@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  get "groups/index"
+  get "users/index"
+  
+  resources :schedules
+
+  resources :pkgs
+
+  resources :programs
+
   resources :users
 
   resources :groups

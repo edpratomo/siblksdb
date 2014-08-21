@@ -1,0 +1,29 @@
+<h2>Daftar Paket</h2>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Paket</th>
+      <th>Program</th>
+      <th>Level</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pkgs.each do |pkg| %>
+      <tr>
+        <td><%= pkg.pkg %></td>
+        <td><%= pkg.program.program %></td>
+        <td><%= pkg.level %></td>
+        <td><%= link_to 'Show', pkg %></td>
+        <td><%= link_to 'Edit', edit_pkg_path(pkg) %></td>
+        <td><%= link_to 'Destroy', pkg, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pkg', new_pkg_path %>

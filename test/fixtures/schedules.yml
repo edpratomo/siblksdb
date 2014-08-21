@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  label: MyText
+  time_slot: MyText
+
+two:
+  label: MyText
+  time_slot: MyText

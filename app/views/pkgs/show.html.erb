@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Pkg:</strong>
+  <%= @pkg.pkg %>
+</p>
+
+<p>
+  <strong>Program:</strong>
+  <%= @pkg.program_id %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @pkg.level %>
+</p>
+
+<%= link_to 'Edit', edit_pkg_path(@pkg) %> |
+<%= link_to 'Back', pkgs_path %>

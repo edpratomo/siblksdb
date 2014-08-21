@@ -1,0 +1,29 @@
+<%= form_for(@pkg) do |f| %>
+  <% if @pkg.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pkg.errors.count, "error") %> prohibited this pkg from being saved:</h2>
+
+      <ul>
+      <% @pkg.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :pkg %><br>
+    <%= f.text_area :pkg %>
+  </div>
+  <div class="field">
+    <%= f.label :program_id %><br>
+    <%= f.number_field :program_id %>
+  </div>
+  <div class="field">
+    <%= f.label :level %><br>
+    <%= f.number_field :level %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
