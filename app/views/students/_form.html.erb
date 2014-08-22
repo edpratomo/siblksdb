@@ -1,4 +1,4 @@
-<%= form_for(@student) do |f| %>
+<%= bootstrap_form_for(@student, layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10") do |f| %>
   <% if @student.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@student.errors.count, "error") %> prohibited this student from being saved:</h2>
@@ -12,31 +12,19 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_area :name %>
+    <%= f.text_field :name, label: "Nama Lengkap" %>
+<%= f.form_group :sex do %>
+<%= f.radio_button :sex, "female", label: "Perempuan" %>
+<%= f.radio_button :sex, "male", label: "Laki-laki" %>
+<% end %>
   </div>
   <div class="field">
-    <%= f.label :sex %><br>
-    <%= f.text_area :sex %>
+    <%= f.phone_field :phone, label: "Telpon" %>
   </div>
   <div class="field">
-    <%= f.label :phone %><br>
-    <%= f.text_area :phone %>
+    <%= f.text_field :note, label: "Keterangan" %>
   </div>
   <div class="field">
-    <%= f.label :note %><br>
-    <%= f.text_area :note %>
-  </div>
-  <div class="field">
-    <%= f.label :ctime %><br>
-    <%= f.datetime_select :ctime %>
-  </div>
-  <div class="field">
-    <%= f.label :mtime %><br>
-    <%= f.datetime_select :mtime %>
-  </div>
-  <div class="field">
-    <%= f.label :modified_by %><br>
     <%= f.number_field :modified_by %>
   </div>
   <div class="actions">
