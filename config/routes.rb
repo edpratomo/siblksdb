@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
   resources :students
 
-  get "groups/index"
-  get "users/index"
-  
   resources :schedules
 
   resources :pkgs
