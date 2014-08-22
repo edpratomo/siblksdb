@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyText
+  sex: MyText
+  phone: MyText
+  note: MyText
+  ctime: 2014-08-22 11:26:15
+  mtime: 2014-08-22 11:26:15
+  modified_by: 1
+
+two:
+  name: MyText
+  sex: MyText
+  phone: MyText
+  note: MyText
+  ctime: 2014-08-22 11:26:15
+  mtime: 2014-08-22 11:26:15
+  modified_by: 1
