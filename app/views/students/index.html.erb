@@ -1,15 +1,13 @@
-<h1>Listing students</h1>
+<h2>Daftar Siswa</h2>
 
-<table>
+<table class="table table-hover table-stripped">
   <thead>
     <tr>
       <th>Name</th>
       <th>Sex</th>
+      <th>Tempat, Tanggal Lahir</th>
       <th>Phone</th>
       <th>Note</th>
-      <th>Ctime</th>
-      <th>Mtime</th>
-      <th>Modified by</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -19,11 +17,9 @@
       <tr>
         <td><%= student.name %></td>
         <td><%= student.sex %></td>
+        <td><%= student.birthplace %>, <%= student.birthday %></td>
         <td><%= student.phone %></td>
         <td><%= student.note %></td>
-        <td><%= student.ctime %></td>
-        <td><%= student.mtime %></td>
-        <td><%= student.modified_by.name %></td>
         <td><%= link_to 'Show', student %></td>
         <td><%= link_to 'Edit', edit_student_path(student) %></td>
         <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' } %></td>

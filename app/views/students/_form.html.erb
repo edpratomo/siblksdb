@@ -1,4 +1,4 @@
-<%= bootstrap_form_for(@student, layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10") do |f| %>
+<%= bootstrap_form_for(@student, layout: :horizontal, label_col: "col-sm-2", control_col: "col-xs-4") do |f| %>
   <% if @student.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@student.errors.count, "error") %> prohibited this student from being saved:</h2>
@@ -12,20 +12,23 @@
   <% end %>
 
   <div class="field">
-    <%= f.text_field :name, label: "Nama Lengkap" %>
+    <%= f.text_field :name, label: "Nama Lengkap", class: "form-control" %>
 <%= f.form_group :sex do %>
 <%= f.radio_button :sex, "female", label: "Perempuan" %>
 <%= f.radio_button :sex, "male", label: "Laki-laki" %>
 <% end %>
   </div>
   <div class="field">
-    <%= f.phone_field :phone, label: "Telpon" %>
+    <%= f.text_field :birthplace, label: "Tempat Lahir", control_col: "col-xs-3" %>
+  </div>
+  <div class="field">
+    <%= f.date_field :birthday, label: "Tanggal Lahir", control_col: "col-xs-3" %>
+  </div>
+  <div class="field">
+    <%= f.telephone_field :phone, label: "Telpon", control_col: "col-xs-2" %>
   </div>
   <div class="field">
     <%= f.text_field :note, label: "Keterangan" %>
-  </div>
-  <div class="field">
-    <%= f.number_field :modified_by %>
   </div>
   <div class="actions">
     <%= f.submit %>
