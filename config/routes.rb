@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'welcome/index'
+
   controller :sessions do
     get 'login' => :new
     post 'login' => :create
