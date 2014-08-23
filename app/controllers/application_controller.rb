@@ -11,4 +11,20 @@ class ApplicationController < ActionController::Base
       redirect_to login_url
     end
   end
+
+  def authorize_admin
+    user = User.find_by(id: session[:user_id])
+    group = user.group.name
+    unless group == "admin" or group == "sysadmin"
+      redirect_to root_url, alert: "Not authorized"
+    end
+  end
+
+  def authorize_sysadmin
+    user = User.find_by(id: session[:user_id])
+    group = user.group.name
+    unless group == "sysadmin"
+      redirect_to root_url, alert: "Not authorized"
+    end
+  end
 end
