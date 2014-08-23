@@ -21,7 +21,10 @@
     <%= f.text_field :fullname, class: "form-control" %>
   </div>
   <div class="field">
-    <%= f.password_field :hashed_pass, label: "Password", class: "form-control" %>
+    <%= f.password_field :password, label: "Password", class: "form-control" %>
+  </div>
+  <div class="field">
+    <%= f.password_field :password_confirmation, label: "Confirm password", class: "form-control" %>
   </div>
   <div class="field">
     <%= f.text_field :email, control_col: "col-xs-3" %>
