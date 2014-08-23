@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  get 'sessions/new'
+
+  controller :sessions do
+    get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy
+  end
 
   get 'sessions/create'
 
