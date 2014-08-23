@@ -33,7 +33,7 @@ CREATE TABLE users (
   group_id INTEGER REFERENCES groups(id),
   username TEXT NOT NULL,
   fullname TEXT NOT NULL,
-  hashed_pass TEXT NOT NULL,
+  password_digest TEXT NOT NULL,
   email TEXT
 );
   
@@ -45,7 +45,7 @@ CREATE TABLE students (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   birthplace TEXT,
-  birthday TIMESTAMP,
+  birthdate DATE,
   sex TEXT NOT NULL CHECK (sex IN ('female','male')),
   phone TEXT,
   note  TEXT,
