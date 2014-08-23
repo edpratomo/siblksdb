@@ -9,7 +9,9 @@
 <body>
 
     <div class="container">
-
+      <% if flash[:alert] %>
+        <p id="notice" class="has-error"><%= flash[:alert] %></p>
+      <% end %>
       <%= form_tag({}, {:class => "form-signin", :role => "form"}) do %>
         <h2 class="form-signin-heading">Please sign in</h2>
         <input type="text" class="form-control" placeholder="Username" name="username" required="" autofocus="">
