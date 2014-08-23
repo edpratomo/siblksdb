@@ -65,11 +65,17 @@ CREATE TABLE students_pkgs (
   modified_by INTEGER REFERENCES users(id)
 );
 
-CREATE TABLE students_pkgs_schedules (
+CREATE TABLE pkgs_schedules (
   id SERIAL PRIMARY KEY,
-  student_pkg_id INTEGER REFERENCES students_pkgs(id),
+  pkg_id INTEGER REFERENCES pkgs(id),
   schedule_id INTEGER REFERENCES schedules(id),
   day TEXT NOT NULL CHECK (day IN ('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun')),
+  avail_seat INTEGER NOT NULL
+);
+
+CREATE TABLE students_pkgs_schedules (
+  id SERIAL PRIMARY KEY,
+  pkg_schedule_id INTEGER REFERENCES pkgs_schedules(id),
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_by INTEGER REFERENCES users(id)
@@ -163,6 +169,36 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION init_avail_seat()
+  RETURNS TRIGGER AS $$
+DECLARE
+  v_capacity INTEGER;
+BEGIN
+  v_capacity := (SELECT p.capacity FROM pkgs JOIN programs p ON pkgs.program_id = p.id WHERE NEW.pkg_id = pkgs.id);
+  NEW.avail_seat = v_capacity;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION populate_pkgs_schedules()
+  RETURNS INTEGER AS $$
+DECLARE
+  pkgs_rec  RECORD;
+  sched_rec RECORD;
+  dayv      TEXT;
+  days      TEXT[] := ARRAY['mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+BEGIN
+  FOR pkgs_rec IN SELECT id FROM pkgs LOOP
+    FOR sched_rec IN SELECT id FROM schedules LOOP
+      FOREACH dayv IN ARRAY days LOOP
+        INSERT INTO pkgs_schedules (pkg_id, schedule_id, day) VALUES (pkgs_rec.id, sched_rec.id, dayv);
+      END LOOP;
+    END LOOP;
+  END LOOP;
+  RETURN 1;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- triggers
 CREATE TRIGGER students_if_modified 
  AFTER INSERT OR UPDATE OR DELETE ON students
@@ -195,4 +231,8 @@ CREATE TRIGGER students_pkgs_schedules_update_timestamp
 CREATE TRIGGER students_qualifications_update_timestamp
  BEFORE UPDATE ON students_qualifications
   FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
+;
+CREATE TRIGGER pkgs_schedules_init_avail_seat
+ BEFORE INSERT ON pkgs_schedules
+  FOR EACH ROW EXECUTE PROCEDURE init_avail_seat();
 ;
