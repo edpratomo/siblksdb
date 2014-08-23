@@ -17,9 +17,9 @@ ActiveRecord::Schema.define(version: 0) do
   enable_extension "plpgsql"
 
   create_table "changes", force: true do |t|
-    t.text     "table_name",                      null: false
-    t.datetime "action_tstamp", default: "now()", null: false
-    t.text     "action",                          null: false
+    t.text     "table_name",                                  null: false
+    t.datetime "action_tstamp", default: "clock_timestamp()", null: false
+    t.text     "action",                                      null: false
     t.text     "original_data"
     t.text     "new_data"
     t.text     "query"
@@ -38,13 +38,21 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "level",      null: false
   end
 
+  create_table "pkgs_schedules", force: true do |t|
+    t.integer "pkg_id"
+    t.integer "schedule_id"
+    t.text    "day",         null: false
+    t.integer "avail_seat",  null: false
+  end
+
   create_table "prereqs", force: true do |t|
     t.integer "pkg_id"
     t.integer "req_pkg_id"
   end
 
   create_table "programs", force: true do |t|
-    t.text "program", null: false
+    t.text    "program",  null: false
+    t.integer "capacity", null: false
   end
 
   add_index "programs", ["program"], name: "programs_program_key", unique: true, using: :btree
@@ -59,28 +67,33 @@ ActiveRecord::Schema.define(version: 0) do
 
   create_table "students", force: true do |t|
     t.text     "name",                                      null: false
+    t.text     "birthplace"
+    t.date     "birthdate"
     t.text     "sex",                                       null: false
     t.text     "phone"
     t.text     "note"
-    t.datetime "ctime",                                     null: false
-    t.datetime "mtime",       default: "clock_timestamp()", null: false
+    t.datetime "created_at",  default: "clock_timestamp()", null: false
+    t.datetime "modified_at", default: "clock_timestamp()", null: false
     t.integer  "modified_by"
   end
+
+  add_index "students", ["name"], name: "students_name", using: :btree
 
   create_table "students_pkgs", force: true do |t|
     t.integer  "student_id"
     t.integer  "pkg_id"
-    t.datetime "ctime",                                     null: false
-    t.datetime "mtime",       default: "clock_timestamp()", null: false
+    t.datetime "created_at",  default: "clock_timestamp()", null: false
+    t.datetime "modified_at", default: "clock_timestamp()", null: false
     t.integer  "modified_by"
   end
 
+  add_index "students_pkgs", ["student_id", "pkg_id"], name: "student_pkg_unique", unique: true, using: :btree
+
   create_table "students_pkgs_schedules", force: true do |t|
     t.integer  "student_pkg_id"
-    t.integer  "schedule_id"
-    t.text     "day",                                          null: false
-    t.datetime "ctime",                                        null: false
-    t.datetime "mtime",          default: "clock_timestamp()", null: false
+    t.integer  "pkg_schedule_id"
+    t.datetime "created_at",      default: "clock_timestamp()", null: false
+    t.datetime "modified_at",     default: "clock_timestamp()", null: false
     t.integer  "modified_by"
   end
 
@@ -88,15 +101,16 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer  "student_id"
     t.integer  "pkg_id"
     t.text     "acquired_from",                               null: false
-    t.datetime "ctime",                                       null: false
-    t.datetime "mtime",         default: "clock_timestamp()", null: false
+    t.datetime "created_at",    default: "clock_timestamp()", null: false
+    t.datetime "modified_at",   default: "clock_timestamp()", null: false
     t.integer  "modified_by"
   end
 
   create_table "users", force: true do |t|
     t.integer "group_id"
-    t.text    "name",        null: false
-    t.text    "hashed_pass", null: false
+    t.text    "username",        null: false
+    t.text    "fullname",        null: false
+    t.text    "password_digest", null: false
     t.text    "email"
   end
 
