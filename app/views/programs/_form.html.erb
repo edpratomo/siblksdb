@@ -1,4 +1,4 @@
-<%= form_for(@program) do |f| %>
+<%= bootstrap_form_for(@program, layout: :horizontal, label_col: "col-sm-2", control_col: "col-xs-4") do |f| %>
   <% if @program.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@program.errors.count, "error") %> prohibited this program from being saved:</h2>
@@ -12,8 +12,10 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :program %><br>
-    <%= f.text_area :program %>
+    <%= f.text_field :program %>
+  </div>
+  <div class="field">
+    <%= f.text_field :capacity, control_col: "col-xs-2" %>
   </div>
   <div class="actions">
     <%= f.submit %>

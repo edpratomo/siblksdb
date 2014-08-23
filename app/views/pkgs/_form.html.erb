@@ -1,4 +1,4 @@
-<%= form_for(@pkg) do |f| %>
+<%= bootstrap_form_for(@pkg, layout: :horizontal, label_col: "col-sm-2", control_col: "col-xs-4") do |f| %>
   <% if @pkg.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@pkg.errors.count, "error") %> prohibited this pkg from being saved:</h2>
@@ -12,16 +12,13 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :pkg %><br>
-    <%= f.text_area :pkg %>
+    <%= f.text_field :pkg, label: "Paket" %>
   </div>
   <div class="field">
-    <%= f.label :program_id %><br>
-    <%= f.number_field :program_id %>
+    <%= f.select :program_id, Program.all.to_a.map {|e| [e.program, e.id]}, control_col: "col-xs-2" %>
   </div>
   <div class="field">
-    <%= f.label :level %><br>
-    <%= f.number_field :level %>
+    <%= f.number_field :level, label: "Level", control_col: "col-xs-1" %>
   </div>
   <div class="actions">
     <%= f.submit %>
