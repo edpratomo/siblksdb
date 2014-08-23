@@ -12,7 +12,7 @@
 
 <p>
   <strong>Tempat, tanggal lahir:</strong>
-  <%= @student.birthplace %>, <%= @student.birthday %>
+  <%= @student.birthplace %>, <%= @student.birthdate %>
 </p>
 
 <p>
@@ -37,7 +37,7 @@
 
 <p>
   <strong>Modified by:</strong>
-  <%= @student.modified_by %>
+  <%= User.find_by(id: @student.modified_by).username %>
 </p>
 
 <%= link_to 'Edit', edit_student_path(@student) %> |

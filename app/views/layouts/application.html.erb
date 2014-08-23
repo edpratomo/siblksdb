@@ -43,19 +43,19 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><%= link_to "Overview", root_path %></li>
+            <li class="<%= active_tab_class(root_path) %>"><%= link_to "Overview", root_path %></li>
             <li><%= link_to "Pendaftaran Siswa Baru", students_path %></li>
             <li><a href="">Buat Jadwal Siswa</a></li>
             <li><a href="">Ubah Data Siswa</a></li>
             <li><a href="">Export</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><%= link_to "Program", programs_path %></li>
-            <li><%= link_to "Paket", pkgs_path %></li>
-            <li><%= link_to "Slot Jadwal", schedules_path %></li>
+            <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
+            <li class="<%= active_tab_class(pkgs_path) %>"><%= link_to "Paket", pkgs_path %></li>
+            <li class="<%= active_tab_class(schedules_path) %>"><%= link_to "Slot Jadwal", schedules_path %></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><%= link_to "Users", users_path %></li>
+            <li class="<%= active_tab_class(users_path) %>"><%= link_to "Users", users_path %></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
