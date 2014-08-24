@@ -2,7 +2,7 @@ class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy]
 
   def name_suggestions
-    @suggestions = Student.basic_search(name: params[:q])
+    @suggestions = Student.fuzzy_search(name: params[:q])
   end
   
   # GET /students
