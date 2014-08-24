@@ -45,7 +45,7 @@
           <ul class="nav nav-sidebar">
             <li class="<%= active_tab_class(root_path) %>"><%= link_to "Overview", root_path %></li>
             <li><%= link_to "Pendaftaran Siswa Baru", students_path %></li>
-            <li><a href="">Buat Jadwal Siswa</a></li>
+            <li class="<%= active_tab_class(student_schedule_index_path) %>"><%= link_to "Atur Jadwal Siswa", student_schedule_index_path %></li>
             <li><a href="">Ubah Data Siswa</a></li>
             <li><a href="">Export</a></li>
           </ul>

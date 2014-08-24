@@ -39,5 +39,6 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'debugger', group: [:development, :test]
 
 gem 'bootstrap_form'
-gem 'rails4-autocomplete'
-gem 'jquery-ui-rails'
+#gem 'rails4-autocomplete'
+#gem 'jquery-ui-rails'
+gem 'textacular'
