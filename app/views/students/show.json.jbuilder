@@ -1,1 +1,1 @@
-json.extract! @student, :id, :name, :sex, :phone, :note, :ctime, :mtime, :modified_by, :created_at, :updated_at
+json.extract! @student, :id, :name, :sex, :birthplace, :birthdate, :phone, :note, :modified_by, :created_at, :updated_at

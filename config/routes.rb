@@ -24,7 +24,11 @@ Rails.application.routes.draw do
 
   get 'sessions/destroy'
 
-  resources :students
+  resources :students do
+    collection do
+      get 'name_suggestions'
+    end
+  end
 
   resources :schedules
 
