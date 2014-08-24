@@ -18,6 +18,11 @@ class ApplicationController < ActionController::Base
     unless User.find_by(id: session[:user_id])
       redirect_to login_url
     end
+    if session[:expires_at] and session[:expires_at] < Time.current
+      # sign out user
+      session[:user_id] = nil
+      redirect_to login_url
+    end
   end
 
   def authorize_admin
