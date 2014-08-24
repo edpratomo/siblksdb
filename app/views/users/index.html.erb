@@ -18,9 +18,11 @@
         <td><%= user.fullname %></td>
         <td><%= user.group.name %></td>
         <td><%= user.email %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to edit_user_path(user), :class => "btn btn-info btn-xs" do %><i class="glyphicon glyphicon-pencil">Edit</i><% end %></td>
+        <td><%= link_to user, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-info btn-xs" do %>
+            <i class="glyphicon glyphicon-remove">Delete</i>
+            <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

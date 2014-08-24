@@ -4,7 +4,6 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Sex</th>
       <th>Tempat, Tanggal Lahir</th>
       <th>Phone</th>
       <th>Note</th>
@@ -15,8 +14,7 @@
   <tbody>
     <% @students.each do |student| %>
       <tr>
-        <td><%= student.name %></td>
-        <td><%= student.sex %></td>
+        <td><%= student.name %> (<%= student.sex == "male" ? "L" : "P" %>)</td>
         <td><%= student.birthplace %>, <%= student.birthdate %></td>
         <td><%= student.phone %></td>
         <td><%= student.note %></td>

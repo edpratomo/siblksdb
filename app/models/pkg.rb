@@ -3,4 +3,6 @@ class Pkg < ActiveRecord::Base
 
   has_many :students_pkgs
   has_many :students, through: :students_pkgs
+
+  has_many :pkgs_schedules
 end
