@@ -5,5 +5,6 @@ class StudentsPkg < ActiveRecord::Base
   belongs_to :pkg
 
   # many-to-many with :pkgs_schedules, via :students_pkgs_schedules
+  has_many :students_pkgs_schedules
   has_many :pkgs_schedules, through: :students_pkgs_schedules
 end

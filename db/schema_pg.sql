@@ -76,8 +76,8 @@ CREATE TABLE pkgs_schedules (
 
 CREATE TABLE students_pkgs_schedules (
   id SERIAL PRIMARY KEY,
-  student_pkg_id INTEGER REFERENCES students_pkgs(id),
-  pkg_schedule_id INTEGER REFERENCES pkgs_schedules(id),
+  students_pkg_id INTEGER REFERENCES students_pkgs(id),
+  pkgs_schedule_id INTEGER REFERENCES pkgs_schedules(id),
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_by INTEGER REFERENCES users(id)

@@ -91,10 +91,10 @@ ActiveRecord::Schema.define(version: 20140824215154) do
   add_index "students_pkgs", ["student_id", "pkg_id"], name: "student_pkg_unique", unique: true, using: :btree
 
   create_table "students_pkgs_schedules", force: true do |t|
-    t.integer  "student_pkg_id"
-    t.integer  "pkg_schedule_id"
-    t.datetime "created_at",      default: "clock_timestamp()", null: false
-    t.datetime "modified_at",     default: "clock_timestamp()", null: false
+    t.integer  "students_pkg_id"
+    t.integer  "pkgs_schedule_id"
+    t.datetime "created_at",       default: "clock_timestamp()", null: false
+    t.datetime "modified_at",      default: "clock_timestamp()", null: false
     t.integer  "modified_by"
   end
 

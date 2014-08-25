@@ -44,10 +44,10 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="<%= active_tab_class(root_path) %>"><%= link_to "Overview", root_path %></li>
-            <li><%= link_to "Pendaftaran Siswa Baru", students_path %></li>
+            <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
             <li class="<%= active_tab_class(student_schedule_index_path) %>"><%= link_to "Atur Jadwal Siswa", student_schedule_index_path %></li>
             <li><a href="">Ubah Data Siswa</a></li>
-            <li><a href="">Export</a></li>
+            <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
           </ul>
           <ul class="nav nav-sidebar">
             <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
