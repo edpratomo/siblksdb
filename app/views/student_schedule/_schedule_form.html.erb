@@ -4,6 +4,7 @@
   <%= bootstrap_form_for(student_pkg, url: student_schedule_path, method: :post) do |f| %>
 
   <table class="table table-striped">
+    <caption><%= "#{package.pkg} Level #{package.level}" %></caption>
     <thead>
       <tr>
         <th colspan="1"></th>

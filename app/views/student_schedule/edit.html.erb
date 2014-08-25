@@ -3,8 +3,6 @@
 <% unless @packages_taken.empty? %>
 <h3><%= @student.name %></h3>
 
-<p>Paket yang dipilih: <%= @packages_taken.map {|e| "#{e.pkg} Level #{e.level}" }.join(', ') %></p>
-
   <% if @student.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@student.errors.count, "error") %> prohibited this student from being saved:</h2>
