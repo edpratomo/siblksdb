@@ -19,6 +19,7 @@ class StudentsController < ApplicationController
   # GET /students/new
   def new
     @student = Student.new
+    @packages = Pkg.where("level = 1").order(:id)
   end
 
   # GET /students/1/edit
@@ -75,6 +76,6 @@ class StudentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :modified_by)
+      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :modified_by, :pkg_ids)
     end
 end

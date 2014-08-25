@@ -30,6 +30,9 @@
   <div class="field">
     <%= f.text_field :note, label: "Keterangan" %>
   </div>
+  <div class="field">
+    <%= f.select :pkg_ids, options_from_collection_for_select(@packages, "id", "pkg"), label: "Pilih Paket" %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
