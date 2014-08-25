@@ -24,13 +24,14 @@ class StudentsController < ApplicationController
 
   # GET /students/1/edit
   def edit
+    @packages = Pkg.where("level = 1").order(:id)
   end
 
   # POST /students
   # POST /students.json
   def create
     @student = Student.new(student_params)
-    @student.modified_by = current_user.id
+    @student.user = current_user
 
     respond_to do |format|
       if @student.save
@@ -47,7 +48,7 @@ class StudentsController < ApplicationController
   # PATCH/PUT /students/1.json
   def update
     respond_to do |format|
-      @student.modified_by = current_user.id
+      @student.user = current_user
       if @student.update(student_params)
         format.html { redirect_to @student, notice: 'Student was successfully updated.' }
         format.json { render :show, status: :ok, location: @student }
@@ -76,6 +77,6 @@ class StudentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :modified_by, :pkg_ids)
+      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :pkg_ids)
     end
 end
