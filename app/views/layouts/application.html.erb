@@ -17,11 +17,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="http://getbootstrap.com/examples/dashboard/#">sistem informasi BLK Salesian Don Bosco</a>
+          <%= link_to "sistem informasi BLK Salesian Don Bosco", nil, class: "navbar-brand" %>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="http://getbootstrap.com/examples/dashboard/#">Settings</a></li>
+            <li><a href="">Settings</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user_fullname || 'Unknown User' %> <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -30,7 +30,7 @@
                 <li><%= link_to "Log Out", logout_path, method: :delete %></li>
               </ul>
             </li>
-            <li><a href="http://getbootstrap.com/examples/dashboard/#">Help</a></li>
+            <li><a href="">Help</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
@@ -46,7 +46,7 @@
             <li class="<%= active_tab_class(root_path) %>"><%= link_to "Overview", root_path %></li>
             <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
             <li class="<%= active_tab_class(student_schedule_index_path) %>"><%= link_to "Atur Jadwal Siswa", student_schedule_index_path %></li>
-            <li><a href="">Ubah Data Siswa</a></li>
+            <li><a href="" onclick="alert('belum dibuat')">Ubah Data Siswa</a></li>
             <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
           </ul>
           <ul class="nav nav-sidebar">

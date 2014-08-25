@@ -1,16 +1,18 @@
 Rails.application.routes.draw do
 
-  get 'student_schedule/index'
+  resources :student_schedule
+  
+  #get 'student_schedule/index'
 
-  get 'student_schedule/new'
+  #get 'student_schedule/new'
 
-  get 'student_schedule/create'
+  #get 'student_schedule/create'
 
-  get 'student_schedule/destroy'
+  #get 'student_schedule/destroy'
 
-  get 'student_schedule/edit'
+  #get 'student_schedule/edit'
 
-  get 'student_schedule/show'
+  #get 'student_schedule/show/:id', to: redirect('/student_schedule/%{id}')
 
   get 'welcome/index'
 

@@ -30,9 +30,9 @@ $('#remote .typeahead').on('typeahead:selected', function (e, datum) {
   console.log("selected");
   var hfield = document.getElementById('hfield');
   hfield.value = datum.id;
-  var url = "<%= student_schedule_show_url %>/" + datum.id;    
+  var url = "<%= student_schedule_index_url %>/" + datum.id;    
   console.log("url: " + url);
-  // $(location).attr('href', url);
+  $(location).attr('href', url);
 });
 $('#remote .typeahead').on('typeahead:opened', function (e, datum) {
   console.log("opened");

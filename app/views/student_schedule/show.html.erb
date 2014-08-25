@@ -1,2 +1,7 @@
 <h2>StudentSchedule#show</h2>
-<p>Find me in app/views/student_schedule/show.html.erb</p>
+<p>Nama siswa: <%= @student.name %></p>
+<% if @packages_taken %>
+<p>paket yang dipilih: <%= @packages_taken.map {|e| e.pkg }.join(', ') %></p>
+<% else %>
+<p>belum memilih paket / memiliki jadwal kursus</p>
+<% end %>
