@@ -30,7 +30,7 @@ $('#remote .typeahead').on('typeahead:selected', function (e, datum) {
   console.log("selected");
   var hfield = document.getElementById('hfield');
   hfield.value = datum.id;
-  var url = "<%= student_schedule_index_url %>/" + datum.id;    
+  var url = "<%= student_schedule_index_url %>/" + datum.id + "/edit";
   console.log("url: " + url);
   $(location).attr('href', url);
 });

@@ -1,5 +1,5 @@
 class StudentScheduleController < ApplicationController
-  before_action :set_student, only: [:show, :new]
+  before_action :set_student, only: [:show, :edit]
 
   def index
   end
@@ -15,14 +15,12 @@ class StudentScheduleController < ApplicationController
   end
 
   def edit
+    @packages_taken = @student.pkgs
+    @schedules = Schedule.order(:id)    
   end
 
   # show this student's schedules
   def show
-    @packages_taken = StudentsPkg.find_by(student: @student)
-    
-    #@student_schedules = @student.pkgs
-    #.schedules
   end
 
   private

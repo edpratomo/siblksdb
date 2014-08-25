@@ -1,0 +1,41 @@
+
+<% @packages_taken.each do |package| %>
+ <% student_pkg = StudentsPkg.find_by(pkg: package, student: @student) %>
+  <%= bootstrap_form_for(student_pkg, url: student_schedule_path, method: :post) do |f| %>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th colspan="1"></th>
+        <th>SEN</th>
+        <th>SEL</th>
+        <th>RAB</th>
+        <th>KAM</th>
+        <th>JUM</th>
+        <th>SAB</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @schedules.each do |schedule| %>
+        <% 
+          this_ps = PkgsSchedule.where("pkg_id = ? AND schedule_id = ?", package.id, schedule.id) 
+          ps_by_day = this_ps.inject({}) do |m,o|
+            m[o.day] = {:id => o.id, :avail_seat => o.avail_seat}
+            m
+          end
+        %>
+        <tr>
+          <td><%= schedule.time_slot %></td>
+          <td><%= ps_by_day["mon"][:avail_seat] %></td>
+          <td><%= ps_by_day["tue"][:avail_seat] %></td>
+          <td><%= ps_by_day["wed"][:avail_seat] %></td>
+          <td><%= ps_by_day["thu"][:avail_seat] %></td>
+          <td><%= ps_by_day["fri"][:avail_seat] %></td>
+          <td><%= ps_by_day["sat"][:avail_seat] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+ <% end %>
+<% end %>

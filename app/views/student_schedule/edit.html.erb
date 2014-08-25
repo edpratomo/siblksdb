@@ -1,2 +1,27 @@
-<h1>StudentSchedule#edit</h1>
-<p>Find me in app/views/student_schedule/edit.html.erb</p>
+<h2>StudentSchedule#edit</h2>
+
+<% unless @packages_taken.empty? %>
+<h3><%= @student.name %></h3>
+
+<p>Paket yang dipilih: <%= @packages_taken.map {|e| "#{e.pkg} Level #{e.level}" }.join(', ') %></p>
+
+  <% if @student.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@student.errors.count, "error") %> prohibited this student from being saved:</h2>
+
+      <ul>
+      <% @student.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<%= render 'schedule_form' %>
+
+<% else %>
+
+<p><%= @student.name %> saat ini sedang tidak mengikuti paket apapun.</p>
+
+<% end %>
+
