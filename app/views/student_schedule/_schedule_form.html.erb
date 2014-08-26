@@ -1,7 +1,7 @@
 
 <% @packages_taken.each do |package| %>
  <% student_pkg = StudentsPkg.find_by(pkg: package, student: @student) %>
-  <%= bootstrap_form_for(student_pkg, url: student_schedule_path, method: :post) do |f| %>
+  <%= bootstrap_form_for(student_pkg, url: student_schedule_path) do |f| %>
   <%= f.hidden_field :id %>
   <table class="table table-striped">
     <caption><%= "#{package.pkg} Level #{package.level}" %></caption>

@@ -80,7 +80,8 @@ CREATE TABLE students_pkgs_schedules (
   pkgs_schedule_id INTEGER REFERENCES pkgs_schedules(id),
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by INTEGER REFERENCES users(id)
+  modified_by INTEGER REFERENCES users(id),
+  CONSTRAINT student_pkg_pkg_schedule_unique UNIQUE(students_pkg_id, pkgs_schedule_id)
 );
 
 CREATE TABLE students_qualifications (
@@ -222,11 +223,11 @@ CREATE OR REPLACE FUNCTION update_avail_seat()
 BEGIN
   IF (TG_OP = 'DELETE') THEN
     UPDATE pkgs_schedules SET avail_seat = avail_seat + 1 
-    WHERE id = OLD.pkg_schedule_id;
+    WHERE id = OLD.pkgs_schedule_id;
     RETURN OLD;
   ELSEIF (TG_OP = 'INSERT') THEN
     UPDATE pkgs_schedules SET avail_seat = avail_seat - 1 
-    WHERE id = NEW.pkg_schedule_id;
+    WHERE id = NEW.pkgs_schedule_id;
     RETURN NEW;
   ELSE 
     RAISE WARNING '[UPDATE_AVAIL_SEAT] - Other action occurred: %, at %',TG_OP,now();

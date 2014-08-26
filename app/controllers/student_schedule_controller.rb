@@ -5,24 +5,26 @@ class StudentScheduleController < ApplicationController
   end
 
   def new
-
   end
 
   def create
+  end
+  
+  def update
     student_pkg = StudentsPkg.find(params.fetch(:students_pkg)[:id])
 
     params.fetch(:students_pkg)[:pkgs_schedule_ids].map {|e| PkgsSchedule.find(e) }.each do |this_ps|
       student_pkg.pkgs_schedules << this_ps
     end
 
-    #@student.user = current_user
+    # @student_pkg.user = current_user
 
     respond_to do |format|
-      if student_pkg.save
-        format.html { redirect_to @student_schedule, notice: 'Schedule was successfully created.' }
+      if student_pkg.update(students_pkg_params)
+        format.html { redirect_to student_schedule_url, notice: 'Schedule was successfully updated.' }
         format.json { render :show, status: :created, location: @student_schedule }
       else
-        format.html { render :new }
+        format.html { render :edit }
         format.json { render json: @student_schedule.errors, status: :unprocessable_entity }
       end
     end
