@@ -9,6 +9,23 @@ class StudentScheduleController < ApplicationController
   end
 
   def create
+    student_pkg = StudentsPkg.find(params.fetch(:students_pkg)[:id])
+
+    params.fetch(:students_pkg)[:pkgs_schedule_ids].map {|e| PkgsSchedule.find(e) }.each do |this_ps|
+      student_pkg.pkgs_schedules << this_ps
+    end
+
+    #@student.user = current_user
+
+    respond_to do |format|
+      if student_pkg.save
+        format.html { redirect_to @student_schedule, notice: 'Schedule was successfully created.' }
+        format.json { render :show, status: :created, location: @student_schedule }
+      else
+        format.html { render :new }
+        format.json { render json: @student_schedule.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy
@@ -21,6 +38,8 @@ class StudentScheduleController < ApplicationController
 
   # show this student's schedules
   def show
+    @packages_taken = @student.pkgs
+    @schedules = Schedule.order(:id)    
   end
 
   private
@@ -34,4 +53,7 @@ class StudentScheduleController < ApplicationController
     params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :modified_by)
   end
 
+  def students_pkg_params
+    params.require(:students_pkg).permit(:id, :pkgs_schedule_ids)
+  end
 end
