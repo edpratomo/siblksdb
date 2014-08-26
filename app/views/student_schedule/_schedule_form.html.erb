@@ -28,12 +28,12 @@
         %>
         <tr>
           <td><%= schedule.time_slot %></td>
-          <td><%= ps_by_day["mon"][:avail_seat] %></td>
-          <td><%= ps_by_day["tue"][:avail_seat] %></td>
-          <td><%= ps_by_day["wed"][:avail_seat] %></td>
-          <td><%= ps_by_day["thu"][:avail_seat] %></td>
-          <td><%= ps_by_day["fri"][:avail_seat] %></td>
-          <td><%= ps_by_day["sat"][:avail_seat] %></td>
+          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["mon"][:avail_seat]}"}, ps_by_day["mon"][:id], nil %></td>
+          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["tue"][:avail_seat]}"}, ps_by_day["tue"][:id], nil %></td>
+          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["wed"][:avail_seat]}"}, ps_by_day["wed"][:id], nil %></td>
+          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["thu"][:avail_seat]}"}, ps_by_day["thu"][:id], nil %></td>
+          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["fri"][:avail_seat]}"}, ps_by_day["fri"][:id], nil %></td>
+          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["sat"][:avail_seat]}"}, ps_by_day["sat"][:id], nil %></td>
         </tr>
       <% end %>
     </tbody>
