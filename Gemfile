@@ -43,3 +43,5 @@ gem 'bootstrap_form'
 #gem 'rails4-autocomplete'
 #gem 'jquery-ui-rails'
 gem 'textacular', '~> 3.0'
+
+gem 'rails_12factor', group: :production
