@@ -13,7 +13,9 @@ class StudentScheduleController < ApplicationController
   def update
     student_pkg = StudentsPkg.find(params.fetch(:students_pkg)[:id])
 
-    my_ps = params.fetch(:students_pkg)[:pkgs_schedule_ids].map {|e| PkgsSchedule.find(e) }
+    my_ps_ids = params.fetch(:students_pkg)[:pkgs_schedule_ids] || []
+    my_ps = my_ps_ids.map {|e| PkgsSchedule.find(e) }
+
     unless student_pkg.pkgs_schedules == my_ps
       logger.debug("Updating students_pkgs_schedules")
       student_pkg.pkgs_schedules = my_ps
