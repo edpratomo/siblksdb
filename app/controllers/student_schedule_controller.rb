@@ -13,8 +13,10 @@ class StudentScheduleController < ApplicationController
   def update
     student_pkg = StudentsPkg.find(params.fetch(:students_pkg)[:id])
 
-    params.fetch(:students_pkg)[:pkgs_schedule_ids].map {|e| PkgsSchedule.find(e) }.each do |this_ps|
-      student_pkg.pkgs_schedules << this_ps
+    my_ps = params.fetch(:students_pkg)[:pkgs_schedule_ids].map {|e| PkgsSchedule.find(e) }
+    unless student_pkg.pkgs_schedules == my_ps
+      logger.debug("Updating students_pkgs_schedules")
+      student_pkg.pkgs_schedules = my_ps
     end
 
     # @student_pkg.user = current_user

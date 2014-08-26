@@ -50,6 +50,8 @@
   </table>
 <% end %>
 
+<%= link_to 'Edit', edit_student_schedule_path(@student) %> 
+
 <% else %>
 
 <p>Siswa <%= @student.name %> saat ini sedang tidak mengikuti paket apapun.</p>

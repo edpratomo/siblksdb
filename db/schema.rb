@@ -98,6 +98,8 @@ ActiveRecord::Schema.define(version: 20140824215154) do
     t.integer  "modified_by"
   end
 
+  add_index "students_pkgs_schedules", ["students_pkg_id", "pkgs_schedule_id"], name: "student_pkg_pkg_schedule_unique", unique: true, using: :btree
+
   create_table "students_qualifications", force: true do |t|
     t.integer  "student_id"
     t.integer  "pkg_id"
