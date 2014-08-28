@@ -19,9 +19,11 @@ class StudentScheduleController < ApplicationController
     unless student_pkg.pkgs_schedules == my_ps
       logger.debug("Updating students_pkgs_schedules")
       student_pkg.pkgs_schedules = my_ps
+      
+      # join table
+      student_pkg_schedules = StudentsPkgsSchedule.where(students_pkg: student_pkg, pkgs_schedule: my_ps)
+      student_pkg_schedules.update_all(modified_by: current_user)
     end
-
-    # @student_pkg.user = current_user
 
     respond_to do |format|
       if student_pkg.update(students_pkg_params)

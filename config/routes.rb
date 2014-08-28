@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'help/index'
+
   resources :student_schedule
   
   #get 'student_schedule/index'

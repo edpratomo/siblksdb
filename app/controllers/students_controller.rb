@@ -24,7 +24,17 @@ class StudentsController < ApplicationController
 
   # GET /students/1/edit
   def edit
-    @packages = Pkg.where("level = 1").order(:id)
+    ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
+    
+    all_pkgs = Pkg.order(pkg: :desc).order(:level)
+    pkg_hash = all_pkgs.inject({}) do |m,o|
+      m[o.pkg] ||= OpenStruct.new(pkg_name: o.pkg, levels: [])
+      m[o.pkg].levels << OpenStruct.new(level: "#{o.pkg} Level #{o.level}", id: o.id)
+      m
+    end
+
+    # finally create the collection obj
+    @packages = ordered_pkg_names.map {|e| pkg_hash[e] }
   end
 
   # POST /students
