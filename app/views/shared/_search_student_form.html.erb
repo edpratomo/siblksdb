@@ -1,0 +1,41 @@
+<%= bootstrap_form_tag(method: :get) do %>
+
+<%= hidden_field_tag 'hfield' %>
+<div id="remote"><input class="typeahead" type="text" placeholder="Cari nama siswa..">
+</div>
+
+<script type="text/javascript">
+
+var studentNames = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  remote: '<%= name_suggestions_students_url %>.json?q=%QUERY'
+});
+
+studentNames.initialize();
+
+$('#remote .typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 3
+}, 
+{
+  name: 'student-names',
+  displayKey: 'name',
+  source: studentNames.ttAdapter()
+});
+
+$('#remote .typeahead').on('typeahead:selected', function (e, datum) {
+  console.log("selected");
+  var hfield = document.getElementById('hfield');
+  hfield.value = datum.id;
+  var url = "<%= result_url %>/" + datum.id + "/edit";
+  console.log("url: " + url);
+  $(location).attr('href', url);
+});
+$('#remote .typeahead').on('typeahead:opened', function (e, datum) {
+  console.log("opened");
+});
+
+</script>
+<% end %>

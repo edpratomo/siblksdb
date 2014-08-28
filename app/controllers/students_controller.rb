@@ -5,6 +5,9 @@ class StudentsController < ApplicationController
     @suggestions = Student.fuzzy_search(name: params[:q])
   end
   
+  def search
+  end
+
   # GET /students
   # GET /students.json
   def index

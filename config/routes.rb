@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   resources :students do
     collection do
       get 'name_suggestions'
+      get 'search'
     end
   end
 
