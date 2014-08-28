@@ -1,11 +1,24 @@
 <% if flash[:alert] %>
   <p id="notice"><%= flash[:alert] %></p>
 <% end %>
-<h1>Welcome#index</h1>
+<h1>Welcome</h1>
 <p>
 <%= image_tag("Salesians_of_Don_Bosco_logo.svg.png", :alt => "Salesians of Don Bosco logo") %>
 </p>
 
+<div class="container-fluid">
+
+<h4>What's New <small>Aug 29, 2014</small></h4>
+<ul>
+<li>"Ubah Data Siswa" berfungsi. Dapat digunakan untuk menambahkan maupun menghapus paket yang diambil siswa. 
+Selain mengedit data siswa.
+</li>
+</ul>
+</div>
+
+<div class="container-fluid">
+
+<h4>Mengenai Otoritas Group</h4>
 <p>
 Users terbagi dalam 3 kelompok otorisasi: sysadmin, admin, dan staff.
 <p>
@@ -37,3 +50,4 @@ Kelompok staff memiliki privilesi:
 <li>melihat daftar program, paket, slot jadwal, tapi tidak dapat mengubah/menambahkan</li>
 </ul>
 </p>
+</div>
