@@ -24,6 +24,7 @@ class StudentsController < ApplicationController
 
   # GET /students/1/edit
   def edit
+    @my_packages = @student.pkgs.order(:id)
     ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
     
     all_pkgs = Pkg.order(pkg: :desc).order(:level)
@@ -59,6 +60,24 @@ class StudentsController < ApplicationController
   def update
     respond_to do |format|
       @student.user = current_user
+      
+      pkg_id = params.fetch(:student)[:pkg_id]
+      if pkg_id and not pkg_id.empty?
+        Student.transaction do 
+          Pkg.transaction do
+            pkg = Pkg.find(pkg_id)
+            @student.pkgs << pkg if pkg
+          end
+        end
+      end
+      
+      remove_pkgs = params[:remove_pkgs]
+      if remove_pkgs 
+        remove_pkgs.map {|e| Pkg.find(e)}.each do |pkg|
+          @student.pkgs.destroy(pkg)
+        end
+      end
+        
       if @student.update(student_params)
         format.html { redirect_to @student, notice: 'Student was successfully updated.' }
         format.json { render :show, status: :ok, location: @student }

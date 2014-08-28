@@ -1,17 +1,37 @@
+<% unless @my_packages.empty? %>
+<div class="form-group">
+  <%= f.label :foo, "Hapus Paket", class: "control-label col-sm-2" %>
+  <div class="col-xs-4">
+    <p class="form-control-static">Paket<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil:</p>
+  </div>
+</div>
+
+<% end %>
+<% @my_packages.each do |my_package| %>
 <div class="form-group">
   <div class="col-sm-offset-2 col-sm-7 form-inline">
-    <div class="form-group col-xs-6">
-      <%= f.grouped_collection_select :pkg_ids, @packages, :levels, :pkg_name, :id, :level,
-                                     {selected: "14", prompt: "Pilih paket"}, {class: "form-control"}
-      %>
+    <div class="form-group col-xs-4">
+      <p class="form-control-static"><%= my_package.pkg %> Level <%= my_package.level %></p>
     </div>
-    <div class="form-group col-xs-6">
+    <div class="form-group col-sm-7">
       <div class="checkbox" %>
-        <%= label_tag :remove do %>
-          <%= check_box_tag :remove %> Hapus
+        <%= label_tag 'remove_pkgs[]' do %>
+          <%= check_box_tag 'remove_pkgs[]', my_package.id, false, {multiple: true} %> Hapus (otomatis juga menghapus jadwal)
         <% end %>
       </div>
     </div>
   </div>
 </div>
+<% end %>
 
+<div class="form-group">
+  <%= f.label :foo, "Tambah Paket", class: "control-label col-sm-2" %>
+  <div class="col-sm-7 form-inline">
+    <div class="form-group col-xs-6">
+      <%= f.grouped_collection_select :pkg_id, @packages, :levels, :pkg_name, :id, :level,
+                                      {selected: nil, prompt: "Pilih paket"}, 
+                                      {class: "form-control"}
+      %>
+    </div>
+  </div>
+</div>
