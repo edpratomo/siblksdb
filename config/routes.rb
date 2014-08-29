@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
 
+  controller :presence_sheet do
+    get 'new'
+    post 'create'
+  end
+  
   get 'help/index'
 
   resources :student_schedule
