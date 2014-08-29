@@ -4,5 +4,7 @@ class Student < ActiveRecord::Base
   has_many :students_pkgs
   has_many :pkgs, through: :students_pkgs
 
+#  has_many :schedules, through: :pkgs
+  
   accepts_nested_attributes_for :pkgs, allow_destroy: true
 end

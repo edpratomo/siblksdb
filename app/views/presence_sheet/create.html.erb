@@ -1,2 +1,27 @@
-<h1>PresenceSheet#create</h1>
-<p>Find me in app/views/presence_sheet/create.html.erb</p>
+<h2>Lembar Absensi Siswa</h2>
+
+<h3><%= @pkg.pkg %> Level <%= @pkg.level %> <small><%= @sch.label %>: <%= @sch.time_slot %></h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>SEN <%= @dates[0] %></th>
+      <th>SEL <%= @dates[1] %></th>
+      <th>RAB <%= @dates[2] %></th>
+      <th>KAM <%= @dates[3] %></th>
+      <th>JUM <%= @dates[4] %></th>
+      <th>SAB <%= @dates[5] %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @schedules.each do |schedule| %>
+      <tr>
+        <td><%= schedule.shift %></td>
+        <% schedule.each do |col| %>
+          <td <%= col ? raw('class="info"') : '' %>></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
