@@ -45,3 +45,5 @@ gem 'bootstrap_form'
 gem 'textacular', '~> 3.0'
 
 gem 'rails_12factor', group: :production
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
