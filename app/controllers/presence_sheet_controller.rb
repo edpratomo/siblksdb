@@ -25,6 +25,7 @@ class PresenceSheetController < ApplicationController
 
     @schedules = if @pkg and @sch
       # find students who take this pkg
+      # XXX - no idea how to do multi join (with :schedules) here, should revisit
       students = Student.joins(:pkgs).where("pkgs.id = ?", @pkg.id).order(name: :asc)
       
       students.map {|student|
@@ -34,7 +35,7 @@ class PresenceSheetController < ApplicationController
         end
         logger.debug("my_schedule: #{my_schedule}")
         [student.name, *ordered_days.map {|e| my_schedule[e] }]
-      }
+      }.reject {|e| e[1..6].all? {|e| not e }}
     else 
       []
     end
