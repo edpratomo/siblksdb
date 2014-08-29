@@ -20,6 +20,6 @@
 <% else %>
 
 <p><%= @student.name %> saat ini sedang tidak mengikuti paket apapun.</p>
-
+<%= link_to "Tambahkan Paket", edit_student_path, :class => "btn btn-info btn-primary" %>
 <% end %>
 
