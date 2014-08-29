@@ -1,6 +1,6 @@
 <h2>Lembar Absensi Siswa</h2>
 
-<%= bootstrap_form_tag(url: presence_sheet_create_path, layout: :horizontal, label_col: "col-sm-2", control_col: "col-xs-4") do |f| %>
+<%= bootstrap_form_tag(url: presence_sheet_create_path, method: :get, layout: :horizontal, label_col: "col-sm-2", control_col: "col-xs-4") do |f| %>
 
 <%= f.select :pkg, Pkg.order(:id).to_a.map {|e| ["#{e.pkg} Level #{e.level}", e.id]}, label: "Paket", control_col: "col-xs-3" %>
 <%= f.select :schedule, Schedule.order(:id).to_a.map {|e| [e.label, e.id]}, label: "Slot Jadwal", control_col: "col-xs-3" %>

@@ -1,23 +1,23 @@
 <h2>Lembar Absensi Siswa</h2>
 
 <h3><%= @pkg.pkg %> Level <%= @pkg.level %> <small><%= @sch.label %>: <%= @sch.time_slot %></h3>
-<table class="table table-bordered">
+<table class="table table-bordered" style="background-color:white;">
   <thead>
     <tr>
       <th>Nama</th>
-      <th>SEN <%= @dates[0] %></th>
-      <th>SEL <%= @dates[1] %></th>
-      <th>RAB <%= @dates[2] %></th>
-      <th>KAM <%= @dates[3] %></th>
-      <th>JUM <%= @dates[4] %></th>
-      <th>SAB <%= @dates[5] %></th>
+      <th style="text-align:center;">SEN / <%= @dates[0].strftime("%d-%m-%Y") %></th>
+      <th style="text-align:center;">SEL / <%= @dates[1].strftime("%d-%m-%Y") %></th>
+      <th style="text-align:center;">RAB / <%= @dates[2].strftime("%d-%m-%Y") %></th>
+      <th style="text-align:center;">KAM / <%= @dates[3].strftime("%d-%m-%Y") %></th>
+      <th style="text-align:center;">JUM / <%= @dates[4].strftime("%d-%m-%Y") %></th>
+      <th style="text-align:center;">SAB / <%= @dates[5].strftime("%d-%m-%Y") %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @schedules.each do |schedule| %>
       <tr>
-        <td><%= schedule.shift %></td>
+        <td style="height:60px;vertical-align:middle;"><%= schedule.shift %></td>
         <% schedule.each do |col| %>
           <td <%= col ? raw('class="info"') : '' %>></td>
         <% end %>

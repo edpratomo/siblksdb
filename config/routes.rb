@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   controller :presence_sheet do
     get 'presence_sheet/new'
-    post 'presence_sheet/create'
+    get 'presence_sheet/create'
   end
   
   get 'help/index'
