@@ -1,2 +1,17 @@
-<h1>PresenceSheet#new</h1>
-<p>Find me in app/views/presence_sheet/new.html.erb</p>
+<h2>Lembar Absensi Siswa</h2>
+
+<%= bootstrap_form_tag(url: presence_sheet_create_path, layout: :horizontal, label_col: "col-sm-2", control_col: "col-xs-4") do |f| %>
+
+<%= f.select :pkg, Pkg.order(:id).to_a.map {|e| ["#{e.pkg} Level #{e.level}", e.id]}, label: "Paket", control_col: "col-xs-3" %>
+<%= f.select :schedule, Schedule.order(:id).to_a.map {|e| [e.label, e.id]}, label: "Slot Jadwal", control_col: "col-xs-3" %>
+
+<%= f.form_group :time_range, label: { text: "Rentang Waktu" } do %>
+  <%= f.radio_button :time_range, "this_week", label: "Minggu Ini" %>
+  <%= f.radio_button :time_range, "next_week", label: "Minggu Depan", checked: true %>
+<% end %>
+
+  <div class="actions">
+    <%= f.submit "Tampilkan"%>
+  </div>
+
+<% end %>
