@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :instructors
+
   controller :presence_sheet do
     get 'presence_sheet/new'
     get 'presence_sheet/create'

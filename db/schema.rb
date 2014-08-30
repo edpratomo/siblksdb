@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140824215154) do
+ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20140824215154) do
 
   add_index "groups", ["name"], name: "groups_name_key", unique: true, using: :btree
 
+  create_table "instructors", force: true do |t|
+    t.text     "name",                                      null: false
+    t.datetime "created_at",  default: "clock_timestamp()", null: false
+    t.datetime "modified_at", default: "clock_timestamp()", null: false
+    t.integer  "modified_by"
+  end
+
+  add_index "instructors", ["name"], name: "instructors_name_key", unique: true, using: :btree
+
   create_table "pkgs", force: true do |t|
     t.text    "pkg",        null: false
     t.integer "program_id"
@@ -43,7 +52,12 @@ ActiveRecord::Schema.define(version: 20140824215154) do
     t.integer "pkg_id"
     t.integer "schedule_id"
     t.text    "day",         null: false
-    t.integer "avail_seat",  null: false
+  end
+
+  create_table "pkgs_schedules_instructors", force: true do |t|
+    t.integer "pkgs_schedule_id"
+    t.integer "instructor_id"
+    t.integer "avail_seat",       null: false
   end
 
   create_table "prereqs", force: true do |t|
@@ -80,25 +94,12 @@ ActiveRecord::Schema.define(version: 20140824215154) do
 
   add_index "students", ["name"], name: "students_name", using: :btree
 
-  create_table "students_pkgs", force: true do |t|
-    t.integer  "student_id"
-    t.integer  "pkg_id"
-    t.datetime "created_at",  default: "clock_timestamp()", null: false
-    t.datetime "modified_at", default: "clock_timestamp()", null: false
-    t.integer  "modified_by"
+  create_table "students_pkgs_schedules_instructors", force: true do |t|
+    t.integer "student_id"
+    t.integer "pkgs_schedules_instructor_id"
   end
 
-  add_index "students_pkgs", ["student_id", "pkg_id"], name: "student_pkg_unique", unique: true, using: :btree
-
-  create_table "students_pkgs_schedules", force: true do |t|
-    t.integer  "students_pkg_id"
-    t.integer  "pkgs_schedule_id"
-    t.datetime "created_at",       default: "clock_timestamp()", null: false
-    t.datetime "modified_at",      default: "clock_timestamp()", null: false
-    t.integer  "modified_by"
-  end
-
-  add_index "students_pkgs_schedules", ["students_pkg_id", "pkgs_schedule_id"], name: "student_pkg_pkg_schedule_unique", unique: true, using: :btree
+  add_index "students_pkgs_schedules_instructors", ["student_id", "pkgs_schedules_instructor_id"], name: "student_pkg_schedule_instructor_unique", unique: true, using: :btree
 
   create_table "students_qualifications", force: true do |t|
     t.integer  "student_id"

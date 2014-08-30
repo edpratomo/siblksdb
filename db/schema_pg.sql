@@ -56,32 +56,36 @@ CREATE TABLE students (
 
 CREATE INDEX students_name ON students(name);
 
-CREATE TABLE students_pkgs (
+CREATE TABLE instructors (
   id SERIAL PRIMARY KEY,
-  student_id INTEGER REFERENCES students(id),
-  pkg_id INTEGER REFERENCES pkgs(id),
+  name TEXT NOT NULL UNIQUE,
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by INTEGER REFERENCES users(id),
-  CONSTRAINT student_pkg_unique UNIQUE(student_id, pkg_id)
+  modified_by INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE pkgs_schedules (
   id SERIAL PRIMARY KEY,
   pkg_id INTEGER REFERENCES pkgs(id),
   schedule_id INTEGER REFERENCES schedules(id),
-  day TEXT NOT NULL CHECK (day IN ('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun')),
+  day TEXT NOT NULL CHECK (day IN ('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'))
+);
+
+CREATE TABLE pkgs_schedules_instructors (
+  id SERIAL PRIMARY KEY,
+  pkgs_schedule_id INTEGER REFERENCES pkgs_schedules(id),
+  instructor_id INTEGER REFERENCES instructors(id),
   avail_seat INTEGER NOT NULL
 );
 
-CREATE TABLE students_pkgs_schedules (
+CREATE TABLE students_pkgs_schedules_instructors (
   id SERIAL PRIMARY KEY,
-  students_pkg_id INTEGER REFERENCES students_pkgs(id) ON DELETE CASCADE,
-  pkgs_schedule_id INTEGER REFERENCES pkgs_schedules(id),
-  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by INTEGER REFERENCES users(id),
-  CONSTRAINT student_pkg_pkg_schedule_unique UNIQUE(students_pkg_id, pkgs_schedule_id)
+  student_id INTEGER REFERENCES students(id),
+--  students_pkg_id INTEGER REFERENCES students_pkgs(id) ON DELETE CASCADE,
+--  pkgs_schedule_id INTEGER REFERENCES pkgs_schedules(id),
+  pkgs_schedules_instructor_id INTEGER REFERENCES pkgs_schedules_instructors(id),
+  CONSTRAINT student_pkg_schedule_instructor_unique UNIQUE(student_id, pkgs_schedules_instructor_id)
+--  CONSTRAINT student_pkg_pkg_schedule_unique UNIQUE(students_pkg_id, pkgs_schedule_id)
 );
 
 CREATE TABLE students_qualifications (
@@ -210,7 +214,7 @@ BEGIN
   v_delta := NEW.capacity - OLD.capacity;
   
   IF (v_delta <> 0) THEN
-    UPDATE pkgs_schedules SET avail_seat = avail_seat + v_delta 
+    UPDATE pkgs_schedules_instructors SET avail_seat = avail_seat + v_delta 
     WHERE pkg_id IN (SELECT id FROM pkgs WHERE program_id = OLD.id);
   END IF;
   RETURN NEW;
@@ -222,11 +226,11 @@ CREATE OR REPLACE FUNCTION update_avail_seat()
   RETURNS TRIGGER AS $body$
 BEGIN
   IF (TG_OP = 'DELETE') THEN
-    UPDATE pkgs_schedules SET avail_seat = avail_seat + 1 
+    UPDATE pkgs_schedules_instructors SET avail_seat = avail_seat + 1 
     WHERE id = OLD.pkgs_schedule_id;
     RETURN OLD;
   ELSEIF (TG_OP = 'INSERT') THEN
-    UPDATE pkgs_schedules SET avail_seat = avail_seat - 1 
+    UPDATE pkgs_schedules_instructors SET avail_seat = avail_seat - 1 
     WHERE id = NEW.pkgs_schedule_id;
     RETURN NEW;
   ELSE 
@@ -252,14 +256,14 @@ CREATE TRIGGER students_if_modified
  AFTER INSERT OR UPDATE OR DELETE ON students
   FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
 ;
-CREATE TRIGGER students_pkgs_if_modified 
- AFTER INSERT OR UPDATE OR DELETE ON students_pkgs
-  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
-;
-CREATE TRIGGER students_pkgs_schedules_if_modified
- AFTER INSERT OR UPDATE OR DELETE ON students_pkgs_schedules
-  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
-;
+--CREATE TRIGGER students_pkgs_if_modified 
+-- AFTER INSERT OR UPDATE OR DELETE ON students_pkgs
+--  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+--;
+--CREATE TRIGGER students_pkgs_schedules_if_modified
+-- AFTER INSERT OR UPDATE OR DELETE ON students_pkgs_schedules
+--  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+--;
 CREATE TRIGGER students_qualifications_if_modified
  AFTER INSERT OR UPDATE OR DELETE ON students_qualifications
   FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
@@ -268,21 +272,21 @@ CREATE TRIGGER students_update_timestamp
  BEFORE UPDATE ON students
   FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
 ;
-CREATE TRIGGER students_pkgs_update_timestamp 
- BEFORE UPDATE ON students_pkgs
-  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
-;
-CREATE TRIGGER students_pkgs_schedules_update_timestamp
- BEFORE UPDATE ON students_pkgs_schedules
-  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
-;
+--CREATE TRIGGER students_pkgs_update_timestamp 
+-- BEFORE UPDATE ON students_pkgs
+--  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
+--;
+--CREATE TRIGGER students_pkgs_schedules_update_timestamp
+-- BEFORE UPDATE ON students_pkgs_schedules
+--  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
+--;
 CREATE TRIGGER students_qualifications_update_timestamp
  BEFORE UPDATE ON students_qualifications
   FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
 ;
 -- initialize available seat based on program's seat capacity
-CREATE TRIGGER pkgs_schedules_init_avail_seat
- BEFORE INSERT ON pkgs_schedules
+CREATE TRIGGER pkgs_schedules_instructors_init_avail_seat
+ BEFORE INSERT ON pkgs_schedules_instructors
   FOR EACH ROW EXECUTE PROCEDURE init_avail_seat();
 ;
 -- capacity upgrades will update available seat
@@ -292,7 +296,7 @@ CREATE TRIGGER programs_update_avail_seat_by_cap
 ;
 -- a pkg schedule taken will decrease available seat
 -- a pkg schedule released will increase available seat
-CREATE TRIGGER students_pkgs_schedules_update_avail_seat
- AFTER INSERT OR DELETE on students_pkgs_schedules
+CREATE TRIGGER students_pkgs_schedules_instructors_update_avail_seat
+ AFTER INSERT OR DELETE on students_pkgs_schedules_instructors
   FOR EACH ROW EXECUTE PROCEDURE update_avail_seat()
 ;
