@@ -76,7 +76,8 @@ CREATE TABLE pkgs_schedules_instructors (
   id SERIAL PRIMARY KEY,
   pkgs_schedule_id INTEGER REFERENCES pkgs_schedules(id),
   instructor_id INTEGER REFERENCES instructors(id),
-  avail_seat INTEGER NOT NULL
+  avail_seat INTEGER NOT NULL,
+  CONSTRAINT pkg_schedule_instructor_unique UNIQUE(pkgs_schedule_id, instructor_id)
 );
 
 CREATE TABLE students_pkgs_schedules_instructors (
@@ -182,7 +183,9 @@ CREATE OR REPLACE FUNCTION init_avail_seat()
 DECLARE
   v_capacity INTEGER;
 BEGIN
-  v_capacity := (SELECT p.capacity FROM pkgs JOIN programs p ON pkgs.program_id = p.id WHERE NEW.pkg_id = pkgs.id);
+  v_capacity := (SELECT p.capacity FROM pkgs JOIN programs p ON pkgs.program_id = p.id 
+                                             JOIN pkgs_schedules ps ON ps.pkg_id = pkgs.id
+                                   WHERE ps.id = NEW.pkgs_schedule_id);
   NEW.avail_seat = v_capacity;
   RETURN NEW;
 END;
@@ -216,7 +219,8 @@ BEGIN
   
   IF (v_delta <> 0) THEN
     UPDATE pkgs_schedules_instructors SET avail_seat = avail_seat + v_delta 
-    WHERE pkg_id IN (SELECT id FROM pkgs WHERE program_id = OLD.id);
+    WHERE pkgs_schedule_id IN (SELECT ps.id FROM pkgs JOIN pkgs_schedules ps ON ps.pkg_id = pkgs.id 
+                               WHERE program_id = OLD.id);
   END IF;
   RETURN NEW;
 END;
@@ -228,11 +232,11 @@ CREATE OR REPLACE FUNCTION update_avail_seat()
 BEGIN
   IF (TG_OP = 'DELETE') THEN
     UPDATE pkgs_schedules_instructors SET avail_seat = avail_seat + 1 
-    WHERE id = OLD.pkgs_schedule_id;
+    WHERE id = OLD.pkgs_schedules_instructor_id;
     RETURN OLD;
   ELSEIF (TG_OP = 'INSERT') THEN
     UPDATE pkgs_schedules_instructors SET avail_seat = avail_seat - 1 
-    WHERE id = NEW.pkgs_schedule_id;
+    WHERE id = NEW.pkgs_schedules_instructor_id;
     RETURN NEW;
   ELSE 
     RAISE WARNING '[UPDATE_AVAIL_SEAT] - Other action occurred: %, at %',TG_OP,now();
