@@ -3,7 +3,7 @@ class PkgsSchedule < ActiveRecord::Base
   belongs_to :pkg
   belongs_to :schedule
 
-  # many-to-many with :students_pkgs, via :students_pkgs_schedules
-  has_many :students_pkgs_schedules
-  has_many :students_pkgs, through: :students_pkgs_schedules
+  # :instructors <= :pkgs_schedules_instructors => :pkgs_schedules
+  has_many :pkgs_schedules_instructors
+  has_many :instructors, through: pkgs_schedules_instructors
 end

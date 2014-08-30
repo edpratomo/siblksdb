@@ -59,6 +59,7 @@ CREATE INDEX students_name ON students(name);
 CREATE TABLE instructors (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
+  nick TEXT NOT NULL UNIQUE,
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_by INTEGER REFERENCES users(id)

@@ -1,10 +1,7 @@
 class Student < ActiveRecord::Base
   belongs_to :user, :foreign_key => 'modified_by'
 
-  has_many :students_pkgs
-  has_many :pkgs, through: :students_pkgs
-
-#  has_many :schedules, through: :pkgs
-  
-  accepts_nested_attributes_for :pkgs, allow_destroy: true
+  # :students <= :students_pkgs_schedules_instructors => :pkgs_schedules_instructors
+  has_many :students_pkgs_schedules_instructors
+  has_many :pkgs_schedules_instructors, through: :students_pkgs_schedules_instructors
 end

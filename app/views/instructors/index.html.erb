@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Nick</th>
       <th>Modified at</th>
       <th>Modified by</th>
       <th colspan="3"></th>
@@ -14,6 +15,7 @@
     <% @instructors.each do |instructor| %>
       <tr>
         <td><%= instructor.name %></td>
+        <td><%= instructor.nick %></td>
         <td><%= instructor.modified_at %></td>
         <td><%= instructor.modified_by %></td>
         <td><%= link_to 'Show', instructor %></td>

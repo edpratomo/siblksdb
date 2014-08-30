@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20140824215154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,12 +35,14 @@ ActiveRecord::Schema.define(version: 0) do
 
   create_table "instructors", force: true do |t|
     t.text     "name",                                      null: false
+    t.text     "nick",                                      null: false
     t.datetime "created_at",  default: "clock_timestamp()", null: false
     t.datetime "modified_at", default: "clock_timestamp()", null: false
     t.integer  "modified_by"
   end
 
   add_index "instructors", ["name"], name: "instructors_name_key", unique: true, using: :btree
+  add_index "instructors", ["nick"], name: "instructors_nick_key", unique: true, using: :btree
 
   create_table "pkgs", force: true do |t|
     t.text    "pkg",        null: false
