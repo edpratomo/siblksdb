@@ -1,5 +1,5 @@
 class StudentScheduleController < ApplicationController
-  before_action :set_student, only: [:show, :edit]
+  before_action :set_student, only: [:show, :edit, :select_pkg]
 
   def index
   end
@@ -39,9 +39,44 @@ class StudentScheduleController < ApplicationController
   def destroy
   end
 
+  def select_pkg
+    @my_packages = @student.pkgs
+
+    ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
+    
+    all_pkgs = Pkg.order(pkg: :desc).order(:level)
+    pkg_hash = all_pkgs.inject({}) do |m,o|
+      m[o.pkg] ||= OpenStruct.new(pkg_name: o.pkg, levels: [])
+      m[o.pkg].levels << OpenStruct.new(level: "#{o.pkg} Level #{o.level}", id: o.id)
+      m
+    end
+
+    # finally create the collection obj
+    @packages = ordered_pkg_names.map {|e| pkg_hash[e] }
+  end
+  
   def edit
-    @packages_taken = @student.pkgs
-    @schedules = Schedule.order(:id)    
+    unless params[:pkg]
+      return redirect_to select_pkg_student_schedule_path(@student)
+    end  
+
+    ordered_days = %w(mon tue wed thu fri sat)
+
+    @pkg = Pkg.find(params[:pkg][:id])
+    @schedules = Schedule.order(:id)
+    
+    @pkgs_schedules_instructors = @schedules.map {|sch|
+      pkgs_schedules = PkgsSchedule.where(pkg: @pkg, schedule: sch).inject({}) do |m,o|
+        m[o.day] = o
+        m
+      end
+      
+      instructors_avail_seat = ordered_days.map {|day|
+        PkgsSchedulesInstructor.joins(:instructor).where("pkgs_schedule_id = ?", pkgs_schedules[day].id).order(:instructor_id)
+      }
+      
+      [sch.time_slot, *instructors_avail_seat]
+    }
   end
 
   # show this student's schedules

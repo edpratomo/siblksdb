@@ -1,10 +1,8 @@
 
-<% @packages_taken.each do |package| %>
- <% student_pkg = StudentsPkg.find_by(pkg: package, student: @student) %>
-  <%= bootstrap_form_for(student_pkg, url: student_schedule_path) do |f| %>
+<%= bootstrap_form_for(@student, url: student_schedule_path) do |f| %>
   <%= f.hidden_field :id %>
   <table class="table table-striped">
-    <caption><%= "#{package.pkg} Level #{package.level}" %></caption>
+    <caption><%= "#{@pkg.pkg} Level #{@pkg.level}" %></caption>
     <thead>
       <tr>
         <th colspan="1"></th>
@@ -18,28 +16,23 @@
     </thead>
 
     <tbody>
-      <% @schedules.each do |schedule| %>
-        <% 
-          this_ps = PkgsSchedule.where("pkg_id = ? AND schedule_id = ?", package.id, schedule.id) 
-          ps_by_day = this_ps.inject({}) do |m,o|
-            m[o.day] = {:id => o.id, :avail_seat => o.avail_seat}
-            m
-          end
-        %>
-        <tr>
-          <td><%= schedule.time_slot %></td>
-          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["mon"][:avail_seat]}"}, ps_by_day["mon"][:id], nil %></td>
-          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["tue"][:avail_seat]}"}, ps_by_day["tue"][:id], nil %></td>
-          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["wed"][:avail_seat]}"}, ps_by_day["wed"][:id], nil %></td>
-          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["thu"][:avail_seat]}"}, ps_by_day["thu"][:id], nil %></td>
-          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["fri"][:avail_seat]}"}, ps_by_day["fri"][:id], nil %></td>
-          <td><%= f.check_box :pkgs_schedule_ids, {multiple: true, label: "#{ps_by_day["sat"][:avail_seat]}"}, ps_by_day["sat"][:id], nil %></td>
-        </tr>
+      <% @pkgs_schedules_instructors.each do |psi_row| %>
+      <tr>
+        <td><%= psi_row.shift %></td>
+        <% psi_row.each do |psi_cell| %>
+          <td><% psi_cell.each do |e| %>
+            <%= f.check_box(:pkgs_schedules_instructor_ids, 
+                          {multiple: true, label: "#{e.avail_seat} (#{e.instructor.nick})"}, 
+                          e.id, nil)
+            %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
       <% end %>
     </tbody>
   </table>
   <div class="actions">
     <%= f.submit %>
   </div>
- <% end %>
 <% end %>

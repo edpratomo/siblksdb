@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 20140824215154) do
     t.integer "avail_seat",       null: false
   end
 
+  add_index "pkgs_schedules_instructors", ["pkgs_schedule_id", "instructor_id"], name: "pkg_schedule_instructor_unique", unique: true, using: :btree
+
   create_table "prereqs", force: true do |t|
     t.integer "pkg_id"
     t.integer "req_pkg_id"

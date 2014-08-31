@@ -40,3 +40,5 @@ INSERT INTO schedules(label, time_slot) VALUES('Jam ke-4', '14:25 - 15:45');
 -- populate pkgs_schedules table
 SELECT populate_pkgs_schedules();
 
+-- include dummy data
+\i db/dummy_data.sql
