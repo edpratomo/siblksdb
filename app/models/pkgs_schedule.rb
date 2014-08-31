@@ -5,5 +5,5 @@ class PkgsSchedule < ActiveRecord::Base
 
   # :instructors <= :pkgs_schedules_instructors => :pkgs_schedules
   has_many :pkgs_schedules_instructors
-  has_many :instructors, through: pkgs_schedules_instructors
+  has_many :instructors, through: :pkgs_schedules_instructors
 end
