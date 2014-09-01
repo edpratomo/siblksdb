@@ -38,7 +38,6 @@ CREATE TABLE users (
   
 CREATE TYPE sex_type AS ENUM ('female', 'male');
 CREATE TYPE day_type AS ENUM ('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
-CREATE TYPE qualification_source AS ENUM ('course test', 'placement test');
 
 CREATE TABLE students (
   id SERIAL PRIMARY KEY,
@@ -54,6 +53,16 @@ CREATE TABLE students (
 );
 
 CREATE INDEX students_name ON students(name);
+
+CREATE TABLE students_pkgs (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER REFERENCES students(id),
+  pkg_id INTEGER REFERENCES pkgs(id),
+  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
+  modified_by INTEGER REFERENCES users(id),
+  CONSTRAINT student_pkg_unique UNIQUE(student_id, pkg_id)
+);
 
 CREATE TABLE instructors (
   id SERIAL PRIMARY KEY,
@@ -80,11 +89,11 @@ CREATE TABLE instructors_schedules (
   CONSTRAINT instructor_schedule_day_unique UNIQUE(schedule_id, instructor_id, day)
 );
 
-CREATE TABLE students_instructors_schedules (
+CREATE TABLE students_pkgs_instructors_schedules (
   id SERIAL PRIMARY KEY,
-  student_id INTEGER REFERENCES students(id),
+  students_pkg_id INTEGER REFERENCES students_pkgs(id),
   instructors_schedule_id INTEGER REFERENCES instructors_schedules(id),
-  CONSTRAINT student_instructor_unique UNIQUE(student_id, instructors_schedule_id)
+  CONSTRAINT student_pkg_instructor_unique UNIQUE(students_pkg_id, instructors_schedule_id)
 );
 
 CREATE TABLE students_qualifications (
@@ -187,19 +196,36 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION populate_pkgs_schedules()
+CREATE OR REPLACE FUNCTION populate_instructors_schedules()
   RETURNS INTEGER AS $$
 DECLARE
-  pkgs_rec  RECORD;
+  instructors_rec  RECORD;
   sched_rec RECORD;
   dayv      TEXT;
   days      TEXT[] := ARRAY['mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 BEGIN
-  FOR pkgs_rec IN SELECT id FROM pkgs LOOP
-    FOR sched_rec IN SELECT id FROM schedules LOOP
+  FOR instructors_rec IN SELECT id FROM instructors WHERE id > 1 AND id < 6 LOOP
+    FOR sched_rec IN SELECT id, label FROM schedules LOOP
       FOREACH dayv IN ARRAY days LOOP
-        INSERT INTO pkgs_schedules (pkg_id, schedule_id, day) VALUES (pkgs_rec.id, sched_rec.id, dayv);
+        IF NOT (dayv = 'wed' AND sched_rec.label = 'Jam ke-4') THEN
+          INSERT INTO instructors_schedules (instructor_id, schedule_id, day) VALUES (instructors_rec.id, sched_rec.id, dayv);
+        END IF;
       END LOOP;
+    END LOOP;
+  END LOOP;
+  RETURN 1;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION populate_programs_instructors()
+  RETURNS INTEGER AS $$
+DECLARE
+  instructors_rec  RECORD;
+  programs_rec RECORD;
+BEGIN
+  FOR programs_rec IN SELECT id FROM programs WHERE id < 4 LOOP
+    FOR instructors_rec IN SELECT id FROM instructors WHERE id > 1 AND id < 7 LOOP
+      INSERT INTO programs_instructors(program_id, instructor_id) VALUES (programs_rec.id, instructors_rec.id);
     END LOOP;
   END LOOP;
   RETURN 1;
@@ -215,7 +241,7 @@ BEGIN
   
   IF (v_delta <> 0) THEN
     UPDATE instructors_schedules SET avail_seat = avail_seat + v_delta 
-    WHERE instructor_id IN OLD.id;
+    WHERE instructor_id = OLD.id;
   END IF;
   RETURN NEW;
 END;
@@ -251,6 +277,27 @@ END;
 $body$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION check_instructors_program()
+  RETURNS TRIGGER AS $body$
+DECLARE
+  is_found   INTEGER;
+BEGIN
+  is_found := (SELECT COUNT(1) FROM students_pkgs sp 
+                                    JOIN pkgs ON sp.pkg_id = pkgs.id 
+                                    JOIN programs_instructors prins ON prins.program_id = pkgs.program_id
+                                    JOIN instructors ins ON ins.id = prins.instructor_id
+                                    JOIN instructors_schedules insch ON insch.instructor_id = ins.id
+               WHERE sp.id = NEW.students_pkg_id AND insch.id = NEW.instructors_schedule_id);
+  IF NOT (is_found = 1) THEN
+    RAISE EXCEPTION '[CHECK_INSTRUCTORS_PROGRAM] - instructor does not match program';
+    RETURN NULL;
+  ELSE
+    RETURN NEW;
+  END IF;
+END;
+$body$
+LANGUAGE plpgsql;
+
 -- triggers
 CREATE TRIGGER students_if_modified 
  AFTER INSERT OR UPDATE OR DELETE ON students
@@ -280,7 +327,12 @@ CREATE TRIGGER instructors_update_avail_seat_by_cap
 ;
 -- a schedule taken will decrease available seat
 -- a schedule released will increase available seat
-CREATE TRIGGER students_instructors_schedules_update_avail_seat
- AFTER INSERT OR DELETE on students_instructors_schedules
+CREATE TRIGGER students_pkgs_instructors_schedules_update_avail_seat
+ AFTER INSERT OR DELETE ON students_pkgs_instructors_schedules
   FOR EACH ROW EXECUTE PROCEDURE update_avail_seat()
+;
+-- check if a chosen instructor has the right program
+CREATE TRIGGER students_pkgs_instructors_schedules_check_instructors_program
+ BEFORE INSERT ON students_pkgs_instructors_schedules
+  FOR EACH ROW EXECUTE PROCEDURE check_instructors_program()
 ;

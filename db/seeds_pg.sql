@@ -7,12 +7,12 @@ INSERT INTO users(group_id, username, fullname, password_digest) VALUES(2, 'bart
 INSERT INTO users(group_id, username, fullname, password_digest) VALUES(3, 'marge', 'Marge Simpson', 'abc');
 INSERT INTO users(group_id, username, fullname, password_digest) VALUES(3, 'lisa', 'Lisa Simpson', 'abc');
 
-INSERT INTO programs(program,capacity) VALUES('Microsoft Office', 10);
-INSERT INTO programs(program,capacity) VALUES('Desain Grafis', 10);
-INSERT INTO programs(program,capacity) VALUES('AutoCAD', 10);
-INSERT INTO programs(program,capacity) VALUES('Bahasa Inggris', 10);
-INSERT INTO programs(program,capacity) VALUES('Teknik', 10);
-INSERT INTO programs(program,capacity) VALUES('Pneumatik/PLC', 10);
+INSERT INTO programs(program) VALUES('Microsoft Office');
+INSERT INTO programs(program) VALUES('Desain Grafis');
+INSERT INTO programs(program) VALUES('AutoCAD');
+INSERT INTO programs(program) VALUES('Bahasa Inggris');
+INSERT INTO programs(program) VALUES('Teknik');
+INSERT INTO programs(program) VALUES('Pneumatik/PLC');
 
 INSERT INTO pkgs(pkg, program_id, level) VALUES('MS Word', 1, 1);
 INSERT INTO pkgs(pkg, program_id, level) VALUES('MS Word', 1, 2);
@@ -37,8 +37,5 @@ INSERT INTO schedules(label, time_slot) VALUES('Jam ke-2', '09:55 - 11:25');
 INSERT INTO schedules(label, time_slot) VALUES('Jam ke-3', '12:50 - 14:20');
 INSERT INTO schedules(label, time_slot) VALUES('Jam ke-4', '14:25 - 15:45');
 
--- populate pkgs_schedules table
-SELECT populate_pkgs_schedules();
-
 -- include dummy data
-\i db/dummy_data.sql
+\i dummy_data.sql
