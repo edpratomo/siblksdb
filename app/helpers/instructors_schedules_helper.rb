@@ -1,0 +1,2 @@
+module InstructorsSchedulesHelper
+end

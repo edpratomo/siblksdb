@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :instructors_schedules
+
+  resources :programs_instructors
+
   resources :instructors
 
   controller :presence_sheet do

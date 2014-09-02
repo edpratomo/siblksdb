@@ -1,0 +1,8 @@
+class InstructorsSchedule < ActiveRecord::Base
+  # :instructors <= :instructors_schedules => :schedules
+  belongs_to :instructor
+  belongs_to :schedule
+
+  has_many :students_pkgs_instructors_schedules
+  has_many :students_pkgs, through: :students_pkgs_instructors_schedules
+end

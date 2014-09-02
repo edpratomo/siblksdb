@@ -1,0 +1,31 @@
+<h1>Listing instructors_schedules</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Schedule</th>
+      <th>Instructor</th>
+      <th>Day</th>
+      <th>Avail seat</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @instructors_schedules.each do |instructors_schedule| %>
+      <tr>
+        <td><%= instructors_schedule.schedule_id %></td>
+        <td><%= instructors_schedule.instructor_id %></td>
+        <td><%= instructors_schedule.day %></td>
+        <td><%= instructors_schedule.avail_seat %></td>
+        <td><%= link_to 'Show', instructors_schedule %></td>
+        <td><%= link_to 'Edit', edit_instructors_schedule_path(instructors_schedule) %></td>
+        <td><%= link_to 'Destroy', instructors_schedule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Instructors schedule', new_instructors_schedule_path %>

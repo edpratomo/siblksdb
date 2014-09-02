@@ -1,0 +1,27 @@
+<h1>Listing programs_instructors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Program</th>
+      <th>Instructor</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @programs_instructors.each do |programs_instructor| %>
+      <tr>
+        <td><%= programs_instructor.program_id %></td>
+        <td><%= programs_instructor.instructor_id %></td>
+        <td><%= link_to 'Show', programs_instructor %></td>
+        <td><%= link_to 'Edit', edit_programs_instructor_path(programs_instructor) %></td>
+        <td><%= link_to 'Destroy', programs_instructor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Programs instructor', new_programs_instructor_path %>

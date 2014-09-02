@@ -1,0 +1,33 @@
+<% unless @my_packages.empty? %>
+
+<%= form_tag(edit_student_schedule_path, {method: :delete, class: "form-horizontal", role: "form"}) do %>
+<div class="form-group">
+  <%= label_tag :foo, "Hapus Paket / Jadwal", class: "control-label col-sm-3" %>
+  <div>
+    <p class="form-control-static">Paket<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil:</p>
+  </div>
+</div>
+
+<% @my_packages.each do |my_package| %>
+ <div class="form-group">
+  <div class="col-sm-offset-3 col-sm-7 form-inline">
+    <div class="form-group col-xs-4">
+      <p class="form-control-static"><%= my_package.pkg %> Level <%= my_package.level %></p>
+    </div>
+    <div class="form-group col-sm-7">
+      <div class="checkbox" %>
+        <%= label_tag 'remove_pkgs[]' do %>
+          <%= check_box_tag 'remove_pkgs[]', my_package.id, false, {multiple: true} %> Hapus (otomatis juga menghapus jadwal)
+        <% end %>
+      </div>
+    </div>
+  </div>
+ </div>
+<% end %>
+
+  <div class="actions">
+    <%= submit_tag "Hapus Paket" %>
+  </div>
+
+<% end %>
+<% end %>
