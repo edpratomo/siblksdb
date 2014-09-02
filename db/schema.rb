@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20140824215154) do
   create_table "instructors", force: true do |t|
     t.text     "name",                                      null: false
     t.text     "nick",                                      null: false
+    t.integer  "capacity",                                  null: false
     t.datetime "created_at",  default: "clock_timestamp()", null: false
     t.datetime "modified_at", default: "clock_timestamp()", null: false
     t.integer  "modified_by"
@@ -44,25 +45,20 @@ ActiveRecord::Schema.define(version: 20140824215154) do
   add_index "instructors", ["name"], name: "instructors_name_key", unique: true, using: :btree
   add_index "instructors", ["nick"], name: "instructors_nick_key", unique: true, using: :btree
 
+  create_table "instructors_schedules", force: true do |t|
+    t.integer "schedule_id"
+    t.integer "instructor_id"
+    t.text    "day",           null: false
+    t.integer "avail_seat",    null: false
+  end
+
+  add_index "instructors_schedules", ["schedule_id", "instructor_id", "day"], name: "instructor_schedule_day_unique", unique: true, using: :btree
+
   create_table "pkgs", force: true do |t|
     t.text    "pkg",        null: false
     t.integer "program_id"
     t.integer "level",      null: false
   end
-
-  create_table "pkgs_schedules", force: true do |t|
-    t.integer "pkg_id"
-    t.integer "schedule_id"
-    t.text    "day",         null: false
-  end
-
-  create_table "pkgs_schedules_instructors", force: true do |t|
-    t.integer "pkgs_schedule_id"
-    t.integer "instructor_id"
-    t.integer "avail_seat",       null: false
-  end
-
-  add_index "pkgs_schedules_instructors", ["pkgs_schedule_id", "instructor_id"], name: "pkg_schedule_instructor_unique", unique: true, using: :btree
 
   create_table "prereqs", force: true do |t|
     t.integer "pkg_id"
@@ -70,11 +66,15 @@ ActiveRecord::Schema.define(version: 20140824215154) do
   end
 
   create_table "programs", force: true do |t|
-    t.text    "program",  null: false
-    t.integer "capacity", null: false
+    t.text "program", null: false
   end
 
   add_index "programs", ["program"], name: "programs_program_key", unique: true, using: :btree
+
+  create_table "programs_instructors", force: true do |t|
+    t.integer "program_id"
+    t.integer "instructor_id"
+  end
 
   create_table "schedules", force: true do |t|
     t.text "label",     null: false
@@ -98,19 +98,29 @@ ActiveRecord::Schema.define(version: 20140824215154) do
 
   add_index "students", ["name"], name: "students_name", using: :btree
 
-  create_table "students_pkgs_schedules_instructors", force: true do |t|
-    t.integer "student_id"
-    t.integer "pkgs_schedules_instructor_id"
+  create_table "students_pkgs", force: true do |t|
+    t.integer  "student_id"
+    t.integer  "pkg_id"
+    t.datetime "created_at",  default: "clock_timestamp()", null: false
+    t.datetime "modified_at", default: "clock_timestamp()", null: false
+    t.integer  "modified_by"
   end
 
-  add_index "students_pkgs_schedules_instructors", ["student_id", "pkgs_schedules_instructor_id"], name: "student_pkg_schedule_instructor_unique", unique: true, using: :btree
+  add_index "students_pkgs", ["student_id", "pkg_id"], name: "student_pkg_unique", unique: true, using: :btree
+
+  create_table "students_pkgs_instructors_schedules", force: true do |t|
+    t.integer "students_pkg_id"
+    t.integer "instructors_schedule_id"
+  end
+
+  add_index "students_pkgs_instructors_schedules", ["students_pkg_id", "instructors_schedule_id"], name: "student_pkg_instructor_unique", unique: true, using: :btree
 
   create_table "students_qualifications", force: true do |t|
     t.integer  "student_id"
     t.integer  "pkg_id"
-    t.text     "acquired_from",                               null: false
-    t.datetime "created_at",    default: "clock_timestamp()", null: false
-    t.datetime "modified_at",   default: "clock_timestamp()", null: false
+    t.text     "instructor_name",                               null: false
+    t.datetime "created_at",      default: "clock_timestamp()", null: false
+    t.datetime "modified_at",     default: "clock_timestamp()", null: false
     t.integer  "modified_by"
   end
 
