@@ -32,6 +32,10 @@ Rails.application.routes.draw do
   get 'sessions/destroy'
 
   resources :students do
+    member do
+      get 'manage_pkg'
+    end
+
     collection do
       get 'name_suggestions'
       get 'search'

@@ -1,29 +1,26 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @student.name %>
-</p>
+<h3><%= @student.name %></h3>
 
-<p>
-  <strong>Sex:</strong>
-  <%= @student.sex %>
-</p>
+<dl class="dl-horizontal" style="font-size:large;">
+  <dt>Jenis kelamin</dt>
+  <dd><%= @student.sex == 'male' ? 'Laki-laki' : 'Perempuan' %></dd>
+</dl>
 
-<p>
-  <strong>Tempat, tanggal lahir:</strong>
-  <%= @student.birthplace %>, <%= @student.birthdate %>
-</p>
+<dl class="dl-horizontal" style="font-size:large;">
+  <dt style="white-space:normal;">Tempat, tanggal lahir</dt>
+  <dd><%= @student.birthplace %>, <%= @student.birthdate %></dd>
+</dl>
 
-<p>
-  <strong>Phone:</strong>
-  <%= @student.phone %>
-</p>
+<dl class="dl-horizontal" style="font-size:large;">
+  <dt>Nomor Telpon</dt>
+  <dd><%= @student.phone %></dd>
+</dl>
 
-<p>
-  <strong>Note:</strong>
-  <%= @student.note %>
-</p>
+<dl class="dl-horizontal" style="font-size:large;">
+  <dt>Keterangan</dt>
+  <dd><%= @student.note %></dd>
+</dl>
 
 <p>
   <strong>Created at:</strong>
@@ -40,6 +37,10 @@
   <%= User.find_by(id: @student.modified_by).username %>
 </p>
 
-<%= link_to 'Edit', edit_student_path(@student) %> |
-<%= link_to 'Atur Jadwal', edit_student_schedule_path(@student) %> |
-<%= link_to 'Back', students_path %>
+<p>
+<%= link_to edit_student_path(@student), class: "btn btn-info" do %>Ubah Data Siswa<% end %>
+<%= link_to manage_pkg_student_path(@student), class: "btn btn-info" do %>Atur Paket yang Diambil<% end %>
+<%= link_to edit_student_schedule_path(@student), class: "btn btn-info" do %>Atur Jadwal<% end %>
+</p>
+
+<%#= link_to 'Back', students_path %>

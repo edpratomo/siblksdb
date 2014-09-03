@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy]
+  before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg]
 
   def name_suggestions
     @suggestions = Student.fuzzy_search(name: params[:q])
@@ -8,6 +8,10 @@ class StudentsController < ApplicationController
   def search
   end
 
+  def manage_pkg
+  
+  end
+  
   # GET /students
   # GET /students.json
   def index
