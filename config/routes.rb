@@ -13,11 +13,7 @@ Rails.application.routes.draw do
   
   get 'help/index'
 
-  resources :student_schedule do
-    member do
-      get 'select_pkg'
-    end
-  end
+  resources :student_schedule
 
   get 'welcome/index'
 

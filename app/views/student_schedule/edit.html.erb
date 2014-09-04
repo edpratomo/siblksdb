@@ -15,7 +15,9 @@
     </div>
   <% end %>
 
-<%= render 'schedule_form' %>
+<% @my_packages.each do |pkg| %>
+<%= render partial: 'schedule_form', locals: {pkg: pkg} %>
+<% end %>
 
 <% else %>
 

@@ -67,14 +67,3 @@
   </div>
 
 <% end %>
-<% if action_name == "edit" %>
-<h3>Tambah / Hapus Paket</h3>
-  <%= form_for(@student, html: { class: "form-horizontal", role: "form"}) do |f| %>
-
-    <%= render partial: 'pkgs_form', locals: {f: f} %>
-
-  <div class="actions">
-    <%= f.submit "Update Paket" %>
-  </div>
-  <% end %>
-<% end %>

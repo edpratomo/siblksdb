@@ -1,8 +1,9 @@
 
 <%= bootstrap_form_for(@student, url: student_schedule_path) do |f| %>
   <%= f.hidden_field :id %>
+  <%= hidden_field_tag 'pkg[id]', pkg[:id]  %>
   <table class="table table-striped">
-    <caption><%= "#{@pkg.pkg} Level #{@pkg.level}" %></caption>
+    <caption><%= pkg[:name] %></caption>
     <thead>
       <tr>
         <th colspan="1"></th>
@@ -16,14 +17,14 @@
     </thead>
 
     <tbody>
-      <% @pkgs_schedules_instructors.each do |psi_row| %>
+      <% pkg[:rows].each do |row| %>
       <tr>
-        <td><%= psi_row.shift %></td>
-        <% psi_row.each do |psi_cell| %>
-          <td><% psi_cell.each do |e| %>
-            <%= f.check_box(:pkgs_schedules_instructor_ids, 
-                          {multiple: true, label: "#{e.avail_seat} (#{e.instructor.nick})"}, 
-                          e.id, nil)
+        <td><%= row.shift %></td>
+        <% row.each do |cell| %>
+          <td><% cell.each do |e| %>
+            <%= f.check_box(:instructors_schedule_ids, 
+                            {multiple: true, label: "#{e.avail_seat} (#{e.instructor.nick})"}, 
+                            e.id, nil)
             %>
             <% end %>
           </td>
