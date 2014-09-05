@@ -50,7 +50,7 @@ class StudentScheduleController < ApplicationController
       end
       timeslot_vs_day = schedules.map do |sched|
         instructors_schedules = ordered_days.map do |day|
-          schedules_by_day[day].select do |i_schedule|
+          (schedules_by_day[day] || []).select do |i_schedule|
             i_schedule.schedule == sched
           end
         end
@@ -89,7 +89,7 @@ class StudentScheduleController < ApplicationController
       end
       timeslot_vs_day = schedules.map do |sched|
         instructors_schedules = ordered_days.map do |day|
-          found = schedules_by_day[day].find {|e| e.schedule == sched and my_schedule[e.id]}
+          found = (schedules_by_day[day] || []).find {|e| e.schedule == sched and my_schedule[e.id]}
           found ? found.instructor.nick : "-"
         end
         [sched.time_slot, *instructors_schedules]
