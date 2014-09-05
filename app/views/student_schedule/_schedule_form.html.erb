@@ -1,7 +1,7 @@
 
-<%= bootstrap_form_for(@student, url: student_schedule_path) do |f| %>
+<%= bootstrap_form_for(pkg[:students_pkg], url: student_schedule_path) do |f| %>
   <%= f.hidden_field :id %>
-  <%= hidden_field_tag 'pkg[id]', pkg[:id]  %>
+  <%#= hidden_field_tag 'pkg[id]', pkg[:id]  %>
   <table class="table table-striped">
     <caption><%= pkg[:name] %></caption>
     <thead>
