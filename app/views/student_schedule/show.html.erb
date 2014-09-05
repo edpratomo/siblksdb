@@ -1,20 +1,18 @@
-p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %></p>
 
 <h2>StudentSchedule#show</h2>
 
-<% unless @packages_taken.empty? %>
+<% if @my_packages.empty? %>
+
+<p>Siswa <%= @student.name %> saat ini sedang tidak mengikuti paket apapun.</p>
+
+<% else %>
+
 <h3><%= @student.name %></h3>
 
-<% @packages_taken.each do |package| %>
- <% 
-   student_pkg = StudentsPkg.find_by(pkg: package, student: @student)
-   my_schedule = student_pkg.pkgs_schedules.inject({}) do |m,o|
-     m[o.id] = 1
-     m
-   end
- %>
+<% @my_packages.each do |pkg| %>
   <table class="table table-striped">
-    <caption><%= "#{package.pkg} Level #{package.level}" %></caption>
+    <caption><%= pkg[:name] %></caption>
     <thead>
       <tr>
         <th colspan="1"></th>
@@ -28,32 +26,19 @@ p id="notice"><%= notice %></p>
     </thead>
 
     <tbody>
-      <% @schedules.each do |schedule| %>
-        <% 
-          this_ps = PkgsSchedule.where("pkg_id = ? AND schedule_id = ?", package.id, schedule.id) 
-          ps_by_day = this_ps.inject({}) do |m,o|
-            m[o.day] = my_schedule[o.id] ? "OK" : "-"
-            m
-          end
-        %>
-        <tr>
-          <td><%= schedule.time_slot %></td>
-          <td><%= ps_by_day["mon"] %></td>
-          <td><%= ps_by_day["tue"] %></td>
-          <td><%= ps_by_day["wed"] %></td>
-          <td><%= ps_by_day["thu"] %></td>
-          <td><%= ps_by_day["fri"] %></td>
-          <td><%= ps_by_day["sat"] %></td>
-        </tr>
+      <% pkg[:rows].each do |row| %>
+      <tr>
+        <td><%= row.shift %></td>
+        <% row.each do |cell| %>
+          <td><%= cell %></td>
+        <% end %>
+      </tr>
       <% end %>
     </tbody>
   </table>
 <% end %>
 
+<% end %>
+
 <%= link_to 'Edit', edit_student_schedule_path(@student) %> 
 
-<% else %>
-
-<p>Siswa <%= @student.name %> saat ini sedang tidak mengikuti paket apapun.</p>
-
-<% end %>

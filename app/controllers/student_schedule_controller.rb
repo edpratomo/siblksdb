@@ -1,6 +1,6 @@
 class StudentScheduleController < ApplicationController
-  before_action :set_student,      only: [:edit]
-  before_action :set_students_pkg, only: [:show, :update]
+  before_action :set_student,      only: [:show, :edit]
+  before_action :set_students_pkg, only: [:update]
   
   def index
   end
@@ -12,6 +12,7 @@ class StudentScheduleController < ApplicationController
   end
   
   def update
+    student = @students_pkg.student
     chosen_instructors_schedules = params[:students_pkg][:instructors_schedule_ids].map {|e| InstructorsSchedule.find(e) }
 
     unless @students_pkg.instructors_schedules == chosen_instructors_schedules
@@ -21,8 +22,8 @@ class StudentScheduleController < ApplicationController
 
     respond_to do |format|
       if @students_pkg.update(students_pkg_params)
-        format.html { redirect_to student_schedule_url, notice: 'Schedule was successfully updated.' }
-        format.json { render :show, status: :created, location: @student_schedule }
+        format.html { redirect_to student_schedule_url(student), notice: 'Schedule was successfully updated.' }
+        format.json { render :show, status: :created, location: student_schedule_url(student) }
       else
         format.html { render :edit }
         format.json { render json: @student_schedule.errors, status: :unprocessable_entity }
@@ -67,11 +68,17 @@ class StudentScheduleController < ApplicationController
 
   # show this student's schedules
   def show
-    pkgs = @students_pkg.student.pkgs.order(:id)
+    pkgs = @student.pkgs.order(:id)
     ordered_days = %w(mon tue wed thu fri sat)
     schedules = Schedule.order(:id)
 
     @my_packages = pkgs.map do |pkg|
+      students_pkg = StudentsPkg.find_by(student: @student, pkg: pkg)
+      my_schedule = students_pkg.instructors_schedules.inject({}) do |m,o|
+        m[o.id] = true
+        m
+      end
+      logger.debug("my_schedule #{my_schedule}")
       instructors = pkg.program.instructors
       schedules_by_day = {}
       instructors.each do |instructor|
@@ -82,21 +89,18 @@ class StudentScheduleController < ApplicationController
       end
       timeslot_vs_day = schedules.map do |sched|
         instructors_schedules = ordered_days.map do |day|
-          schedules_by_day[day].select do |i_schedule|
-            i_schedule.schedule == sched
-          end
+          found = schedules_by_day[day].find {|e| e.schedule == sched and my_schedule[e.id]}
+          found ? found.instructor.nick : "-"
         end
         [sched.time_slot, *instructors_schedules]
       end
       {
         name: "#{pkg.pkg} Level #{pkg.level}",
-        students_pkg: StudentsPkg.find_by(student: @student, pkg: pkg),
-        #id: pkg.id,
+        students_pkg: students_pkg,
         rowspan: instructors.size, 
         rows: timeslot_vs_day
       }
     end
-
   end
 
   private
