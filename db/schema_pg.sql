@@ -326,6 +326,22 @@ END;
 $body$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION check_avail_seat()
+  RETURNS TRIGGER AS $body$
+DECLARE
+  v_avail_seat  INTEGER;
+BEGIN
+  v_avail_seat := (SELECT avail_seat FROM instructors_schedules WHERE id = NEW.instructors_schedule_id);
+  IF (v_avail_seat < 1) THEN
+    RAISE EXCEPTION '[CHECK_AVAIL_SEAT] - seat not available';
+    RETURN NULL;
+  ELSE
+    RETURN NEW;
+  END IF;
+END;
+$body$
+LANGUAGE plpgsql;
+
 -- triggers
 CREATE TRIGGER students_if_modified 
  AFTER INSERT OR UPDATE OR DELETE ON students
@@ -368,4 +384,9 @@ CREATE TRIGGER students_pkgs_instructors_schedules_check_instructors_program
 CREATE TRIGGER students_pkgs_instructors_schedules_check_unique_schedule
  BEFORE INSERT ON students_pkgs_instructors_schedules
   FOR EACH ROW EXECUTE PROCEDURE check_unique_schedule()
+;
+-- check if seat is available
+CREATE TRIGGER students_pkgs_instructors_schedules_check_avail_seat
+ BEFORE INSERT ON students_pkgs_instructors_schedules
+  FOR EACH ROW EXECUTE PROCEDURE check_avail_seat()
 ;
