@@ -298,6 +298,34 @@ END;
 $body$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION check_unique_schedule()
+  RETURNS TRIGGER AS $body$
+DECLARE
+  is_found    INTEGER;
+  v_student_id  INTEGER;
+  v_schedule_id INTEGER;
+  v_day         TEXT;
+BEGIN
+  v_student_id := (SELECT std.id FROM students std JOIN students_pkgs sp ON std.id = sp.student_id WHERE sp.id = NEW.students_pkg_id);
+  v_schedule_id := (SELECT schedule_id FROM instructors_schedules WHERE id = NEW.instructors_schedule_id);
+  v_day := (SELECT "day" FROM instructors_schedules WHERE id = NEW.instructors_schedule_id);
+
+  is_found := (SELECT COUNT(1) FROM students_pkgs_instructors_schedules spis
+                                    JOIN instructors_schedules insched ON spis.instructors_schedule_id = insched.id 
+                                    JOIN students_pkgs sp ON sp.id = spis.students_pkg_id 
+               WHERE sp.student_id = v_student_id AND 
+                     insched.schedule_id = v_schedule_id AND
+                     insched.day = v_day);
+  IF (is_found >= 1) THEN
+    RAISE EXCEPTION '[CHECK_UNIQUE_SCHEDULE] - already exists';
+    RETURN NULL;
+  ELSE
+    RETURN NEW;
+  END IF;
+END;
+$body$
+LANGUAGE plpgsql;
+
 -- triggers
 CREATE TRIGGER students_if_modified 
  AFTER INSERT OR UPDATE OR DELETE ON students
@@ -335,4 +363,9 @@ CREATE TRIGGER students_pkgs_instructors_schedules_update_avail_seat
 CREATE TRIGGER students_pkgs_instructors_schedules_check_instructors_program
  BEFORE INSERT ON students_pkgs_instructors_schedules
   FOR EACH ROW EXECUTE PROCEDURE check_instructors_program()
+;
+-- check if the same student takes the same schedule/day more than once
+CREATE TRIGGER students_pkgs_instructors_schedules_check_unique_schedule
+ BEFORE INSERT ON students_pkgs_instructors_schedules
+  FOR EACH ROW EXECUTE PROCEDURE check_unique_schedule()
 ;
