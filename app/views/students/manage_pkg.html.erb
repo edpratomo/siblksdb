@@ -1,0 +1,15 @@
+<h2>Tambah / Hapus Paket</h2>
+<h3><%= @student.name %></h3>
+
+<%= form_for(@student, html: { class: "form-horizontal", role: "form"}) do |f| %>
+  <%= render partial: 'pkgs_form', locals: {f: f} %>
+  <div class="actions">
+    <%= f.submit "Update Paket" %>
+  </div>
+<% end %>
+
+<p>
+<%= link_to edit_student_path(@student), class: "btn btn-info" do %>Ubah Data Siswa<% end %>
+<%= link_to manage_pkg_student_path(@student), class: "btn btn-info" do %>Atur Paket yang Diambil<% end %>
+<%= link_to edit_student_schedule_path(@student), class: "btn btn-info" do %>Atur Jadwal<% end %>
+</p>
