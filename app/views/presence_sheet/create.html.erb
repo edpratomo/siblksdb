@@ -19,7 +19,7 @@
       <tr>
         <td style="height:60px;vertical-align:middle;"><%= row.shift %></td>
         <% row.each do |col| %>
-          <td <%= col ? raw('class="info"') : '' %>><%= col || '' %></td>
+          <td <%= col ? raw('class="info small"') : '' %>><%= col || '' %></td>
         <% end %>
       </tr>
     <% end %>

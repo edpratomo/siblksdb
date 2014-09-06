@@ -26,7 +26,7 @@ class PresenceSheetController < ApplicationController
     @student_vs_day = if @instructor and @sched
       students_pkgs_by_day = @instructor.instructors_schedules.where(schedule: @sched).inject({}) do |m,o|
         m[o.day] = o.students_pkgs.inject({}) do |m1,o1|
-          m1[o1.student.name] = o1.pkg.pkg
+          m1[o1.student.name] = "#{o1.pkg.pkg} / Lev. #{o1.pkg.level}"
           m1
         end
         m
