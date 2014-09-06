@@ -2,8 +2,8 @@
 
 <%= bootstrap_form_tag(url: presence_sheet_create_path, method: :get, layout: :horizontal, label_col: "col-sm-2", control_col: "col-xs-4") do |f| %>
 
-<%= f.select :pkg, Pkg.order(:id).to_a.map {|e| ["#{e.pkg} Level #{e.level}", e.id]}, label: "Paket", control_col: "col-xs-3" %>
 <%= f.select :schedule, Schedule.order(:id).to_a.map {|e| [e.label, e.id]}, label: "Slot Jadwal", control_col: "col-xs-3" %>
+<%= f.select :instructor, Instructor.order(:id).to_a.map {|e| ["#{e.name} (#{e.nick})", e.id]}, label: "Instruktur", control_col: "col-xs-3" %>
 
 <%= f.form_group :time_range, label: { text: "Rentang Waktu" } do %>
   <%= f.radio_button :time_range, "this_week", label: "Minggu Ini" %>

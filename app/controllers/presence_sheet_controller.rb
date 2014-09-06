@@ -18,27 +18,30 @@ class PresenceSheetController < ApplicationController
       m
     end
     
-    @pkg = Pkg.find(params[:pkg])
-    @sch = Schedule.find(params[:schedule])
+    @instructor = Instructor.find(params[:instructor])
+    @sched = Schedule.find(params[:schedule])
     
     ordered_days = %w(mon tue wed thu fri sat)
 
-    @schedules = if @pkg and @sch
-      # find students who take this pkg
-      # XXX - no idea how to do multi join (with :schedules) here, should revisit
-      students = Student.joins(:pkgs).where("pkgs.id = ?", @pkg.id).order(name: :asc)
-      
-      students.map {|student|
-        my_schedule = StudentsPkg.find_by(student: student, pkg: @pkg).pkgs_schedules.where(schedule: @sch).inject({}) do |m,o|
-          m[o.day] = true
-          m
+    @student_vs_day = if @instructor and @sched
+      students_pkgs_by_day = @instructor.instructors_schedules.where(schedule: @sched).inject({}) do |m,o|
+        m[o.day] = o.students_pkgs.inject({}) do |m1,o1|
+          m1[o1.student.name] = o1.pkg.pkg
+          m1
         end
-        logger.debug("my_schedule: #{my_schedule}")
-        [student.name, *ordered_days.map {|e| my_schedule[e] }]
-      }.reject {|e| e[1..6].all? {|e| not e }}
+        m
+      end
+      
+      students = @instructor.students.order(name: :asc).uniq
+      students.map do |student|
+        student_schedule = ordered_days.map do |day|
+          students_pkgs_by_day[day] ||= {}
+          students_pkgs_by_day[day][student.name] #|| ''
+        end  
+        [student.name, *student_schedule]
+      end
     else 
       []
     end
-
   end
 end
