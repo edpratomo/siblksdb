@@ -36,10 +36,10 @@ class PresenceSheetController < ApplicationController
       students.map do |student|
         student_schedule = ordered_days.map do |day|
           students_pkgs_by_day[day] ||= {}
-          students_pkgs_by_day[day][student.name] #|| ''
+          students_pkgs_by_day[day][student.name] 
         end  
         [student.name, *student_schedule]
-      end
+      end.reject {|e| e[1..6].all? {|e| not e }} # exclude students with empty schedules
     else 
       []
     end
