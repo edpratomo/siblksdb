@@ -1,5 +1,5 @@
 class InstructorsController < ApplicationController
-  before_action :set_instructor, only: [:show, :edit, :update, :destroy]
+  before_action :set_instructor, only: [:show, :edit, :update, :destroy, :edit_schedule, :update_schedule]
   before_action :authorize_admin, only: [:create, :edit, :update, :destroy]
 
   # GET /instructors
@@ -14,11 +14,43 @@ class InstructorsController < ApplicationController
   end
 
   def edit_schedule
-  
+    ordered_days = %w(mon tue wed thu fri sat)
+    schedules = Schedule.order(:id)
+    @checked_schedules = InstructorsSchedule.where(instructor: @instructor).inject({}) do |m,o|
+      m["#{o.schedule_id}_#{o.day}"] = true
+      m
+    end
+    @schedules_vs_days = schedules.map do |sched|
+      ["#{sched.label} (#{sched.time_slot})", *ordered_days.map {|day| "#{sched.id}_#{day}" }]
+    end
   end
 
   def update_schedule
-  
+    current_schedules = InstructorsSchedule.where(instructor: @instructor).map {|e| "#{e.schedule_id}_#{e.day}"}
+    added = params[:instructor][:schedule_ids] - current_schedules
+    deleted = current_schedules - params[:instructor][:schedule_ids]
+    
+    added.each do |to_add|
+      schedule_id, day = to_add.split('_')
+      instructor_schedule = InstructorsSchedule.new(instructor: @instructor, schedule_id: schedule_id.to_i, day: day)
+      instructor_schedule.save
+    end
+
+    deleted.each do |to_add|
+      schedule_id, day = to_add.split('_')
+      instructor_schedule = InstructorsSchedule.find_by(instructor: @instructor, schedule_id: schedule_id.to_i, day: day)
+      instructor_schedule.destroy
+    end
+
+    respond_to do |format|
+      if @instructor.update(instructor_params)
+        format.html { redirect_to @instructor, notice: 'Instructor was successfully updated.' }
+        format.json { render :show, status: :ok, location: @instructor }
+      else
+        format.html { render :edit }
+        format.json { render json: @instructor.errors, status: :unprocessable_entity }
+      end
+    end
   end
   
   # GET /instructors/new

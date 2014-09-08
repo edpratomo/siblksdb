@@ -1,0 +1,47 @@
+
+<%= form_for(@instructor, url: update_schedule_instructor_path(params[:id]), method: :patch, html: { class: "form-horizontal", role: "form"}) do |f| %>
+  <% if @instructor.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@instructor.errors.count, "error") %> prohibited this instructor from being saved:</h2>
+
+      <ul>
+      <% @instructor.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table class="table table-striped">
+    <caption><h2><%= @instructor.name %></h2></caption>
+    <thead>
+      <tr>
+        <th colspan="1"></th>
+        <th>SEN</th>
+        <th>SEL</th>
+        <th>RAB</th>
+        <th>KAM</th>
+        <th>JUM</th>
+        <th>SAB</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @schedules_vs_days.each do |row| %>
+      <tr>
+        <td><%= row.shift %></td>
+        <% row.each do |cell| %>
+        <td>
+            <%= f.check_box(:schedule_ids, 
+                            {multiple: true, checked: @checked_schedules[cell]}, 
+                            cell, nil)
+            %>
+        </td>
+        <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="actions">
+    <%= f.submit "Update Jadwal" %>
+  </div>
+<% end %>

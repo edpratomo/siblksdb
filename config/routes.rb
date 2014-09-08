@@ -4,7 +4,12 @@ Rails.application.routes.draw do
 
   resources :programs_instructors
 
-  resources :instructors
+  resources :instructors do
+    member do
+      get 'edit_schedule'
+      patch 'update_schedule'
+    end
+  end
 
   controller :presence_sheet do
     get 'presence_sheet/new'
