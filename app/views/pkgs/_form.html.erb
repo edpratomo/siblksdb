@@ -18,7 +18,7 @@
     <%= f.select :program_id, Program.all.to_a.map {|e| [e.program, e.id]}, control_col: "col-xs-2" %>
   </div>
   <div class="field">
-    <%= f.number_field :level, label: "Level", control_col: "col-xs-1" %>
+    <%= f.number_field :level, label: "Level", min: 1, control_col: "col-xs-1" %>
   </div>
   <div class="actions">
     <%= f.submit %>

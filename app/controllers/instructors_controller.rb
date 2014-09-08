@@ -5,7 +5,7 @@ class InstructorsController < ApplicationController
   # GET /instructors
   # GET /instructors.json
   def index
-    @instructors = Instructor.all
+    @instructors = Instructor.order(:name)
   end
 
   # GET /instructors/1
@@ -13,6 +13,14 @@ class InstructorsController < ApplicationController
   def show
   end
 
+  def edit_schedule
+  
+  end
+
+  def update_schedule
+  
+  end
+  
   # GET /instructors/new
   def new
     @instructor = Instructor.new
@@ -21,15 +29,23 @@ class InstructorsController < ApplicationController
 
   # GET /instructors/1/edit
   def edit
+    @programs = Program.order(:id)
+    @checked_programs = @instructor.programs
   end
 
   # POST /instructors
   # POST /instructors.json
   def create
     @instructor = Instructor.new(instructor_params)
-
+    logger.debug("program_ids: #{params[:instructor][:program_ids]}")
+    if params[:instructor][:program_ids] # not automatic? 
+      @instructor.programs = params[:instructor][:program_ids].map {|e| Program.find(e)}.compact
+    end
     respond_to do |format|
       if @instructor.save
+        if params[:init_default_schedule]
+          ActiveRecord::Base.connection.execute("SELECT initialize_instructors_schedules(#{@instructor.id})")
+        end
         format.html { redirect_to @instructor, notice: 'Instructor was successfully created.' }
         format.json { render :show, status: :created, location: @instructor }
       else
@@ -71,6 +87,6 @@ class InstructorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def instructor_params
-      params.require(:instructor).permit(:name, :nick, :modified_at, :modified_by)
+      params.require(:instructor).permit(:name, :nick, :capacity, :program_ids)
     end
 end
