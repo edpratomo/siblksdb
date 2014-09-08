@@ -16,6 +16,7 @@ class InstructorsController < ApplicationController
   # GET /instructors/new
   def new
     @instructor = Instructor.new
+    @programs = Program.order(:id)
   end
 
   # GET /instructors/1/edit

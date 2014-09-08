@@ -1,4 +1,4 @@
-<%= form_for(@instructor) do |f| %>
+<%= form_for(@instructor, html: { class: "form-horizontal", role: "form"}) do |f| %>
   <% if @instructor.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@instructor.errors.count, "error") %> prohibited this instructor from being saved:</h2>
@@ -11,23 +11,48 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_area :name %>
+  <div class="form-group">
+    <%= f.label :name, "Nama Lengkap", class: "control-label col-sm-2" %>
+    <div class="col-xs-4">
+      <%= f.text_field :name, label: "Nama Lengkap", class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :nick %><br>
-    <%= f.text_area :nick %>
+  <div class="form-group">
+    <%= f.label :name, "Nick name", class: "control-label col-sm-2" %>
+    <div class="col-xs-2">
+      <%= f.text_field :nick, class: "form-control" %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :modified_at %><br>
-    <%= f.datetime_select :modified_at %>
+  <div class="form-group">
+    <%= f.label :program_ids, "Program", class: "control-label col-sm-2" %>
+    <% @programs.each_with_index do |program,idx| %>
+      <% if idx == 0 %>
+      <div class="col-sm-7">
+      <% else %>
+      <div class="col-sm-offset-2 col-sm-7">
+      <% end %>
+        <div class="form-group col-sm-7">
+          <div class="checkbox" %>
+            <%= label_tag 'program_ids[]' do %>
+              <%= check_box_tag 'program_ids[]', program.id, false, {multiple: true} %> <%= program.program %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
-  <div class="field">
-    <%= f.label :modified_by %><br>
-    <%= f.number_field :modified_by %>
+
+  <div class="form-group">
+    <%= f.label 'init_default_schedule', "Jadwal Default?", class: "control-label col-sm-2" %>
+    <div class="col-sm-7"
+    <%= label_tag 'init_default_schedule' do %>
+    <%= check_box_tag 'init_default_schedule', true %> Ya, Senin s/d Sabtu semua jam, kecuali Rabu jam ke-4.
+    <% end %>
+    </div>
   </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
+
 <% end %>
