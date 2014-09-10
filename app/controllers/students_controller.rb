@@ -1,6 +1,8 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg]
 
+  helper_method :sort_column, :sort_direction
+  
   def name_suggestions
     @suggestions = Student.fuzzy_search(name: params[:q])
   end
@@ -26,7 +28,7 @@ class StudentsController < ApplicationController
   # GET /students
   # GET /students.json
   def index
-    @students = Student.order(:name).paginate(:per_page => 10, :page => params[:page]) 
+    @students = Student.order(sort_column + ' ' + sort_direction).paginate(:per_page => 10, :page => params[:page]) 
   end
 
   # GET /students/1
@@ -114,4 +116,12 @@ class StudentsController < ApplicationController
     def student_params
       params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note)
     end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ?  params[:direction] : "asc"
+  end
+  
+  def sort_column
+    Student.column_names.include?(params[:sort]) ? params[:sort] : "name"
+  end
 end
