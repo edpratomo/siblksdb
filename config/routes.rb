@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  get 'profile/show'
+
+  get 'profile/edit'
+
+  get 'profile/update'
+
   resources :instructors_schedules
 
   resources :programs_instructors
