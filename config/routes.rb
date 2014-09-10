@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   get 'profile/edit'
 
-  get 'profile/update'
+  patch 'profile/update'
 
   resources :instructors_schedules
 
