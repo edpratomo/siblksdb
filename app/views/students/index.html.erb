@@ -25,7 +25,5 @@
     <% end %>
   </tbody>
 </table>
-
+<%= will_paginate @students, renderer: BootstrapPagination::Rails %>
 <br>
-
-<%= link_to 'New Student', new_student_path %>

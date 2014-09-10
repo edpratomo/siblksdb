@@ -47,3 +47,5 @@ gem 'textacular', '~> 3.0'
 gem 'rails_12factor', group: :production
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'

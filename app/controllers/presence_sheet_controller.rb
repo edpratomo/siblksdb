@@ -43,5 +43,20 @@ class PresenceSheetController < ApplicationController
     else 
       []
     end
+
+    respond_to do |format|
+      if true # @students_pkg.update(students_pkg_params)
+        # format.html { redirect_to student_schedule_url(student), notice: 'Schedule was successfully updated.' }
+        format.html { render :create }
+        format.pdf { 
+          render pdf: %[Absensi_#{@instructor.name.gsub(' ', '_')}_#{start_day.strftime("%d-%m-%Y")}],
+          template: 'presence_sheet/create.html.erb' 
+        }
+        format.json { render :show, status: :created, location: student_schedule_url(student) }
+      else
+        format.html { render :edit }
+        format.json { render json: @student_schedule.errors, status: :unprocessable_entity }
+      end
+    end
   end
 end
