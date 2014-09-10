@@ -1,0 +1,12 @@
+.pretty th .current {
+  padding-right: 20px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+.pretty th .asc { 
+  background-image: url(/images/arrow-top-icon.png); 
+}
+
+.pretty th .desc { 
+  background-image: url(/images/arrow-down-icon.png); 
+}
