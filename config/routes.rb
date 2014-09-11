@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :changes
+
   get 'profile/show'
 
   get 'profile/edit'

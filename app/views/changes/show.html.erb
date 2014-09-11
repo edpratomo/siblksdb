@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Table name:</strong>
+  <%= @change.table_name %>
+</p>
+
+<p>
+  <strong>Action tstamp:</strong>
+  <%= @change.action_tstamp %>
+</p>
+
+<p>
+  <strong>Action:</strong>
+  <%= @change.action %>
+</p>
+
+<p>
+  <strong>Original data:</strong>
+  <%= @change.original_data %>
+</p>
+
+<p>
+  <strong>New data:</strong>
+  <%= @change.new_data %>
+</p>
+
+<p>
+  <strong>Query:</strong>
+  <%= @change.query %>
+</p>
+
+<p>
+  <strong>Modified by:</strong>
+  <%= @change.modified_by %>
+</p>
+
+<%= link_to 'Edit', edit_change_path(@change) %> |
+<%= link_to 'Back', changes_path %>
