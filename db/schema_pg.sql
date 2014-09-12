@@ -49,7 +49,7 @@ CREATE TABLE students (
   note  TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by INTEGER REFERENCES users(id)
+  modified_by TEXT
 );
 
 CREATE INDEX students_name ON students(name);
@@ -60,7 +60,7 @@ CREATE TABLE students_pkgs (
   pkg_id INTEGER REFERENCES pkgs(id),
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by INTEGER REFERENCES users(id),
+  modified_by TEXT,
   CONSTRAINT student_pkg_unique UNIQUE(student_id, pkg_id)
 );
 
@@ -71,7 +71,7 @@ CREATE TABLE instructors (
   capacity INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by INTEGER REFERENCES users(id)
+  modified_by TEXT
 );
 
 CREATE TABLE programs_instructors (
@@ -93,6 +93,9 @@ CREATE TABLE students_pkgs_instructors_schedules (
   id SERIAL PRIMARY KEY,
   students_pkg_id INTEGER REFERENCES students_pkgs(id),
   instructors_schedule_id INTEGER REFERENCES instructors_schedules(id),
+  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
+  modified_by TEXT,
   CONSTRAINT student_pkg_instructor_unique UNIQUE(students_pkg_id, instructors_schedule_id)
 );
 
@@ -104,7 +107,7 @@ CREATE TABLE students_qualifications (
 --  acquired_from TEXT NOT NULL CHECK (acquired_from IN ('course test', 'placement test')),
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by INTEGER REFERENCES users(id)
+  modified_by TEXT
 );
 
 CREATE TABLE changes (
@@ -126,7 +129,8 @@ DECLARE
   cur_user TEXT;
 BEGIN
   BEGIN
-    cur_user := (SELECT username FROM current_app_user WHERE txid = txid_current());
+    -- cur_user := (SELECT username FROM current_app_user WHERE txid = txid_current());
+    cur_user := (SELECT username FROM current_user);
   EXCEPTION WHEN undefined_table THEN
    cur_user := 'unknown user';
   END;
@@ -144,9 +148,8 @@ BEGIN
   IF (TG_OP = 'UPDATE') THEN
     v_old_data := ROW(OLD.*);
     v_new_data := ROW(NEW.*);
-    cur_user := (SELECT username FROM users WHERE id = NEW.modified_by);
     INSERT INTO changes (table_name,action,original_data,new_data,query,modified_by) 
-    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_old_data,v_new_data, current_query(), cur_user);
+    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_old_data,v_new_data, current_query(), NEW.modified_by);
     RETURN NEW;
   ELSIF (TG_OP = 'DELETE') THEN
     v_old_data := ROW(OLD.*);
@@ -155,9 +158,8 @@ BEGIN
     RETURN OLD;
   ELSIF (TG_OP = 'INSERT') THEN
     v_new_data := ROW(NEW.*);
-    cur_user := (SELECT username FROM users WHERE id = NEW.modified_by);
     INSERT INTO changes (table_name,action,new_data,query,modified_by)
-    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_new_data, current_query(), cur_user);
+    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_new_data, current_query(), NEW.modified_by);
     RETURN NEW;
   ELSE
     RAISE WARNING '[IF_MODIFIED_FUNC] - Other action occurred: %, at %',TG_OP,now();
