@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140908172425) do
+ActiveRecord::Schema.define(version: 20140912124132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20140908172425) do
     t.integer  "capacity",                                  null: false
     t.datetime "created_at",  default: "clock_timestamp()", null: false
     t.datetime "modified_at", default: "clock_timestamp()", null: false
-    t.integer  "modified_by"
+    t.text     "modified_by"
   end
 
   add_index "instructors", ["name"], name: "instructors_name_key", unique: true, using: :btree
@@ -84,6 +84,16 @@ ActiveRecord::Schema.define(version: 20140908172425) do
   add_index "schedules", ["label"], name: "schedules_label_key", unique: true, using: :btree
   add_index "schedules", ["time_slot"], name: "schedules_time_slot_key", unique: true, using: :btree
 
+  create_table "sessions", force: true do |t|
+    t.string   "session_id", null: false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
+  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+
   create_table "students", force: true do |t|
     t.text     "name",                                      null: false
     t.text     "birthplace"
@@ -93,17 +103,14 @@ ActiveRecord::Schema.define(version: 20140908172425) do
     t.text     "note"
     t.datetime "created_at",  default: "clock_timestamp()", null: false
     t.datetime "modified_at", default: "clock_timestamp()", null: false
-    t.integer  "modified_by"
+    t.text     "modified_by"
   end
 
   add_index "students", ["name"], name: "students_name", using: :btree
 
   create_table "students_pkgs", force: true do |t|
-    t.integer  "student_id"
-    t.integer  "pkg_id"
-    t.datetime "created_at",  default: "clock_timestamp()", null: false
-    t.datetime "modified_at", default: "clock_timestamp()", null: false
-    t.integer  "modified_by"
+    t.integer "student_id"
+    t.integer "pkg_id"
   end
 
   add_index "students_pkgs", ["student_id", "pkg_id"], name: "student_pkg_unique", unique: true, using: :btree
@@ -121,7 +128,7 @@ ActiveRecord::Schema.define(version: 20140908172425) do
     t.text     "instructor_name",                               null: false
     t.datetime "created_at",      default: "clock_timestamp()", null: false
     t.datetime "modified_at",     default: "clock_timestamp()", null: false
-    t.integer  "modified_by"
+    t.text     "modified_by"
   end
 
   create_table "users", force: true do |t|

@@ -35,7 +35,7 @@
 
 <p>
   <strong>Modified by:</strong>
-  <%= User.find_by(id: @student.modified_by).username %>
+  <%= @student.modified_by %>
 </p>
 
 <%#= link_to 'Back', students_path %>

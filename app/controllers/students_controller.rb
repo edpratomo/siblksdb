@@ -39,7 +39,6 @@ class StudentsController < ApplicationController
   # GET /students/new
   def new
     @student = Student.new
-    @packages = Pkg.where("level = 1").order(:id)
   end
 
   # GET /students/1/edit
@@ -50,7 +49,6 @@ class StudentsController < ApplicationController
   # POST /students.json
   def create
     @student = Student.new(student_params)
-    @student.user = current_user
 
     respond_to do |format|
       if @student.save
@@ -67,7 +65,6 @@ class StudentsController < ApplicationController
   # PATCH/PUT /students/1.json
   def update
     respond_to do |format|
-      @student.user = current_user
       
       pkg_id = params.fetch(:student)[:pkg_id]
       if pkg_id and not pkg_id.empty?

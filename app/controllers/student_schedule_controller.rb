@@ -21,7 +21,7 @@ class StudentScheduleController < ApplicationController
 
     unless @students_pkg.instructors_schedules == chosen_instructors_schedules
       logger.debug("Updating students_pkgs_instructors_schedules")
-      @students_pkg.instructors_schedules = chosen_instructors_schedules
+      @students_pkg.save_schedules chosen_instructors_schedules, current_user.username
     end
 
     respond_to do |format|

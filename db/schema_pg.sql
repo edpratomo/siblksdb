@@ -58,9 +58,6 @@ CREATE TABLE students_pkgs (
   id SERIAL PRIMARY KEY,
   student_id INTEGER REFERENCES students(id),
   pkg_id INTEGER REFERENCES pkgs(id),
-  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by TEXT,
   CONSTRAINT student_pkg_unique UNIQUE(student_id, pkg_id)
 );
 
@@ -93,9 +90,6 @@ CREATE TABLE students_pkgs_instructors_schedules (
   id SERIAL PRIMARY KEY,
   students_pkg_id INTEGER REFERENCES students_pkgs(id),
   instructors_schedule_id INTEGER REFERENCES instructors_schedules(id),
-  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_by TEXT,
   CONSTRAINT student_pkg_instructor_unique UNIQUE(students_pkg_id, instructors_schedule_id)
 );
 
@@ -104,7 +98,6 @@ CREATE TABLE students_qualifications (
   student_id INTEGER REFERENCES students(id),
   pkg_id INTEGER REFERENCES pkgs(id),
   instructor_name TEXT NOT NULL,
---  acquired_from TEXT NOT NULL CHECK (acquired_from IN ('course test', 'placement test')),
   created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT
@@ -121,18 +114,16 @@ CREATE TABLE changes (
   modified_by TEXT
 );
 
--- CREATE TEMPORARY TABLE current_app_user(txid INTEGER DEFAULT txid_current(), username TEXT);
--- CREATE TEMPORARY TABLE current_user(username TEXT) ON COMMIT DROP;
-
+-- exception list http://www.postgresql.org/docs/9.2/static/errcodes-appendix.html
+-- CREATE TEMPORARY TABLE current_app_user(username TEXT) ON COMMIT DROP;
 CREATE OR REPLACE FUNCTION get_app_user() RETURNS TEXT AS $$
 DECLARE
   cur_user TEXT;
 BEGIN
   BEGIN
-    -- cur_user := (SELECT username FROM current_app_user WHERE txid = txid_current());
-    cur_user := (SELECT username FROM current_user);
+    cur_user := (SELECT username FROM current_app_user);
   EXCEPTION WHEN undefined_table THEN
-   cur_user := 'unknown user';
+    cur_user := 'unknown user';
   END;
   RETURN cur_user;
 END;
@@ -148,8 +139,16 @@ BEGIN
   IF (TG_OP = 'UPDATE') THEN
     v_old_data := ROW(OLD.*);
     v_new_data := ROW(NEW.*);
+    BEGIN
+      cur_user := NEW.modified_by;
+    EXCEPTION WHEN undefined_column THEN
+      cur_user := NULL;
+    END;
+    IF cur_user IS NULL THEN
+      cur_user := get_app_user();
+    END IF;
     INSERT INTO changes (table_name,action,original_data,new_data,query,modified_by) 
-    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_old_data,v_new_data, current_query(), NEW.modified_by);
+    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_old_data,v_new_data, current_query(), cur_user);
     RETURN NEW;
   ELSIF (TG_OP = 'DELETE') THEN
     v_old_data := ROW(OLD.*);
@@ -158,8 +157,16 @@ BEGIN
     RETURN OLD;
   ELSIF (TG_OP = 'INSERT') THEN
     v_new_data := ROW(NEW.*);
+    BEGIN
+      cur_user := NEW.modified_by;
+    EXCEPTION WHEN undefined_column THEN
+      cur_user := NULL;
+    END;
+    IF cur_user IS NULL THEN
+      cur_user := get_app_user();
+    END IF;
     INSERT INTO changes (table_name,action,new_data,query,modified_by)
-    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_new_data, current_query(), NEW.modified_by);
+    VALUES (TG_TABLE_NAME::TEXT,substring(TG_OP,1,1),v_new_data, current_query(), cur_user);
     RETURN NEW;
   ELSE
     RAISE WARNING '[IF_MODIFIED_FUNC] - Other action occurred: %, at %',TG_OP,now();
@@ -179,10 +186,16 @@ END;
 $body$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION update_timestamp()
+CREATE OR REPLACE FUNCTION update_userstamp()
   RETURNS TRIGGER AS $$
+DECLARE
+  cur_user TEXT;
 BEGIN
-  NEW.modified_at = now(); 
+  -- NEW.modified_at = now(); 
+  cur_user = get_app_user();
+  IF cur_user <> 'unknown user' THEN
+    NEW.modified_by = cur_user;
+  END IF;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -363,6 +376,7 @@ $body$
 LANGUAGE plpgsql;
 
 -- triggers
+-- audit log
 CREATE TRIGGER students_if_modified 
  AFTER INSERT OR UPDATE OR DELETE ON students
   FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
@@ -371,13 +385,38 @@ CREATE TRIGGER students_qualifications_if_modified
  AFTER INSERT OR UPDATE OR DELETE ON students_qualifications
   FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
 ;
-CREATE TRIGGER students_update_timestamp 
- BEFORE UPDATE ON students
-  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
+CREATE TRIGGER instructors_if_modified
+ AFTER INSERT OR UPDATE OR DELETE ON instructors
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
 ;
-CREATE TRIGGER students_qualifications_update_timestamp
- BEFORE UPDATE ON students_qualifications
-  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
+CREATE TRIGGER students_pkgs_if_modified
+ AFTER INSERT OR UPDATE OR DELETE ON students_pkgs
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+;
+CREATE TRIGGER programs_instructors_if_modified
+ AFTER INSERT OR UPDATE OR DELETE ON programs_instructors
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+;
+CREATE TRIGGER instructors_schedules_if_modified
+ AFTER INSERT OR UPDATE OR DELETE ON instructors_schedules
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+;
+CREATE TRIGGER students_pkgs_instructors_schedules_if_modified
+ AFTER INSERT OR UPDATE OR DELETE ON students_pkgs_instructors_schedules
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+;
+-- userstamp
+CREATE TRIGGER students_update_userstamp 
+ BEFORE INSERT OR UPDATE ON students
+  FOR EACH ROW EXECUTE PROCEDURE update_userstamp()
+;
+CREATE TRIGGER students_qualifications_update_userstamp
+ BEFORE INSERT OR UPDATE ON students_qualifications
+  FOR EACH ROW EXECUTE PROCEDURE update_userstamp()
+;
+CREATE TRIGGER instructors_update_userstamp
+ BEFORE INSERT OR UPDATE ON instructors
+  FOR EACH ROW EXECUTE PROCEDURE update_userstamp()
 ;
 -- initialize available seat based on instructor's seat capacity
 CREATE TRIGGER instructors_schedules_init_avail_seat
