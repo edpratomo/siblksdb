@@ -12,6 +12,7 @@ class StudentScheduleController < ApplicationController
   end
   
   def update
+    username = current_user.username
     student = @students_pkg.student
     chosen_instructors_schedules = if params[:students_pkg]
       params[:students_pkg][:instructors_schedule_ids].map {|e| InstructorsSchedule.find(e) }
@@ -21,7 +22,9 @@ class StudentScheduleController < ApplicationController
 
     unless @students_pkg.instructors_schedules == chosen_instructors_schedules
       logger.debug("Updating students_pkgs_instructors_schedules")
-      @students_pkg.save_schedules chosen_instructors_schedules, current_user.username
+      @students_pkg.transaction_user(username) {
+        @students_pkg.instructors_schedules = chosen_instructors_schedules
+      }
     end
 
     respond_to do |format|
