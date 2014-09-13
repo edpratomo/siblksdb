@@ -8,4 +8,12 @@ class StudentsPkg < ActiveRecord::Base
 
   has_many :students_pkgs_instructors_schedules
   has_many :instructors_schedules, through: :students_pkgs_instructors_schedules
+
+  def save_schedules chosen_instructors_schedules, current_user
+    transaction do
+      ActiveRecord::Base.connection.execute('CREATE TEMPORARY TABLE current_app_user(username TEXT) ON COMMIT DROP')
+      ActiveRecord::Base.connection.execute("INSERT INTO current_app_user VALUES('#{current_user}')")
+      self.instructors_schedules = chosen_instructors_schedules
+    end
+  end
 end
