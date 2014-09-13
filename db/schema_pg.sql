@@ -47,8 +47,8 @@ CREATE TABLE students (
   sex TEXT NOT NULL CHECK (sex IN ('female','male')),
   phone TEXT,
   note  TEXT,
-  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT
 );
 
@@ -66,8 +66,8 @@ CREATE TABLE instructors (
   name TEXT NOT NULL UNIQUE,
   nick TEXT NOT NULL UNIQUE,
   capacity INTEGER NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT
 );
 
@@ -98,8 +98,8 @@ CREATE TABLE students_qualifications (
   student_id INTEGER REFERENCES students(id),
   pkg_id INTEGER REFERENCES pkgs(id),
   instructor_name TEXT NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
-  modified_at TIMESTAMP NOT NULL DEFAULT clock_timestamp(),
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT
 );
 
@@ -185,6 +185,14 @@ EXCEPTION
 END;
 $body$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_timestamp()
+  RETURNS TRIGGER AS $$
+BEGIN
+  NEW.modified_at = now(); 
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION update_userstamp()
   RETURNS TRIGGER AS $$
@@ -404,6 +412,19 @@ CREATE TRIGGER instructors_schedules_if_modified
 CREATE TRIGGER students_pkgs_instructors_schedules_if_modified
  AFTER INSERT OR UPDATE OR DELETE ON students_pkgs_instructors_schedules
   FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+;
+-- timestamp
+CREATE TRIGGER students_update_timestamp 
+ BEFORE UPDATE ON students
+  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
+;
+CREATE TRIGGER students_qualifications_update_timestamp 
+ BEFORE UPDATE ON students_qualifications
+  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
+;
+CREATE TRIGGER instructors_update_timestamp 
+ BEFORE UPDATE ON instructors
+  FOR EACH ROW EXECUTE PROCEDURE update_timestamp()
 ;
 -- userstamp
 CREATE TRIGGER students_update_userstamp 
