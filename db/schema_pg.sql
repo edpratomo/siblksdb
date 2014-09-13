@@ -114,6 +114,9 @@ CREATE TABLE changes (
   modified_by TEXT
 );
 
+CREATE INDEX changes_action_tstamp ON changes(action_tstamp);
+CREATE INDEX changes_modified_by ON changes(modified_by);
+
 -- exception list http://www.postgresql.org/docs/9.2/static/errcodes-appendix.html
 -- CREATE TEMPORARY TABLE current_app_user(username TEXT) ON COMMIT DROP;
 CREATE OR REPLACE FUNCTION get_app_user() RETURNS TEXT AS $$
