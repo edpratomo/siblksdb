@@ -49,9 +49,10 @@ class StudentsController < ApplicationController
   # POST /students.json
   def create
     @student = Student.new(student_params)
+    username = current_user.username
 
     respond_to do |format|
-      if @student.save
+      if @student.transaction_user(username) { @student.save }
         format.html { redirect_to @student, notice: 'Student was successfully created.' }
         format.json { render :show, status: :created, location: @student }
       else
@@ -64,26 +65,26 @@ class StudentsController < ApplicationController
   # PATCH/PUT /students/1
   # PATCH/PUT /students/1.json
   def update
-    respond_to do |format|
-      
-      pkg_id = params.fetch(:student)[:pkg_id]
-      if pkg_id and not pkg_id.empty?
-        Student.transaction do 
-          Pkg.transaction do
-            pkg = Pkg.find(pkg_id)
-            @student.pkgs << pkg if pkg
-          end
-        end
+    username = current_user.username
+    pkg_id = params.fetch(:student)[:pkg_id]
+    if pkg_id and not pkg_id.empty?
+      @student.transaction_user(username) do
+        pkg = Pkg.find(pkg_id)
+        @student.pkgs << pkg if pkg
       end
+    end
       
-      remove_pkgs = params[:remove_pkgs]
-      if remove_pkgs 
+    remove_pkgs = params[:remove_pkgs]
+    if remove_pkgs
+      @student.transaction_user(username) do
         remove_pkgs.map {|e| Pkg.find(e)}.each do |pkg|
           @student.pkgs.destroy(pkg)
         end
       end
-        
-      if @student.update(student_params)
+    end
+    
+    respond_to do |format|
+      if @student.transaction_user(username) { @student.update(student_params) }
         format.html { redirect_to @student, notice: 'Student was successfully updated.' }
         format.json { render :show, status: :ok, location: @student }
       else
