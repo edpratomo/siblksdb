@@ -1,6 +1,6 @@
 class Student < ActiveRecord::Base
-  belongs_to :user, :foreign_key => 'modified_by'
-
+  include TransactionHelper
+  
   # :students <= :students_qualifications => :pkgs
   has_many :students_qualifications
   has_many :qualifications, through: :students_qualifications, source: :pkg
