@@ -1,64 +1,19 @@
 class ChangesController < ApplicationController
-  before_action :set_change, only: [:show, :edit, :update, :destroy]
+  before_action :set_change, only: [:show]
+  before_action :authorize_sysadmin
+
+  helper_method :sort_column, :sort_direction
 
   # GET /changes
   # GET /changes.json
   def index
-    @changes = Change.all
+    # @changes = Change.all
+    @changes = Change.order(sort_column + ' ' + sort_direction).paginate(:per_page => 10, :page => params[:page]) 
   end
 
   # GET /changes/1
   # GET /changes/1.json
   def show
-  end
-
-  # GET /changes/new
-  def new
-    @change = Change.new
-  end
-
-  # GET /changes/1/edit
-  def edit
-  end
-
-  # POST /changes
-  # POST /changes.json
-  def create
-    @change = Change.new(change_params)
-
-    respond_to do |format|
-      if @change.save
-        format.html { redirect_to @change, notice: 'Change was successfully created.' }
-        format.json { render :show, status: :created, location: @change }
-      else
-        format.html { render :new }
-        format.json { render json: @change.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /changes/1
-  # PATCH/PUT /changes/1.json
-  def update
-    respond_to do |format|
-      if @change.update(change_params)
-        format.html { redirect_to @change, notice: 'Change was successfully updated.' }
-        format.json { render :show, status: :ok, location: @change }
-      else
-        format.html { render :edit }
-        format.json { render json: @change.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /changes/1
-  # DELETE /changes/1.json
-  def destroy
-    @change.destroy
-    respond_to do |format|
-      format.html { redirect_to changes_url, notice: 'Change was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
 
   private
@@ -71,4 +26,13 @@ class ChangesController < ApplicationController
     def change_params
       params.require(:change).permit(:table_name, :action_tstamp, :action, :original_data, :new_data, :query, :modified_by)
     end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"
+  end
+  
+  def sort_column
+    Change.column_names.include?(params[:sort]) ? params[:sort] : "action_tstamp"
+  end
+
 end

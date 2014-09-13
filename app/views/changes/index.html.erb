@@ -1,16 +1,15 @@
-<h1>Listing changes</h1>
+<h2>Changes History</h2>
 
-<table>
+<table class="table pretty table-hover table-striped">
   <thead>
     <tr>
-      <th>Table name</th>
-      <th>Action tstamp</th>
+      <th>Table</th>
+      <th><%= sortable "action_tstamp", "Timestamp" %></th>
       <th>Action</th>
       <th>Original data</th>
       <th>New data</th>
-      <th>Query</th>
       <th>Modified by</th>
-      <th colspan="3"></th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -22,16 +21,11 @@
         <td><%= change.action %></td>
         <td><%= change.original_data %></td>
         <td><%= change.new_data %></td>
-        <td><%= change.query %></td>
         <td><%= change.modified_by %></td>
-        <td><%= link_to 'Show', change %></td>
-        <td><%= link_to 'Edit', edit_change_path(change) %></td>
-        <td><%= link_to 'Destroy', change, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Detail', change_path(change) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+<%= will_paginate @changes, renderer: BootstrapPagination::Rails %>
 
-<br>
-
-<%= link_to 'New Change', new_change_path %>
