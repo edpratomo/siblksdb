@@ -20,70 +20,92 @@
 <% end %>
 
 <script type="text/javascript">
-$('input[type="checkbox"]').change(function() {
-  if (this.checked) {
-    var checked_id = this.id
-    checked_prefix = checked_id.replace(/_\d+$/, '_');
-    checked_subprefix = checked_id.replace(/_\d+_\d+$/, '_');
-
-    var checkbox_ids = $('input[type="checkbox"]')
-      .map(function() { return this.id; })
-      .get();
-
-    var uncheck_these = $.grep(checkbox_ids, function(e) {
-      return (e.indexOf(checked_prefix) == 0 && e != checked_id);
-    });
-
-    //alert("uncheck_these: " + uncheck_these.join(', '));
-
-    $.each(uncheck_these, function(idx,e) {
-      $('#' + e).attr('checked', false); 
-    });
-  }
-});
 
 $(function() {
-  var checkbox_inputs = $('input[type="checkbox"]');
-  var checkbox_ids = checkbox_inputs.map(function() { return this.id; }).get();
+  var checkbox_ids = $('input[type="checkbox"]')
+   .map(function() { return this.id; })
+   .get();
 
-  var checked_checkboxes = $.grep(checkbox_ids, function(e) {
-    return ($('#' + e).prop("checked") == true);
-  });
+  var disable_checkboxes = function(reference_id) {
+    var checked_checkboxes = [];
+    if (reference_id === undefined) {
+      checked_checkboxes = $.grep(checkbox_ids, function(e) {
+        return ($('#' + e).prop("checked") == true);
+      });
+    } else {
+      checked_checkboxes = [reference_id];
+    }
 
-  var checked_prefixes = checked_checkboxes.map(function(e) {
-    return e.replace(/_\d+$/, '_');
-  });
-
-  var checked_subprefixes = checked_checkboxes.map(function(e) {
-    return e.replace(/_\d+_\d+$/, '_');
-  });
-
-  // alert("checked_subp: " + checked_subprefixes.join(', '));
-
-  var disable_these_ids = $.grep(checkbox_ids, function(e) {
-    var found = false;
-    $.each(checked_subprefixes, function(idx, subprefix) {
-      if (e.indexOf(subprefix) == 0) {
-        found = true;
-      }
+    var checked_prefixes = checked_checkboxes.map(function(e) {
+      return e.replace(/_\d+$/, '_');
     });
-    if (found) {
-      $.each(checked_prefixes, function(idx, prefix) {
-        if (e.indexOf(prefix) == 0) {
-          found = false;
-          return false; // break each in javascript
+
+    var checked_subprefixes = checked_checkboxes.map(function(e) {
+      return e.replace(/_\d+_\d+$/, '_');
+    });
+
+    var disable_these_ids = $.grep(checkbox_ids, function(e) {
+      var found = false;
+      $.each(checked_subprefixes, function(idx, subprefix) {
+        if (e.indexOf(subprefix) == 0) {
+          found = true;
         }
       });
-      return found;
+      if (found) {
+        $.each(checked_prefixes, function(idx, prefix) {
+          if (e.indexOf(prefix) == 0) {
+            found = false;
+            return false; // break each in javascript
+          }
+        });
+        return found;
+      } else {
+        return false;
+      }
+    });
+
+    $.each(disable_these_ids, function(idx, e) {
+      $('#' + e).attr("disabled", true);
+    });
+  }
+
+  var enable_checkboxes = function(reference_id) {
+    var checked_subprefix = reference_id.replace(/_\d+_\d+$/, '_');
+
+    var enable_these_ids = $.grep(checkbox_ids, function(e) {
+      return (e.indexOf(checked_subprefix) == 0);
+    });
+    console.log("enable: " + enable_these_ids.join(', '));
+    $.each(enable_these_ids, function(idx, e) {
+      $('#' + e).removeAttr("disabled");
+    });
+  }
+
+  disable_checkboxes();
+
+  $('input[type="checkbox"]').change(function() {
+    if (this.checked) {
+      var checked_id = this.id
+      checked_prefix = checked_id.replace(/_\d+$/, '_');
+      checked_subprefix = checked_id.replace(/_\d+_\d+$/, '_');
+
+      var uncheck_these = $.grep(checkbox_ids, function(e) {
+        return (e.indexOf(checked_prefix) == 0 && e != checked_id);
+      });
+
+      $.each(uncheck_these, function(idx,e) {
+        $('#' + e).attr('checked', false); 
+      });
+      disable_checkboxes(this.id);
     } else {
-      return false;
+      // find subprefix and enable all checkboxes with this subprefix
+      // alert("unchecked");
+      enable_checkboxes(this.id);
     }
   });
 
-  $.each(disable_these_ids, function(idx, e) {
-    $('#' + e).attr("disabled", true);
-  });
 });
+
 </script>
 
 <% else %>
@@ -91,4 +113,3 @@ $(function() {
 <p>Saat ini sedang tidak mengikuti paket apapun.</p>
 <%= link_to "Tambahkan Paket", edit_student_path, :class => "btn btn-info btn-primary" %>
 <% end %>
-
