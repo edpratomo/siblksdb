@@ -1,5 +1,5 @@
 class Instructor < ActiveRecord::Base
-  belongs_to :user, :foreign_key => 'modified_by'
+  include TransactionHelper
 
   # :instructors <= :programs_instructors => :programs
   has_many :programs_instructors

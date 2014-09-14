@@ -114,6 +114,7 @@ CREATE TABLE changes (
   modified_by TEXT
 );
 
+CREATE INDEX changes_table_name ON changes(table_name);
 CREATE INDEX changes_action_tstamp ON changes(action_tstamp);
 CREATE INDEX changes_modified_by ON changes(modified_by);
 
