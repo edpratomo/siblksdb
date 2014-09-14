@@ -97,7 +97,7 @@ CREATE TABLE students_qualifications (
   id SERIAL PRIMARY KEY,
   student_id INTEGER REFERENCES students(id),
   pkg_id INTEGER REFERENCES pkgs(id),
-  instructor_name TEXT NOT NULL,
+--  instructor_name TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT

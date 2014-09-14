@@ -50,7 +50,9 @@ class PresenceSheetController < ApplicationController
         format.html { render :create }
         format.pdf { 
           render pdf: %[Absensi_#{@instructor.name.gsub(' ', '_')}_#{start_day.strftime("%d-%m-%Y")}],
-          template: 'presence_sheet/create.html.erb' 
+                 orientation: 'Landscape',
+                 template: 'presence_sheet/create.pdf.erb',
+                 layout: 'pdf_layout.html.erb'
         }
         format.json { render :show, status: :created, location: student_schedule_url(student) }
       else

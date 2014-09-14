@@ -1,6 +1,7 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg]
-
+  before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg, :finish_pkg, :remove_pkg]
+  before_action :set_current_user
+  
   helper_method :sort_column, :sort_direction
   
   def name_suggestions
@@ -10,6 +11,31 @@ class StudentsController < ApplicationController
   def search
   end
 
+  # DELETE
+  def finish_pkg
+    @student.transaction_user(@current_user) do
+      pkg = Pkg.find(params[:pid])
+      @student.qualifications << pkg
+      @student.pkgs.destroy(pkg)
+    end
+    respond_to do |format|
+      format.html { redirect_to @student, notice: 'Student was successfully updated.' }
+      format.json { render :show, status: :ok, location: @student }
+    end
+  end
+  
+  # DELETE
+  def remove_pkg
+    @student.transaction_user(@current_user) do
+      pkg = Pkg.find(params[:pid])
+      @student.pkgs.destroy(pkg)
+    end
+    respond_to do |format|
+      format.html { redirect_to @student, notice: 'Student was successfully updated.' }
+      format.json { render :show, status: :ok, location: @student }
+    end
+  end
+      
   def manage_pkg
     @my_packages = @student.pkgs.order(:id)
     ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
@@ -49,10 +75,9 @@ class StudentsController < ApplicationController
   # POST /students.json
   def create
     @student = Student.new(student_params)
-    username = current_user.username
 
     respond_to do |format|
-      if @student.transaction_user(username) { @student.save }
+      if @student.transaction_user(@current_user) { @student.save! }
         format.html { redirect_to @student, notice: 'Student was successfully created.' }
         format.json { render :show, status: :created, location: @student }
       else
@@ -65,26 +90,16 @@ class StudentsController < ApplicationController
   # PATCH/PUT /students/1
   # PATCH/PUT /students/1.json
   def update
-    username = current_user.username
     pkg_id = params.fetch(:student)[:pkg_id]
     if pkg_id and not pkg_id.empty?
-      @student.transaction_user(username) do
+      @student.transaction_user(@current_user) do
         pkg = Pkg.find(pkg_id)
         @student.pkgs << pkg if pkg
       end
     end
       
-    remove_pkgs = params[:remove_pkgs]
-    if remove_pkgs
-      @student.transaction_user(username) do
-        remove_pkgs.map {|e| Pkg.find(e)}.each do |pkg|
-          @student.pkgs.destroy(pkg)
-        end
-      end
-    end
-    
     respond_to do |format|
-      if @student.transaction_user(username) { @student.update(student_params) }
+      if @student.transaction_user(@current_user) { @student.update(student_params) }
         format.html { redirect_to @student, notice: 'Student was successfully updated.' }
         format.json { render :show, status: :ok, location: @student }
       else
@@ -110,6 +125,10 @@ class StudentsController < ApplicationController
       @student = Student.find(params[:id])
     end
 
+    def set_current_user
+      @current_user = current_user.username
+    end
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
       params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note)

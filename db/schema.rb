@@ -27,6 +27,10 @@ ActiveRecord::Schema.define(version: 20140912124132) do
     t.text     "modified_by"
   end
 
+  add_index "changes", ["action_tstamp"], name: "changes_action_tstamp", using: :btree
+  add_index "changes", ["modified_by"], name: "changes_modified_by", using: :btree
+  add_index "changes", ["table_name"], name: "changes_table_name", using: :btree
+
   create_table "groups", force: true do |t|
     t.text "name", null: false
   end
@@ -125,9 +129,8 @@ ActiveRecord::Schema.define(version: 20140912124132) do
   create_table "students_qualifications", force: true do |t|
     t.integer  "student_id"
     t.integer  "pkg_id"
-    t.text     "instructor_name",                               null: false
-    t.datetime "created_at",      default: "clock_timestamp()", null: false
-    t.datetime "modified_at",     default: "clock_timestamp()", null: false
+    t.datetime "created_at",  default: "clock_timestamp()", null: false
+    t.datetime "modified_at", default: "clock_timestamp()", null: false
     t.text     "modified_by"
   end
 
