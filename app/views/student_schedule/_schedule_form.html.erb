@@ -19,7 +19,7 @@
       <tr>
         <td style="vertical-align:middle;"><%= row.shift %></td>
         <% row.each_with_index do |cell,day_idx| %>
-          <td>
+          <td style="padding-right: 20px;">
           <% cell.each do |e| %>
             <div class="checkbox">
             <%= f.check_box(:instructors_schedule_ids, 

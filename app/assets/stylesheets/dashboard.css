@@ -66,6 +66,9 @@ body {
   background-color: #428bca;
 }
 
+.nav-sidebar > li > a:hover {
+  color: #0000ff; 
+}
 
 /*
  * Main content

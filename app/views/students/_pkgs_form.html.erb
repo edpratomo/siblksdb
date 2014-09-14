@@ -1,6 +1,6 @@
 <% unless @my_packages.empty? %>
+  <p style="padding-top: 20px;"><strong>Paket<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil</strong></p>
   <table class="table" style="width: 60%;">
-    <caption style="text-align: left;"><strong>Paket<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil</strong></caption>
     <tbody>
       <% @my_packages.each do |my_package| %>
       <tr>

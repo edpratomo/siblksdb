@@ -46,6 +46,12 @@ class StudentScheduleController < ApplicationController
     ordered_days = %w(mon tue wed thu fri sat)
     schedules = Schedule.order(:id)
     
+    css_colors = %w[aqua blue fuchsia gray green lime maroon navy olive orange purple red silver teal yellow]
+    iterator = gen_iterator
+    @instructors_colors = Instructor.all.map {|e| e.nick }.inject({}) do |m,o|
+      m[o] = iterator.call(css_colors)
+      m
+    end
     @my_packages = pkgs.map do |pkg|
       instructors = pkg.program.instructors
       schedules_by_day = {}
@@ -126,5 +132,11 @@ class StudentScheduleController < ApplicationController
 
   def students_pkg_params
     params.require(:students_pkg).permit(:id, :instructors_schedule_ids)
+  end
+
+  # circular iterator
+  def gen_iterator
+    idx = 0
+    -> (items) { idx += 1; idx = 1 if idx > items.size; items[idx - 1] }
   end
 end

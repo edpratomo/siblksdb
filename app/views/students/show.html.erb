@@ -23,7 +23,12 @@
   <dd><%= @student.note %></dd>
 </dl>
 
-<p>
+<dl class="dl-horizontal" style="font-size:large;">
+  <dt>Sudah Lulus</dt>
+  <dd><%= @student.qualifications.map {|e| "#{e.pkg} Lv.#{e.level}" }.join(', ') %></dd>
+</dl>
+
+<p style="padding-top: 30px;">
   <strong>Created at:</strong>
   <%= @student.created_at %>
 </p>
