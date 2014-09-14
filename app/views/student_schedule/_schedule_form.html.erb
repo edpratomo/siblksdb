@@ -23,7 +23,7 @@
           <% cell.each do |e| %>
             <div class="checkbox">
             <%= f.check_box(:instructors_schedule_ids, 
-                            {multiple: true, id: "schedules_#{sched_idx}_#{day_idx}_#{e.id}"}, 
+                            {multiple: true, id: "schedules_#{sched_idx}_#{day_idx}_#{pkg_idx}_#{e.id}"}, 
                             e.id, nil)
             %> <%= "#{e.avail_seat} (#{e.instructor.nick})" %>
             </div>
@@ -38,23 +38,3 @@
     <%= f.submit %>
   </div>
 <% end %>
-<script type="text/javascript">
-$('input[type="checkbox"]').change(function() {
-  if (this.checked) {
-    var checked_id = this.id
-    checked_prefix = checked_id.replace(/_\d+$/, '_');
-
-    var checkbox_ids = $('input[type="checkbox"]')
-      .map(function() { return this.id; })
-      .get();
-
-    var uncheck_these = $.grep(checkbox_ids, function(e) {
-      return (e.indexOf(checked_prefix) == 0 && e != checked_id);
-    });
-
-    $.each(uncheck_these, function(idx,e) {
-      $('#' + e).attr('checked', false); 
-    });
-  }
-});
-</script>

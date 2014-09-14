@@ -1,8 +1,8 @@
 <%= render partial: 'shared/student_navbar' %>
 
-<% if true %>
 <h3><%= @student.name %></h3>
 
+<% unless @my_packages.empty? %>
   <% if @student.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@student.errors.count, "error") %> prohibited this student from being saved:</h2>
@@ -15,13 +15,80 @@
     </div>
   <% end %>
 
-<% @my_packages.each do |pkg| %>
-<%= render partial: 'schedule_form', locals: {pkg: pkg} %>
+<% @my_packages.each_with_index do |pkg,pkg_idx| %>
+<%= render partial: 'schedule_form', locals: {pkg: pkg, pkg_idx: pkg_idx} %>
 <% end %>
+
+<script type="text/javascript">
+$('input[type="checkbox"]').change(function() {
+  if (this.checked) {
+    var checked_id = this.id
+    checked_prefix = checked_id.replace(/_\d+$/, '_');
+    checked_subprefix = checked_id.replace(/_\d+_\d+$/, '_');
+
+    var checkbox_ids = $('input[type="checkbox"]')
+      .map(function() { return this.id; })
+      .get();
+
+    var uncheck_these = $.grep(checkbox_ids, function(e) {
+      return (e.indexOf(checked_prefix) == 0 && e != checked_id);
+    });
+
+    //alert("uncheck_these: " + uncheck_these.join(', '));
+
+    $.each(uncheck_these, function(idx,e) {
+      $('#' + e).attr('checked', false); 
+    });
+  }
+});
+
+$(function() {
+  var checkbox_inputs = $('input[type="checkbox"]');
+  var checkbox_ids = checkbox_inputs.map(function() { return this.id; }).get();
+
+  var checked_checkboxes = $.grep(checkbox_ids, function(e) {
+    return ($('#' + e).prop("checked") == true);
+  });
+
+  var checked_prefixes = checked_checkboxes.map(function(e) {
+    return e.replace(/_\d+$/, '_');
+  });
+
+  var checked_subprefixes = checked_checkboxes.map(function(e) {
+    return e.replace(/_\d+_\d+$/, '_');
+  });
+
+  // alert("checked_subp: " + checked_subprefixes.join(', '));
+
+  var disable_these_ids = $.grep(checkbox_ids, function(e) {
+    var found = false;
+    $.each(checked_subprefixes, function(idx, subprefix) {
+      if (e.indexOf(subprefix) == 0) {
+        found = true;
+      }
+    });
+    if (found) {
+      $.each(checked_prefixes, function(idx, prefix) {
+        if (e.indexOf(prefix) == 0) {
+          found = false;
+          return false; // break each in javascript
+        }
+      });
+      return found;
+    } else {
+      return false;
+    }
+  });
+
+  $.each(disable_these_ids, function(idx, e) {
+    $('#' + e).attr("disabled", true);
+  });
+});
+</script>
 
 <% else %>
 
-<p><%= @student.name %> saat ini sedang tidak mengikuti paket apapun.</p>
+<p>Saat ini sedang tidak mengikuti paket apapun.</p>
 <%= link_to "Tambahkan Paket", edit_student_path, :class => "btn btn-info btn-primary" %>
 <% end %>
 
