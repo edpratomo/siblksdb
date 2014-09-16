@@ -3,6 +3,10 @@
 
 <h3><%= @student.name %></h3>
 
+<%#= image_tag @student.avatar.url %>
+<%= image_tag @student.avatar.url(:medium) %>
+<%= image_tag @student.avatar.url(:thumb) %>
+
 <dl class="dl-horizontal" style="font-size:large;">
   <dt>Jenis kelamin</dt>
   <dd><%= @student.sex == 'male' ? 'Laki-laki' : 'Perempuan' %></dd>

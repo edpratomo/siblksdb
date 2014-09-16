@@ -78,6 +78,14 @@ class StudentsController < ApplicationController
 
     respond_to do |format|
       if @student.transaction_user(@current_user) { @student.save! }
+        if params[:student][:avatar].blank?  
+          redirect_to @student
+          return  
+        else  
+          render :action => 'crop'
+          return
+        end  
+
         format.html { redirect_to @student, notice: 'Student was successfully created.' }
         format.json { render :show, status: :created, location: @student }
       else
@@ -97,15 +105,16 @@ class StudentsController < ApplicationController
         @student.pkgs << pkg if pkg
       end
     end
-      
-    respond_to do |format|
-      if @student.transaction_user(@current_user) { @student.update(student_params) }
-        format.html { redirect_to @student, notice: 'Student was successfully updated.' }
-        format.json { render :show, status: :ok, location: @student }
-      else
-        format.html { render :edit }
-        format.json { render json: @student.errors, status: :unprocessable_entity }
-      end
+
+    if @student.transaction_user(@current_user) { @student.update(student_params) }
+      flash[:notice] = "Successfully updated user."
+      if params[:student][:avatar].blank?  
+        redirect_to @student
+      else  
+        render :action => 'crop'
+      end  
+    else
+      render :action => 'edit'
     end
   end
 
@@ -131,7 +140,7 @@ class StudentsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note)
+      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :avatar, :crop_x, :crop_y, :crop_w, :crop_h)
     end
 
   def sort_direction

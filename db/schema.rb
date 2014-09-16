@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140912124132) do
+ActiveRecord::Schema.define(version: 20140916010050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,15 +99,19 @@ ActiveRecord::Schema.define(version: 20140912124132) do
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
   create_table "students", force: true do |t|
-    t.text     "name",                                      null: false
+    t.text     "name",                                              null: false
     t.text     "birthplace"
     t.date     "birthdate"
-    t.text     "sex",                                       null: false
+    t.text     "sex",                                               null: false
     t.text     "phone"
     t.text     "note"
-    t.datetime "created_at",  default: "clock_timestamp()", null: false
-    t.datetime "modified_at", default: "clock_timestamp()", null: false
+    t.datetime "created_at",          default: "clock_timestamp()", null: false
+    t.datetime "modified_at",         default: "clock_timestamp()", null: false
     t.text     "modified_by"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
   end
 
   add_index "students", ["name"], name: "students_name", using: :btree
