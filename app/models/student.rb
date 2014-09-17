@@ -51,6 +51,6 @@ class Student < ActiveRecord::Base
   def reprocess_avatar  
      avatar.assign(avatar)
      avatar.save
-  #  avatar.reprocess!  
+     # avatar.reprocess! # this causes loop until stack level too deep
   end    
 end
