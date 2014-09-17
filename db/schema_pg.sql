@@ -103,6 +103,18 @@ CREATE TABLE students_qualifications (
   modified_by TEXT
 );
 
+CREATE TABLE students_records (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER REFERENCES students(id),
+  pkg_id INTEGER REFERENCES pkgs(id),
+  started_on TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_date,
+  finished_on TIMESTAMP WITH TIME ZONE,
+  status TEXT NOT NULL CHECK (status IN ('active','finished','abandoned')),
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_by TEXT
+);
+
 CREATE TABLE changes (
   id SERIAL PRIMARY KEY,
   table_name TEXT NOT NULL,
