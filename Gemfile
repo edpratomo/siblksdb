@@ -51,3 +51,4 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem "rails-settings-cached", "0.4.1"
 gem 'rails-settings-ui', '~> 0.3.0'
+gem 'paperclip', '~> 4.2'
