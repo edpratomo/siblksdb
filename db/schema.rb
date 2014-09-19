@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140916010050) do
+ActiveRecord::Schema.define(version: 20140919184638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_trgm"
+  enable_extension "hstore"
 
   create_table "changes", force: true do |t|
     t.text     "table_name",                                  null: false
@@ -102,6 +103,7 @@ ActiveRecord::Schema.define(version: 20140916010050) do
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
+    t.hstore   "biodata"
   end
 
   add_index "students", ["name"], name: "students_name", using: :btree
