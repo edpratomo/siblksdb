@@ -73,10 +73,11 @@
       <% else %>
        <% if biodata[2].is_a? Array %>
        <div class="col-sm-7 form-inline">
+        <% curr_value = @student.biodata && @student.biodata[biodata[0]] %>
         <% biodata[2].each do |answer| %>
           <div class="radio form-control">
           <label>
-            <%= radio_button_tag "student[biodata][#{biodata[0]}]", answer, false %> <%= answer %>
+            <%= radio_button_tag "student[biodata][#{biodata[0]}]", answer, answer == curr_value %> <%= answer %>
           </label>
           </div>
         <% end %>
