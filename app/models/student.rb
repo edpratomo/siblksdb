@@ -38,6 +38,9 @@ class Student < ActiveRecord::Base
     @geometry[style] ||= Paperclip::Geometry.from_file(avatar.path(style))  
   end  
 
+  # hstore
+  store_accessor :biodata, "Hobi"
+
   private
   def default_url_by_gender
     gender = self.sex

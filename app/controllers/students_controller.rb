@@ -140,7 +140,7 @@ class StudentsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :avatar, :crop_x, :crop_y, :crop_w, :crop_h)
+      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, :avatar, :crop_x, :crop_y, :crop_w, :crop_h, "Hobi")
     end
 
   def sort_direction
