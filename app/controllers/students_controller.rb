@@ -142,7 +142,9 @@ class StudentsController < ApplicationController
     def student_params
       params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, 
                                       :avatar, :crop_x, :crop_y, :crop_w, :crop_h).tap do |whitelisted|
-                                        whitelisted[:biodata] = params[:student][:biodata]
+                                        if params[:student][:biodata]
+                                          whitelisted[:biodata] = params[:student][:biodata]
+                                        end
                                       end
     end
 
