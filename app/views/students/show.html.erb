@@ -1,38 +1,30 @@
 <%= render partial: 'shared/student_navbar' %>
 <p id="notice"><%= notice %></p>
 
-<h3><%= @student.name %></h3>
+<h2><%= @student.name %></h2>
 
-<%#= image_tag @student.avatar.url %>
-<%= image_tag @student.avatar.url(:medium) %>
-<%= image_tag @student.avatar.url(:thumb) %>
+<div class="clearfix" style="padding-top:20px;">
+<%= image_tag @student.avatar.url(:medium), style: "float:left;padding-bottom:20px;padding-right:20px;" %>
 
-<dl class="dl-horizontal" style="font-size:large;">
-  <dt>Jenis kelamin</dt>
-  <dd><%= @student.sex == 'male' ? 'Laki-laki' : 'Perempuan' %></dd>
+<dl style="font-size:large;">
+  <dt sytle="float:left;width:50px;">Jenis kelamin</dt>
+  <dd style="margin-left:100px;"><%= @student.sex == 'male' ? 'Laki-laki' : 'Perempuan' %></dd>
 </dl>
 
-<dl class="dl-horizontal" style="font-size:large;">
+<dl style="font-size:large;">
   <dt style="white-space:normal;">Tempat, tanggal lahir</dt>
   <dd><%= @student.birthplace %>, <%= @student.birthdate %></dd>
 </dl>
 
-<dl class="dl-horizontal" style="font-size:large;">
+<dl style="font-size:large;">
   <dt>Nomor Telpon</dt>
   <dd><%= @student.phone %></dd>
 </dl>
 
-<dl class="dl-horizontal" style="font-size:large;">
-  <dt>Keterangan</dt>
-  <dd><%= @student.note %></dd>
-</dl>
+</div>
 
-<dl class="dl-horizontal" style="font-size:large;">
-  <dt>Sudah Lulus</dt>
-  <dd><%= @student.qualifications.map {|e| "#{e.pkg} Lv.#{e.level}" }.join(', ') %></dd>
-</dl>
-
-<p style="padding-top: 30px;">
+<div style="padding-top: 30px;">
+<p style="">
   <strong>Created at:</strong>
   <%= @student.created_at %>
 </p>
@@ -46,5 +38,6 @@
   <strong>Modified by:</strong>
   <%= @student.modified_by %>
 </p>
+</div>
 
 <%#= link_to 'Back', students_path %>
