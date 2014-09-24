@@ -1,5 +1,5 @@
 <% unless @my_packages.empty? %>
-  <p style="padding-top: 20px;"><strong>Paket<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil</strong></p>
+  <p style="padding-top: 20px;"><strong>Kursus<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil</strong></p>
   <table class="table" style="width: 60%;">
     <tbody>
       <% @my_packages.each do |my_package| %>
@@ -22,7 +22,7 @@
 <% end %>
 
 <div class="form-group">
-  <%= f.label :foo, "Tambah Paket", class: "control-label col-sm-2" %>
+  <%= f.label :foo, "Tambah Kursus", class: "control-label col-sm-2" %>
   <div class="col-sm-7 form-inline">
     <div class="form-group col-xs-6">
       <%= f.grouped_collection_select :pkg_id, @packages, :levels, :pkg_name, :id, :level,

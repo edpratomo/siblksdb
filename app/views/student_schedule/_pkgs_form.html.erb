@@ -1,7 +1,7 @@
 <%= form_tag(edit_student_schedule_path, {method: :get, class: "form-horizontal", role: "form"}) do %>
 
 <div class="form-group">
-  <%= label_tag :foo, "Tambah Paket / Edit Jadwal", class: "control-label col-sm-3" %>
+  <%= label_tag :foo, "Tambah Kursus / Edit Jadwal", class: "control-label col-sm-3" %>
   <div class="col-sm-7 form-inline">
     <div class="form-group col-xs-6">
       <%= grouped_collection_select :pkg, :id, @packages, :levels, :pkg_name, :id, :level,

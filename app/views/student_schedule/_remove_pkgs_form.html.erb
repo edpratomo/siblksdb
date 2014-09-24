@@ -2,9 +2,9 @@
 
 <%= form_tag(edit_student_schedule_path, {method: :delete, class: "form-horizontal", role: "form"}) do %>
 <div class="form-group">
-  <%= label_tag :foo, "Hapus Paket / Jadwal", class: "control-label col-sm-3" %>
+  <%= label_tag :foo, "Hapus Kursus / Jadwal", class: "control-label col-sm-3" %>
   <div>
-    <p class="form-control-static">Paket<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil:</p>
+    <p class="form-control-static">Kursus<%= @my_packages.size > 1 ? "-paket" : "" %> yang saat ini sedang diambil:</p>
   </div>
 </div>
 
@@ -26,7 +26,7 @@
 <% end %>
 
   <div class="actions">
-    <%= submit_tag "Hapus Paket" %>
+    <%= submit_tag "Hapus Kursus" %>
   </div>
 
 <% end %>

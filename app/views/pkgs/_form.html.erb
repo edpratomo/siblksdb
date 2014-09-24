@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="field">
-    <%= f.text_field :pkg, label: "Paket" %>
+    <%= f.text_field :pkg, label: "Kursus" %>
   </div>
   <div class="field">
     <%= f.select :program_id, Program.all.to_a.map {|e| [e.program, e.id]}, control_col: "col-xs-2" %>
