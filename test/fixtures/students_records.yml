@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  student_id: 1
+  pkg_id: 1
+  started_on: 2014-09-25 19:12:38
+  finished_on: 2014-09-25 19:12:38
+  status: MyText
+  modified_at: 2014-09-25 19:12:38
+  modified_by: MyText
+
+two:
+  student_id: 1
+  pkg_id: 1
+  started_on: 2014-09-25 19:12:38
+  finished_on: 2014-09-25 19:12:38
+  status: MyText
+  modified_at: 2014-09-25 19:12:38
+  modified_by: MyText
