@@ -1,4 +1,5 @@
 <%= form_tag(students_records_path, {class: "form-horizontal", role: "form"}) do %>
+  <%= hidden_field_tag :id, @student.id %>
   <div class="form-group">
     <%= label_tag :pkg_id, "Kursus", class: "control-label col-sm-2" %>
     <div class="col-sm-3">

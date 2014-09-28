@@ -4,7 +4,11 @@ Rails.application.routes.draw do
 
   patch 'settings/update'
 
-  resources :students_records
+  resources :students_records, :except => [:new, :index] do
+    collection do
+      get 'new/:id' => 'students_records#new', as: "new"
+    end
+  end
 
   resources :changes
 

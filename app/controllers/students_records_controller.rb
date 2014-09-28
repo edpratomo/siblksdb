@@ -1,21 +1,28 @@
 class StudentsRecordsController < ApplicationController
   # before_action :set_students_record, only: [:show, :edit, :update, :destroy]
-  before_action :set_student, only: [:show, :edit, :update, :destroy]
+  before_action :set_student, only: [:new, :create, :show, :edit, :update, :destroy]
 
   # GET /students_records
   # GET /students_records.json
   def index
-    @students_records = StudentsRecord.all
+    @students_records = @student.records
   end
 
   # GET /students_records/1
   # GET /students_records/1.json
   def show
+    @records = StudentsRecord.where(student: @student).order(params[:started_on])
   end
 
   # GET /students_records/new
   def new
-    @students_record = StudentsRecord.new
+    # ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
+    all_pkgs = Pkg.order(pkg: :desc).order(:level)
+    @grouped_options = all_pkgs.inject({}) do |m,o|
+      m[o.program.program] ||= []
+      m[o.program.program] << [ "#{o.pkg} Level #{o.level}", o.id ]
+      m
+    end
   end
 
   # GET /students_records/1/edit
@@ -25,17 +32,33 @@ class StudentsRecordsController < ApplicationController
   # POST /students_records
   # POST /students_records.json
   def create
-    @students_record = StudentsRecord.new(students_record_params)
+    pkg = Pkg.find(params[:pkg_id])
+
+    params_new = {
+      student: @student,
+      pkg: pkg,
+      started_on: params[:started_on],
+      finished_on: params[:finished_on],
+      status: (params[:finished_on].empty? ? 'active' : 'finished')
+    }
+
+    @students_record = StudentsRecord.new(params_new)
 
     respond_to do |format|
-      if @students_record.save
-        format.html { redirect_to @students_record, notice: 'Students record was successfully created.' }
+      if @student.transaction_user(@current_user) {
+        if params[:finished_on].empty?
+          @student.pkgs << pkg
+        end
+        @students_record.save
+      }
+        format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully created.' }
         format.json { render :show, status: :created, location: @students_record }
       else
         format.html { render :new }
         format.json { render json: @students_record.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # PATCH/PUT /students_records/1

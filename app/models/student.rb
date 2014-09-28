@@ -1,6 +1,10 @@
 class Student < ActiveRecord::Base
   include TransactionHelper
   
+  # :students <= :students_records => :pkgs
+  has_many :students_records
+  has_many :records, through: :students_records, source: :pkg
+
   # :students <= :students_qualifications => :pkgs
   has_many :students_qualifications
   has_many :qualifications, through: :students_qualifications, source: :pkg
