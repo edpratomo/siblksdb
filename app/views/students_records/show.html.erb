@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Student:</strong>
+  <%= @students_record.student_id %>
+</p>
+
+<p>
+  <strong>Pkg:</strong>
+  <%= @students_record.pkg_id %>
+</p>
+
+<p>
+  <strong>Started on:</strong>
+  <%= @students_record.started_on %>
+</p>
+
+<p>
+  <strong>Finished on:</strong>
+  <%= @students_record.finished_on %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @students_record.status %>
+</p>
+
+<p>
+  <strong>Modified at:</strong>
+  <%= @students_record.modified_at %>
+</p>
+
+<p>
+  <strong>Modified by:</strong>
+  <%= @students_record.modified_by %>
+</p>
+
+<%= link_to 'Edit', edit_students_record_path(@students_record) %> |
+<%= link_to 'Back', students_records_path %>

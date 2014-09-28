@@ -1,0 +1,37 @@
+<h1>Listing students_records</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Pkg</th>
+      <th>Started on</th>
+      <th>Finished on</th>
+      <th>Status</th>
+      <th>Modified at</th>
+      <th>Modified by</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @students_records.each do |students_record| %>
+      <tr>
+        <td><%= students_record.student_id %></td>
+        <td><%= students_record.pkg_id %></td>
+        <td><%= students_record.started_on %></td>
+        <td><%= students_record.finished_on %></td>
+        <td><%= students_record.status %></td>
+        <td><%= students_record.modified_at %></td>
+        <td><%= students_record.modified_by %></td>
+        <td><%= link_to 'Show', students_record %></td>
+        <td><%= link_to 'Edit', edit_students_record_path(students_record) %></td>
+        <td><%= link_to 'Destroy', students_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Students record', new_students_record_path %>

@@ -1,5 +1,6 @@
 class StudentsRecordsController < ApplicationController
-  before_action :set_students_record, only: [:show, :edit, :update, :destroy]
+  # before_action :set_students_record, only: [:show, :edit, :update, :destroy]
+  before_action :set_student, only: [:show, :edit, :update, :destroy]
 
   # GET /students_records
   # GET /students_records.json
@@ -63,12 +64,20 @@ class StudentsRecordsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_students_record
-      @students_record = StudentsRecord.find(params[:id])
-    end
+    #def set_students_record
+    #  @students_record = StudentsRecord.find(params[:id])
+    #end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def students_record_params
       params.require(:students_record).permit(:student_id, :pkg_id, :started_on, :finished_on, :status, :modified_at, :modified_by)
+    end
+
+    def set_student
+      @student = Student.find(params[:id])
+    end
+
+    def set_current_user
+      @current_user = current_user.username
     end
 end
