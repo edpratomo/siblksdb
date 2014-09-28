@@ -22,4 +22,8 @@ module Siblksdb
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
   end
+
+  config.generators do |g|
+    g.template_engine = :erb
+  end
 end
