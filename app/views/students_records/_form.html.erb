@@ -3,7 +3,7 @@
     <%= label_tag :pkg_id, "Kursus", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-        <%= select_tag :pkg_id, grouped_options_for_select(@grouped_options), class: "form-control" %>
+        <%= select_tag :pkg_id, grouped_options_for_select(@grouped_options), { prompt: "Pilih kursus", class: "form-control"} %>
       </div>
     </div>
   </div>
@@ -12,7 +12,7 @@
     <%= label_tag :started_on, "Tanggal mulai", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-      <%= date_field_tag :started_on, nil, class: "form-control" %>
+      <%= date_field_tag :started_on, Date.today, class: "form-control" %>
       </div>
     </div>
   </div>

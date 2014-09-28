@@ -12,7 +12,7 @@
 <%= form_tag(settings_update_path, {method: :patch, class: "form-horizontal", role: "form", multipart: true}) do %>
 
   <div class="form-group">
-    <%= label_tag :change_log_archive_interval, "Arsipkan Log Perubahan setiap", class: "control-label col-sm-3" %>
+    <%= label_tag :change_log_archive_interval, "Rotasi Log Perubahan setiap", class: "control-label col-sm-3" %>
     <div class="col-sm-2">
       <%= select_tag :change_log_archive_interval, options_for_select(@change_log_archive_intervals, @current_interval), 
                      class: "form-control" %>
