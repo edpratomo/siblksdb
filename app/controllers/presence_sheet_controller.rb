@@ -17,6 +17,9 @@ class PresenceSheetController < ApplicationController
       m << start_day.advance(days: o)
       m
     end
+
+    holidays_setting = Setting.holidays
+    @holidays = @dates.map {|e| holidays_setting[e.strftime("%Y-%m-%d")]}
     
     @instructor = Instructor.find(params[:instructor])
     @sched = Schedule.find(params[:schedule])
