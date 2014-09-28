@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'settings/edit'
+
+  patch 'settings/update'
+
   resources :students_records
 
   resources :changes

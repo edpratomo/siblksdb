@@ -1,6 +1,9 @@
 class Instructor < ActiveRecord::Base
   include TransactionHelper
 
+  validates :name, presence: true
+  validates :nick, presence: true
+  
   # :instructors <= :programs_instructors => :programs
   has_many :programs_instructors
   has_many :programs, through: :programs_instructors
