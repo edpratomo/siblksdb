@@ -24,10 +24,12 @@ function update_crop(coords) {
 <%= image_tag @student.avatar.url(:large), :id => "cropbox" %>  
 
 <%= form_for @student, :html => { :multipart => true } do |form| %>  
-  <% if Rails.env.development? %>
   <% for attribute in [:crop_x, :crop_y, :crop_w, :crop_h] %>  
-    <%= form.text_field attribute, :id => attribute %>  
+    <% if Rails.env.development? %>
+      <%= form.text_field attribute, :id => attribute %>  
+    <% else %>
+      <%= form.hidden_field attribute, :id => attribute %>
+    <% end %>
   <% end %>  
-  <% end %>
-  <p><%= form.submit "Crop" %></p>  
+  <p style="padding-top: 20px;"><%= form.submit "Crop" %></p>  
 <% end %>
