@@ -42,7 +42,7 @@ class StudentScheduleController < ApplicationController
   end
 
   def edit
-    pkgs = @student.pkgs.order(:id)
+    pkgs = [ Pkg.find(params[:pkg_id]) ]
     ordered_days = %w(mon tue wed thu fri sat)
     schedules = Schedule.order(:id)
     
@@ -110,7 +110,8 @@ class StudentScheduleController < ApplicationController
         name: "#{pkg.pkg} Level #{pkg.level}",
         students_pkg: students_pkg,
         rowspan: instructors.size, 
-        rows: timeslot_vs_day
+        rows: timeslot_vs_day,
+        id: pkg.id
       }
     end
   end

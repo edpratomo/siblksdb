@@ -12,8 +12,9 @@
 <h3><%= @student.name %></h3>
 
 <% @my_packages.each do |pkg| %>
+<div style="padding-bottom: 30px;">
   <table class="table table-striped">
-    <caption><%= pkg[:name] %></caption>
+    <caption><h4><%= pkg[:name] %></h4></caption>
     <thead>
       <tr>
         <th colspan="1"></th>
@@ -37,9 +38,9 @@
       <% end %>
     </tbody>
   </table>
-<% end %>
+  <%= link_to 'Edit', edit_student_schedule_index_path(@student, pkg[:id]) %> 
+</div>
 
 <% end %>
 
-<%= link_to 'Edit', edit_student_schedule_path(@student) %> 
-
+<% end %>

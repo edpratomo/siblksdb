@@ -36,8 +36,12 @@ Rails.application.routes.draw do
   
   get 'help/index'
 
-  resources :student_schedule
-
+  resources :student_schedule, :except => [:edit] do
+    collection do
+      get ':id/:pkg_id/edit' => 'student_schedule#edit', as: "edit"
+    end
+  end
+  
   get 'welcome/index'
 
   controller :sessions do
