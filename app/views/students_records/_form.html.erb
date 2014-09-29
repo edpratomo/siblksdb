@@ -18,6 +18,7 @@
       <div class="form-group">
         <% if controller.action_name == "edit" %>
           <p class="form-control-static"><%= @students_record.pkg.pkg %></p>
+          <%= f.hidden_field :pkg_id %>
         <% else %>
           <%= f.select :pkg_id, grouped_options_for_select(@grouped_options), { prompt: "Pilih kursus"}, { class: "form-control"} %>
         <% end %>

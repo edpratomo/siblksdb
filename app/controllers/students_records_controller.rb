@@ -1,6 +1,7 @@
 class StudentsRecordsController < ApplicationController
   # before_action :set_students_record, only: [:show, :edit, :update, :destroy]
-  before_action :set_student, only: [:new, :show, :update, :destroy]
+  before_action :set_student, only: [:new, :show, :destroy]
+  before_action :set_students_record, only: [:edit, :update]
   before_action :set_grouped_pkg_options, only: [:new]
   
   # GET /students_records
@@ -39,7 +40,7 @@ class StudentsRecordsController < ApplicationController
       if @student.transaction_user(@current_user) {
         if params[:students_record][:finished_on].empty?
           pkg = Pkg.find(params[:students_record][:pkg_id])
-          @student.pkgs << pkg
+          @student.pkgs << pkg # this student has just started a pkg
         end
         @students_record.save
       }
@@ -55,9 +56,19 @@ class StudentsRecordsController < ApplicationController
   # PATCH/PUT /students_records/1
   # PATCH/PUT /students_records/1.json
   def update
+    @student = @students_record.student
     respond_to do |format|
-      if @students_record.update(students_record_params)
-        format.html { redirect_to @students_record, notice: 'Students record was successfully updated.' }
+      if @students_record.transaction_user(@current_user) {
+        unless params[:students_record][:finished_on].empty?
+          pkg = Pkg.find(params[:students_record][:pkg_id])
+          if pkg
+            @student.pkgs.destroy(pkg) # this student has finished a pkg
+          end
+          params[:students_record][:status] = 'finished'
+        end
+        @students_record.update(students_record_params)
+      }
+        format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully updated.' }
         format.json { render :show, status: :ok, location: @students_record }
       else
         format.html { render :edit }
@@ -78,9 +89,9 @@ class StudentsRecordsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    #def set_students_record
-    #  @students_record = StudentsRecord.find(params[:id])
-    #end
+    def set_students_record
+      @students_record = StudentsRecord.find(params[:id])
+    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def students_record_params
