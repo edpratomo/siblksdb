@@ -1,15 +1,13 @@
 <p id="notice"><%= notice %></p>
 <%= render partial: 'shared/student_navbar' %>
 
-<!-- <h2>StudentSchedule#show</h2> -->
+<h3><%= @student.name %></h3>
 
 <% if @my_packages.empty? %>
 
-<p>Siswa <%= @student.name %> saat ini sedang tidak mengikuti satupun kursus.</p>
+<div class="alert alert-danger" role="alert">Saat ini sedang tidak mengikuti satupun kursus.</div>
 
 <% else %>
-
-<h3><%= @student.name %></h3>
 
 <% @my_packages.each do |pkg| %>
 <div style="padding-bottom: 30px;">

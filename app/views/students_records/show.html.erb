@@ -3,6 +3,9 @@
 
 <h3><%= @student.name %></h3>
 
+<% if @records.empty? %>
+<div class="alert alert-danger" role="alert">Belum memiliki catatan kursus.</div>
+<% else %>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -28,3 +31,4 @@
   </tbody>
 </table>
 
+<% end %>
