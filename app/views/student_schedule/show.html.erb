@@ -1,10 +1,11 @@
 <p id="notice"><%= notice %></p>
+<%= render partial: 'shared/student_navbar' %>
 
-<h2>StudentSchedule#show</h2>
+<!-- <h2>StudentSchedule#show</h2> -->
 
 <% if @my_packages.empty? %>
 
-<p>Siswa <%= @student.name %> saat ini sedang tidak mengikuti kursus apapun.</p>
+<p>Siswa <%= @student.name %> saat ini sedang tidak mengikuti satupun kursus.</p>
 
 <% else %>
 

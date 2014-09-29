@@ -1,6 +1,6 @@
-<h1>Editing students_record</h1>
+<%= render partial: 'shared/student_navbar' %>
+
+<h3><%= @student.name %></h3>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @students_record %> |
-<%= link_to 'Back', students_records_path %>

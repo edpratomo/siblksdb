@@ -3,5 +3,5 @@
   <li class="<%= active_tab_class(edit_student_path(@student)) %>"><%= link_to "Ubah Data", edit_student_path(@student) %></li>
   <li class="<%= active_tab_class(new_students_records_path(@student)) %>"><%= link_to "Ambil Kursus Baru", new_students_records_path(@student) %></li>
   <li class="<%= active_tab_class(students_record_path(@student)) %>"><%= link_to "Lihat Kursus", students_record_path(@student) %></li>
-  <li class="<%= active_tab_class(edit_student_schedule_path(@student)) %>"><%= link_to "Atur Jadwal", edit_student_schedule_path(@student) %></li>
+  <li class="<%= active_tab_class(edit_student_schedule_path(@student), student_schedule_path(@student)) %>"><%= link_to "Atur Jadwal", edit_student_schedule_path(@student) %></li>
 </ul>

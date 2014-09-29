@@ -1,28 +1,44 @@
-<%= form_tag(students_records_path, {class: "form-horizontal", role: "form"}) do %>
-  <%= hidden_field_tag :id, @student.id %>
+<%= form_for(@students_record, html: {class: "form-horizontal", role: "form"}) do |f| %>
+  <% if @students_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@students_record.errors.count, "error") %> prohibited this record from being saved:</h2>
+
+      <ul>
+      <% @students_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :student_id %>
   <div class="form-group">
-    <%= label_tag :pkg_id, "Kursus", class: "control-label col-sm-2" %>
+    <%= f.label :pkg_id, "Kursus", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-        <%= select_tag :pkg_id, grouped_options_for_select(@grouped_options), { prompt: "Pilih kursus", class: "form-control"} %>
+        <% if controller.action_name == "edit" %>
+          <p class="form-control-static"><%= @students_record.pkg.pkg %></p>
+        <% else %>
+          <%= f.select :pkg_id, grouped_options_for_select(@grouped_options), { prompt: "Pilih kursus"}, { class: "form-control"} %>
+        <% end %>
       </div>
     </div>
   </div>
 
   <div class="form-group">
-    <%= label_tag :started_on, "Tanggal mulai", class: "control-label col-sm-2" %>
+    <%= f.label :started_on, "Tanggal mulai", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-      <%= date_field_tag :started_on, Date.today, class: "form-control" %>
+      <%= f.date_field :started_on, class: "form-control" %>
       </div>
     </div>
   </div>
 
   <div class="form-group">
-    <%= label_tag :finished_on, "Tanggal selesai", class: "control-label col-sm-2" %>
+    <%= f.label :finished_on, "Tanggal selesai", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-      <%= date_field_tag :finished_on, nil, class: "form-control" %>
+      <%= f.date_field :finished_on, class: "form-control" %>
       </div>
     </div>
   </div>

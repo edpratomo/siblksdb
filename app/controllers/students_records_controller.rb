@@ -1,7 +1,8 @@
 class StudentsRecordsController < ApplicationController
   # before_action :set_students_record, only: [:show, :edit, :update, :destroy]
-  before_action :set_student, only: [:new, :create, :show, :edit, :update, :destroy]
-
+  before_action :set_student, only: [:new, :show, :update, :destroy]
+  before_action :set_grouped_pkg_options, only: [:new]
+  
   # GET /students_records
   # GET /students_records.json
   def index
@@ -16,37 +17,28 @@ class StudentsRecordsController < ApplicationController
 
   # GET /students_records/new
   def new
-    # ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
-    all_pkgs = Pkg.order(pkg: :desc).order(:level)
-    @grouped_options = all_pkgs.inject({}) do |m,o|
-      m[o.program.program] ||= []
-      m[o.program.program] << [ "#{o.pkg} Level #{o.level}", o.id ]
-      m
-    end
+    @students_record = StudentsRecord.new
+    @students_record.student = @student
+    @students_record.started_on = Date.today # default value for started_on
   end
 
   # GET /students_records/1/edit
   def edit
+    @students_record = StudentsRecord.find(params[:id])
+    @student = @students_record.student
   end
 
   # POST /students_records
   # POST /students_records.json
   def create
-    pkg = Pkg.find(params[:pkg_id])
-
-    params_new = {
-      student: @student,
-      pkg: pkg,
-      started_on: params[:started_on],
-      finished_on: params[:finished_on],
-      status: (params[:finished_on].empty? ? 'active' : 'finished')
-    }
-
-    @students_record = StudentsRecord.new(params_new)
+    params[:students_record][:status] = (params[:students_record][:finished_on].empty? ? 'active' : 'finished')
+    @students_record = StudentsRecord.new(students_record_params)
+    @student = Student.find(params[:students_record][:student_id])
 
     respond_to do |format|
       if @student.transaction_user(@current_user) {
-        if params[:finished_on].empty?
+        if params[:students_record][:finished_on].empty?
+          pkg = Pkg.find(params[:students_record][:pkg_id])
           @student.pkgs << pkg
         end
         @students_record.save
@@ -58,7 +50,6 @@ class StudentsRecordsController < ApplicationController
         format.json { render json: @students_record.errors, status: :unprocessable_entity }
       end
     end
-
   end
 
   # PATCH/PUT /students_records/1
@@ -93,9 +84,18 @@ class StudentsRecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def students_record_params
-      params.require(:students_record).permit(:student_id, :pkg_id, :started_on, :finished_on, :status, :modified_at, :modified_by)
+      params.require(:students_record).permit(:student_id, :pkg_id, :started_on, :finished_on, :status)
     end
 
+    def set_grouped_pkg_options
+      all_pkgs = Pkg.order(pkg: :desc).order(:level)
+      @grouped_options = all_pkgs.inject({}) do |m,o|
+        m[o.program.program] ||= []
+        m[o.program.program] << [ "#{o.pkg} Level #{o.level}", o.id ]
+        m
+      end
+    end
+    
     def set_student
       @student = Student.find(params[:id])
     end
