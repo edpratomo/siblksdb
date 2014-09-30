@@ -11,88 +11,88 @@
     </div>
   <% end %>
 
-    <div class="form-group">
-      <%= f.label :name, "Nama Lengkap", class: "control-label col-sm-2" %>
-      <div class="col-xs-4">
-        <%= f.text_field :name, class: "form-control" %>
+<div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          Data Pribadi
+        </h4>
       </div>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :avatar, "Foto", class: "control-label col-sm-2" %>
-      <div class="col-xs-4">
-        <%= f.file_field :avatar, class: "form-control", accept: "image/png,image/gif,image/jpeg" %>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <label class="radio"><%= f.radio_button :sex, "female" %>Perempuan</label>
-        <label class="radio"><%= f.radio_button :sex, "male" %>Laki-laki</label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :birthplace, "Tempat Lahir", class: "control-label col-sm-2" %>
-      <div class="col-xs-3">
-        <%= f.text_field :birthplace, class: "form-control" %>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :birthdate, "Tanggal Lahir", class: "control-label col-sm-2" %>
-      <div class="col-xs-3">
-        <%= f.date_field :birthdate, class: "form-control" %><span class="help-block">bulan/hari/tahun</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :phone, "Telpon", class: "control-label col-sm-2" %>
-      <div class="col-xs-2">
-        <%= f.telephone_field :phone, class: "form-control" %>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :note, "Keterangan", class: "control-label col-sm-2" %>
-      <div class="col-xs-4">
-        <%= f.text_field :note, class: "form-control" %>
-      </div>
-    </div>
-
-  <%#################%>
-  <%# biodata hstore %>
-  <%#################%>
-  <% @biodata_fields.each do |biodata| %>
-    <div class="form-group">
-      <%= f.label biodata[0], biodata[1], class: "control-label col-sm-2" %>
-      <% unless biodata[2] %>
-      <div class="col-xs-4">
-        <%= text_field_tag "student[biodata][#{biodata[0]}]", @student.biodata && @student.biodata[biodata[0]], class: "form-control" %>
-      </div>
-      <% else %>
-       <% if biodata[2].is_a? Array %>
-       <div class="col-sm-7 form-inline">
-        <% curr_value = @student.biodata && @student.biodata[biodata[0]] %>
-        <% biodata[2].each do |answer| %>
-          <div class="radio form-control">
-          <label>
-            <%= radio_button_tag "student[biodata][#{biodata[0]}]", answer, answer == curr_value %> <%= answer %>
-          </label>
-          </div>
-        <% end %>
-       </div>
-
-       <% else %>
-        <div class="col-xs-1">
-          <%= number_field_tag "student[biodata][#{biodata[0]}]", @student.biodata && @student.biodata[biodata[0]], 
-              min: 0, class: "form-control" %>
-          <%#= biodata[3] %>
+      <div class="panel-collapse collapse in">
+        <div class="panel-body">
+        <%= render partial: 'personal_bio_form', locals: {f: f} %>
         </div>
-       <% end %>
-      <% end %>
+      </div>
     </div>
-  <% end %>
+
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Data Orang Tua</a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'parents_bio_form', locals: {f: f} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Data Keluarga (bagi yang sudah menikah)</a>
+        </h4>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'family_bio_form', locals: {f: f} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Riwayat Pendidikan</a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'schools_bio_form', locals: {f: f} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Pengalaman Bekerja</a>
+        </h4>
+      </div>
+      <div id="collapseFour" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'work_experiences_bio_form', locals: {f: f} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">Survey</a>
+        </h4>
+      </div>
+      <div id="collapseFive" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'survey_bio_form', locals: {f: f} %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
   <div class="actions">
     <%= f.submit %>

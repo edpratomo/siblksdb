@@ -1,0 +1,97 @@
+    <div class="form-group">
+      <%= f.label "student[biodata][Nama Ayah]", "Nama Ayah", class: "control-label col-sm-2" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][Nama Ayah]", @student.biodata && @student.biodata["Nama Ayah"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Ayah Masih Hidup]", "Masih Hidup", class: "control-label col-sm-2" %>
+      <div class="col-sm-7 form-inline">
+        <% curr_value = @student.biodata && @student.biodata["Ayah Masih Hidup"] %>
+        <% %w(ya tidak).each do |answer| %>
+          <div class="radio form-control">
+          <label>
+            <%= radio_button_tag "student[biodata][Ayah Masih Hidup]", answer, answer == curr_value %> <%= answer %>
+          </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Status Pernikahan Ayah]", "Status Pernikahan", class: "control-label col-sm-2" %>
+      <div class="col-sm-7 form-inline">
+        <% curr_value = @student.biodata && @student.biodata["Status Pernikahan Ayah"] %>
+        <% %w(cerai tidak).each do |answer| %>
+          <div class="radio form-control">
+          <label>
+            <%= radio_button_tag "student[biodata][Status Pernikahan Ayah]", answer, answer == curr_value %> <%= answer %>
+          </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Pekerjaan Ayah]", "Pekerjaan", class: "control-label col-sm-2" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][Pekerjaan Ayah]", @student.biodata && @student.biodata["Pekerjaan Ayah"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][No. Telp/HP Ayah]", "No. Telp / HP", class: "control-label col-sm-2" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][No. Telp/HP Ayah]", @student.biodata && @student.biodata["No. Telp/HP Ayah"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group" style="padding-top:30px;">
+      <%= f.label "student[biodata][Nama Ibu]", "Nama Ibu", class: "control-label col-sm-2" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][Nama Ibu]", @student.biodata && @student.biodata["Nama Ibu"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Ibu Masih Hidup]", "Masih Hidup", class: "control-label col-sm-2" %>
+      <div class="col-sm-7 form-inline">
+        <% curr_value = @student.biodata && @student.biodata["Ibu Masih Hidup"] %>
+        <% %w(ya tidak).each do |answer| %>
+          <div class="radio form-control">
+          <label>
+            <%= radio_button_tag "student[biodata][Ibu Masih Hidup]", answer, answer == curr_value %> <%= answer %>
+          </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Status Pernikahan Ibu]", "Status Pernikahan", class: "control-label col-sm-2" %>
+      <div class="col-sm-7 form-inline">
+        <% curr_value = @student.biodata && @student.biodata["Status Pernikahan Ibu"] %>
+        <% %w(cerai tidak).each do |answer| %>
+          <div class="radio form-control">
+          <label>
+            <%= radio_button_tag "student[biodata][Status Pernikahan Ibu]", answer, answer == curr_value %> <%= answer %>
+          </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Pekerjaan Ibu]", "Pekerjaan", class: "control-label col-sm-2" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][Pekerjaan Ibu]", @student.biodata && @student.biodata["Pekerjaan Ibu"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][No. Telp/HP Ibu]", "No. Telp / HP", class: "control-label col-sm-2" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][No. Telp/HP Ibu]", @student.biodata && @student.biodata["No. Telp/HP Ibu"], class: "form-control" %>
+      </div>
+    </div>

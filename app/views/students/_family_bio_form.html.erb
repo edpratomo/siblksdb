@@ -1,0 +1,36 @@
+    <div class="form-group">
+      <%= f.label "student[biodata][Nama suami/istri]", "Nama suami/istri", class: "control-label col-sm-3" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][Nama suami/istri]", @student.biodata && @student.biodata["Nama suami/istri"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Pekerjaan]", "Pekerjaan", class: "control-label col-sm-3" %>
+      <div class="col-xs-4">
+        <%= text_field_tag "student[biodata][Pekerjaan]", @student.biodata && @student.biodata["Pekerjaan"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][No. Telp/HP suami/istri]", "No. Telp/HP suami/istri", class: "control-label col-sm-3" %>
+      <div class="col-sm-2">
+        <%= text_field_tag "student[biodata][No. Telp/HP suami/istri]", @student.biodata && @student.biodata["No. Telp/HP suami/istri"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Jumlah anak]", "Jumlah anak", class: "control-label col-sm-3" %>
+      <div class="col-sm-2">
+        <%= number_field_tag "student[biodata][Jumlah anak]", @student.biodata && @student.biodata['Jumlah anak'], 
+            min: 0, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Tanggungan keluarga]", "Tanggungan keluarga", class: "control-label col-sm-3" %>
+      <div class="col-sm-2">
+        <%= number_field_tag "student[biodata][Tanggungan keluarga]", @student.biodata && @student.biodata['Tanggungan keluarga'], 
+            min: 0, class: "form-control" %>
+      </div>
+    </div>

@@ -1,0 +1,17 @@
+
+    <div class="form-group" style="padding-left:20px">
+      <%= f.label "student[biodata][Pengalaman Kerja #1]", "Pengalaman Kerja #1", class: "sr-only" %>
+      <div class="form-inline">
+        <div class="input-group col-md-4">
+          <%= text_field_tag "student[biodata][Pengalaman Kerja #1]", @student.biodata && @student.biodata["Pengalaman Kerja #1"], placeholder: "Bekerja di mana", class: "form-control" %>
+        </div>
+
+        <div class="input-group">
+          <%= text_field_tag "student[biodata][Pengalaman Kerja #1 Sebagai]", @student.biodata && @student.biodata["Pengalaman Kerja #1 Sebagai"], placeholder: "Sebagai apa", class: "form-control" %>
+        </div>
+      
+        <div class="input-group">
+          <%= text_field_tag "student[biodata][Pengalaman Kerja #1 Tahun]", @student.biodata && @student.biodata["Pengalaman Kerja #1 Tahun"], placeholder: "Tahun", class: "form-control" %>
+        </div>
+      </div>
+    </div>
