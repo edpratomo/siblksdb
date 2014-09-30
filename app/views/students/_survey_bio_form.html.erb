@@ -1,1 +1,57 @@
-<p>test</p>
+    <div class="form-group">
+      <%= f.label "student[biodata][Alasan Mengikuti Kursus]", "Alasan mengikuti kursus", class: "control-label col-sm-3" %>
+      <div class="col-sm-7">
+        <%= text_field_tag "student[biodata][Alasan Mengikuti Kursus]", @student.biodata && @student.biodata["Alasan Mengikuti Kursus"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Sumber Info BLK]", "Mengetahui BLK Salesian Don Bosco dari", class: "control-label col-sm-3" %>
+      <div class="col-sm-7 form-inline">
+        <% curr_value = @student.biodata && @student.biodata["Sumber Info BLK"] %>
+        <% %w(teman brosur sticker spanduk).each do |answer| %>
+          <div class="radio form-control">
+          <label>
+            <%= radio_button_tag "student[biodata][Sumber Info BLK]", answer, answer == curr_value %> <%= answer %>
+          </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Jarak dari rumah ke BLK]", "Jarak dari rumah ke BLK (km)", class: "control-label col-sm-3" %>
+      <div class="col-sm-2">
+        <%= number_field_tag "student[biodata][Jarak dari rumah ke BLK]", @student.biodata && @student.biodata['Jarak dari rumah ke BLK'], 
+            min: 0, class: "form-control" %>
+        </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Alat transportasi]", "Alat transportasi yang digunakan", class: "control-label col-sm-3" %>
+      <div class="col-sm-3">
+        <%= text_field_tag "student[biodata][Alat transportasi]", @student.biodata && @student.biodata["Alat transportasi"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Berapa kali naik angkutan]", "Berapa kali naik angkutan?", class: "control-label col-sm-3" %>
+      <div class="col-sm-2">
+        <%= number_field_tag "student[biodata][Berapa kali naik angkutan]", @student.biodata && @student.biodata['Berapa kali naik angkutan'], 
+            min: 0, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Kegiatan sehari-hari]", "Kegiatan sehari-hari", class: "control-label col-sm-3" %>
+      <div class="col-sm-7">
+        <%= text_field_tag "student[biodata][Kegiatan sehari-hari]", @student.biodata && @student.biodata["Kegiatan sehari-hari"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Sumber biaya kursus]", "Yang akan membiayai kursus ini", class: "control-label col-sm-3" %>
+      <div class="col-sm-3">
+        <%= text_field_tag "student[biodata][Sumber biaya kursus]", @student.biodata && @student.biodata["Sumber biaya kursus"], class: "form-control" %>
+      </div>
+    </div>
