@@ -1,6 +1,6 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg, :finish_pkg, :remove_pkg]
-  before_action :set_current_user, :set_biodata_fields
+#  before_action :set_current_user, :set_biodata_fields
   
   helper_method :sort_column, :sort_direction
   
@@ -148,29 +148,6 @@ class StudentsController < ApplicationController
                                       end
     end
 
-    def set_biodata_fields
-      # [hstore_key, form label, input type (default text), trailing text]
-      @biodata_fields = ['Hobi', 'Nama Ayah', ['Ayah Masih Hidup', 'Masih Hidup', %w[ya tidak]], 
-                         ['Status Pernikahan Ayah', 'Status Pernikahan', %w[cerai tidak]],
-                         ['Pekerjaan Ayah', 'Pekerjaan'], 'No. Telp/HP Ayah',
-                         'Nama Ibu', ['Ibu Masih Hidup', 'Masih Hidup', %w[ya tidak]], 
-                         ['Status Pernikahan Ibu', 'Status Pernikahan', %w[cerai tidak]],
-                         ['Pekerjaan Ibu', 'Pekerjaan'], 'No. Telp/HP Ibu',
-                         'Nama suami/istri', 'Pekerjaan', 'No. Telp/HP suami/istri',
-                         ['Jumlah anak', 'Jumlah anak', :number, 'orang'],
-                         ['Tanggungan keluarga', 'Tanggungan keluarga', :number, 'orang'],
-                         ['Jumlah saudara laki-laki', 'Jumlah saudara laki-laki', :number, 'orang'],
-                         ['Jumlah saudara perempuan', 'Jumlah saudara perempuan', :number, 'orang'],
-                         ['Saya anak ke', 'Saya anak ke', :number],
-                        ].map do |e|
-                          unless e.is_a? Array
-                            [e, e]
-                          else
-                            e
-                          end
-                        end
-    end
-    
   def sort_direction
     %w[asc desc].include?(params[:direction]) ?  params[:direction] : "asc"
   end

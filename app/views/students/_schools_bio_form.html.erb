@@ -15,7 +15,7 @@
         </div>
           <div class="checkbox form-control">
             <%= label_tag "student[biodata[#{edu} Lulus]" do %>
-              <%= check_box_tag "student[biodata[#{edu} Lulus]", "Lulus", @student.biodata && @student.biodata["#{edu} Lulus"] %>
+              <%= check_box_tag "student[biodata][#{edu} Lulus]", "ya", @student.biodata && @student.biodata["#{edu} Lulus"] == "ya" %>
               Lulus
             <% end %>
           </div>
@@ -26,15 +26,15 @@
     <div class="form-group" style="padding-left:20px">
       <%= f.label "student[biodata][Kursus #1]", "Kursus #1", class: "sr-only" %>
       <div class="form-inline">
-        <div class="input-group col-md-3">
+        <div class="input-group col-sm-3">
           <%= text_field_tag "student[biodata][Kursus #1]", @student.biodata && @student.biodata["Kursus #1"], placeholder: "Kursus yang pernah diikuti", class: "form-control" %>
         </div>
 
-        <div class="input-group col-md-4">
+        <div class="input-group col-sm-5">
           <%= text_field_tag "student[biodata][Kursus #1 Tempat]", @student.biodata && @student.biodata["Kursus #1 Tempat"], placeholder: "Nama / Tempat kursus", class: "form-control" %>
         </div>
       
-        <div class="input-group">
+        <div class="input-group col-sm-2">
           <%= text_field_tag "student[biodata][Kursus #1 Tahun]", @student.biodata && @student.biodata["Kursus #1 Tahun"], placeholder: "Tahun", class: "form-control" %>
         </div>
       </div>
