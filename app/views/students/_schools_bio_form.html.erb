@@ -1,92 +1,27 @@
-<table class="table pretty table-striped">
-  <thead>
-    <tr>
-      <th>Tingkatan</th>
-      <th>Tamat</th>
-      <th>Nama / Alamat Sekolah</th>
-      <th colspan="3">Tahun</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td style="vertical-align:middle;">SD</td>
-      <td>
-      <div class="form-group">
-        <div class="form-inline">
-          <% curr_value = @student.biodata && @student.biodata["Pendidikan SD Tamat"] %>
-          <% %w(ya sedang tidak).each do |answer| %>
-            <div class="radio form-control">
-              <label><%= radio_button_tag "student[biodata][Pendidikan SD Tamat]", answer, answer == curr_value %> <%= answer %></label>
-            </div>
-          <% end %>
+  <% ["SD", "SLTP", "SLTA", "Sekolah Tinggi"].each do |edu| %>
+    <div class="form-group" style="padding-left:20px">
+      <%= f.label "student[biodata][#{edu}]", edu, class: "col-label col-sm-2", style: "vertical-align:middle;" %>
+      <div class="form-inline">
+        <div class="input-group col-sm-5">
+          <%= text_field_tag "student[biodata][#{edu}]", @student.biodata && @student.biodata[edu], placeholder: "Nama / Alamat Sekolah", class: "form-control" %>
         </div>
-      </div>
-      </td>
-      <td style="vertical-align:middle;" class="col-md-5"><%= text_field_tag "student[biodata][Pendidikan SD]", @student.biodata && @student.biodata["Pendidikan SD"], class: "form-control" %></td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan SD Mulai]", @student.biodata && @student.biodata["Pendidikan SD Mulai"], class: "form-control" %></td>
-      <td style="vertical-align:middle;"> s/d </td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan SD Sampai]", @student.biodata && @student.biodata["Pendidikan SD Sampai"], class: "form-control" %></td>
-    </tr>
-    <tr>
-      <td style="vertical-align:middle;">SLTP</td>
-      <td>
-      <div class="form-group">
-        <div class="form-inline">
-          <% curr_value = @student.biodata && @student.biodata["Pendidikan SLTP Tamat"] %>
-          <% %w(ya sedang tidak).each do |answer| %>
-            <div class="radio form-control">
-              <label><%= radio_button_tag "student[biodata][Pendidikan SLTP Tamat]", answer, answer == curr_value %> <%= answer %></label>
-            </div>
-          <% end %>
+        <div class="input-group"  style="padding-left:10px">Tahun: </div>
+        <div class="input-group col-sm-1">
+          <%= text_field_tag "student[biodata][#{edu} Mulai]", @student.biodata && @student.biodata["#{edu} Mulai"], placeholder: "mulai", class: "form-control" %>
         </div>
-      </div>
-      </td>
-      <td style="vertical-align:middle;" class="col-md-5"><%= text_field_tag "student[biodata][Pendidikan SLTP]", @student.biodata && @student.biodata["Pendidikan SLTP"], class: "form-control" %></td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan SLTP Mulai]", @student.biodata && @student.biodata["Pendidikan SLTP Mulai"], class: "form-control" %></td>
-      <td style="vertical-align:middle;"> s/d </td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan SLTP Sampai]", @student.biodata && @student.biodata["Pendidikan SLTP Sampai"], class: "form-control" %></td>
-    </tr>
-    <tr>
-      <td style="vertical-align:middle;">SLTA</td>
-      <td>
-      <div class="form-group">
-        <div class="form-inline">
-          <% curr_value = @student.biodata && @student.biodata["Pendidikan SLTA Tamat"] %>
-          <% %w(ya sedang tidak).each do |answer| %>
-            <div class="radio form-control">
-              <label><%= radio_button_tag "student[biodata][Pendidikan SLTA Tamat]", answer, answer == curr_value %> <%= answer %></label>
-            </div>
-          <% end %>
+        <div class="input-group"> - </div>
+        <div class="input-group col-sm-1">
+          <%= text_field_tag "student[biodata][#{edu} Sampai]", @student.biodata && @student.biodata["#{edu} Sampai"], placeholder: "sampai", class: "form-control" %>
         </div>
+          <div class="checkbox form-control">
+            <%= label_tag "student[biodata[#{edu} Lulus]" do %>
+              <%= check_box_tag "student[biodata[#{edu} Lulus]", "Lulus", @student.biodata && @student.biodata["#{edu} Lulus"] %>
+              Lulus
+            <% end %>
+          </div>
       </div>
-      </td>
-      <td style="vertical-align:middle;" class="col-md-5"><%= text_field_tag "student[biodata][Pendidikan SLTA]", @student.biodata && @student.biodata["Pendidikan SLTA"], class: "form-control" %></td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan SLTA Mulai]", @student.biodata && @student.biodata["Pendidikan SLTA Mulai"], class: "form-control" %></td>
-      <td style="vertical-align:middle;"> s/d </td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan SLTA Sampai]", @student.biodata && @student.biodata["Pendidikan SLTA Sampai"], class: "form-control" %></td>
-    </tr>
-    <tr>
-      <td style="vertical-align:middle;">Sekolah Tinggi</td>
-      <td>
-      <div class="form-group">
-        <div class="form-inline">
-          <% curr_value = @student.biodata && @student.biodata["Pendidikan Sekolah Tinggi Tamat"] %>
-          <% %w(ya sedang tidak).each do |answer| %>
-            <div class="radio form-control">
-              <label><%= radio_button_tag "student[biodata][Pendidikan Sekolah Tinggi Tamat]", answer, answer == curr_value %> <%= answer %></label>
-            </div>
-          <% end %>
-        </div>
-      </div>
-      </td>
-      <td style="vertical-align:middle;" class="col-md-5"><%= text_field_tag "student[biodata][Pendidikan Sekolah Tinggi]", @student.biodata && @student.biodata["Pendidikan Sekolah Tinggi"], class: "form-control" %></td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan Sekolah Tinggi Mulai]", @student.biodata && @student.biodata["Pendidikan Sekolah Tinggi Mulai"], class: "form-control" %></td>
-      <td style="vertical-align:middle;"> s/d </td>
-      <td style="vertical-align:middle;" class="col-md-1"><%= text_field_tag "student[biodata][Pendidikan Sekolah Tinggi Sampai]", @student.biodata && @student.biodata["Pendidikan Sekolah Tinggi Sampai"], class: "form-control" %></td>
-    </tr>
-  </tbody>
-</table>
+    </div>
+  <% end %>
 
     <div class="form-group" style="padding-left:20px">
       <%= f.label "student[biodata][Kursus #1]", "Kursus #1", class: "sr-only" %>

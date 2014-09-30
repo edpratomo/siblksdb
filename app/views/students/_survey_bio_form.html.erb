@@ -6,13 +6,13 @@
     </div>
 
     <div class="form-group">
-      <%= f.label "student[biodata][Sumber Info BLK]", "Mengetahui BLK Salesian Don Bosco dari", class: "control-label col-sm-3" %>
+      <%= f.label "student[biodata][Sumber info BLK]", "Mengetahui BLK Salesian Don Bosco dari", class: "control-label col-sm-3" %>
       <div class="col-sm-7 form-inline">
-        <% curr_value = @student.biodata && @student.biodata["Sumber Info BLK"] %>
+        <% curr_value = @student.biodata && @student.biodata["Sumber info BLK"] %>
         <% %w(teman brosur sticker spanduk).each do |answer| %>
           <div class="radio form-control">
           <label>
-            <%= radio_button_tag "student[biodata][Sumber Info BLK]", answer, answer == curr_value %> <%= answer %>
+            <%= radio_button_tag "student[biodata][Sumber info BLK]", answer, answer == curr_value %> <%= answer %>
           </label>
           </div>
         <% end %>
