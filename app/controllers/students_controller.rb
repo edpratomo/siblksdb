@@ -1,6 +1,6 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg, :finish_pkg, :remove_pkg]
-#  before_action :set_current_user, :set_biodata_fields
+  before_action :set_current_user
   
   helper_method :sort_column, :sort_direction
   
