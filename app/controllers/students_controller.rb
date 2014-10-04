@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg, :finish_pkg, :remove_pkg]
+  before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg, :remove_pkg]
   before_action :set_current_user
   
   helper_method :sort_column, :sort_direction
@@ -11,19 +11,6 @@ class StudentsController < ApplicationController
   def search
   end
 
-  # DELETE
-  def finish_pkg
-    @student.transaction_user(@current_user) do
-      pkg = Pkg.find(params[:pid])
-      @student.qualifications << pkg
-      @student.pkgs.destroy(pkg)
-    end
-    respond_to do |format|
-      format.html { redirect_to @student, notice: 'Student was successfully updated.' }
-      format.json { render :show, status: :ok, location: @student }
-    end
-  end
-  
   # DELETE
   def remove_pkg
     @student.transaction_user(@current_user) do
