@@ -65,9 +65,9 @@ class StudentsRecordsController < ApplicationController
           if pkg
             @student.pkgs.destroy(pkg) # this student has finished a pkg
           end
-          params[:students_record][:status] = 'finished'
+          # this is now controlled by check_box:
+          # params[:students_record][:status] ||= 'finished'
         else
-          # XXX - should be prevented by a validation
           params[:students_record][:status] = 'active'
         end
         @students_record.update(students_record_params)

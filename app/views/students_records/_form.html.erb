@@ -17,7 +17,7 @@
     <div class="col-sm-3">
       <div class="form-group">
         <% if controller.action_name == "edit" %>
-          <p class="form-control-static"><%= @students_record.pkg.pkg %></p>
+          <p class="form-control-static"><%= @students_record.pkg.pkg %> Level <%= @students_record.pkg.level %></p>
           <%= f.hidden_field :pkg_id %>
         <% else %>
           <%= f.select :pkg_id, grouped_options_for_select(@grouped_options), { prompt: "Pilih kursus"}, { class: "form-control"} %>
@@ -43,7 +43,39 @@
       </div>
     </div>
   </div>
+
+  <div class="form-group">
+    <%= f.label :status, "Tidak lulus", class: "sr-only control-label col-sm-2" %>
+    <div class="col-sm-3">
+      <div class="form-group checkbox">
+          <label>
+            <%= f.check_box :status, {}, "failed", "finished" %> <%= t('failed') %>
+          </label>
+      </div>
+    </div>
+  </div>
+
   <div class="actions">
     <%= submit_tag %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+$(function() {
+  var enable_disable_status_checkbox = function() {
+    var finished_on = $.trim($('#students_record_finished_on').val());
+    if (finished_on) {
+      $('#students_record_status').removeAttr("disabled");
+    } else {
+      $('#students_record_status').attr("disabled", true);
+    }
+  }
+
+  enable_disable_status_checkbox();
+
+  $('#students_record_finished_on').change(function() {
+    // alert( "Handler for .change() called." );
+    enable_disable_status_checkbox();
+  });
+});
+</script>
