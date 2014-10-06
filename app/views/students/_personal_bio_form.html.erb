@@ -29,7 +29,22 @@
       <%= f.label :birthplace, "Tempat, Tanggal Lahir", class: "control-label col-sm-3" %>
       <div class="col-sm-7 form-inline">
           <%= f.text_field :birthplace, class: "form-control" %>
-          <%= f.date_field :birthdate, class: "form-control" %>
+          <%#= f.date_field :birthdate, class: "form-control" %>
+
+          <div class='input-group date' id='datetimepicker5' >
+            <input type='text' id="student_birthdate" name="student[birthdate]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" value="<%= @student.birthdate %>"/>
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+          </div>
+<script type="text/javascript">
+$(function () {
+  $('.date').datetimepicker({
+    pickTime: false
+  });
+});
+</script>
+
       </div>
     </div>
 

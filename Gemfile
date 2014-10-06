@@ -53,3 +53,6 @@ gem "rails-settings-cached", "0.4.1"
 gem 'rails-settings-ui', '~> 0.3.0'
 gem 'paperclip', '~> 4.2'
 gem 'nokogiri'
+
+gem 'momentjs-rails', '>= 2.8.1'
+gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'

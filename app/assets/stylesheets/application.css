@@ -15,6 +15,7 @@
  *= require bootstrap-theme.min
  *= require_tree .
  *= require rails_bootstrap_forms
+ *= require bootstrap-datetimepicker
  */
 
 @font-face {

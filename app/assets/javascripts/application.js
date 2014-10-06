@@ -16,3 +16,6 @@
 //= require turbolinks
 //= require_tree .
 //= require typeahead.bundle.min
+//= require moment
+//= require bootstrap-datetimepicker
+//= require moment/id
