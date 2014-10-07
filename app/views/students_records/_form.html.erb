@@ -30,7 +30,22 @@
     <%= f.label :started_on, "Tanggal mulai", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-      <%= f.date_field :started_on, class: "form-control" %>
+      <%#= f.date_field :started_on, class: "form-control" %>
+          <div class='input-group date'>
+            <input type='text' id="students_record_started_on" name="students_record[started_on]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" 
+                   value="<%= @students_record.started_on && @students_record.started_on.to_date %>"/>
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+          </div>
+<script type="text/javascript">
+$(function () {
+  $('.date').datetimepicker({
+    pickTime: false
+  });
+});
+</script>
+
       </div>
     </div>
   </div>
@@ -39,7 +54,20 @@
     <%= f.label :finished_on, "Tanggal selesai", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-      <%= f.date_field :finished_on, class: "form-control" %>
+        <%#= f.date_field :finished_on, class: "form-control" %>
+
+        <div class="input-group date">
+          <input type='text' id="students_record_finished_on" name="students_record[finished_on]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" 
+                 value="<%= @students_record.finished_on && @students_record.finished_on.to_date %>"/>
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-remove" id="remove_date"></span>
+          </span>
+
+          <span class="input-group-addon datepickerbutton">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+
+        </div>
       </div>
     </div>
   </div>
@@ -62,6 +90,11 @@
 
 <script type="text/javascript">
 $(function() {
+  $('#remove_date').click(function() { 
+    //alert('remove data');
+    $('#students_record_finished_on').val('');
+  });
+
   var enable_disable_status_checkbox = function() {
     var finished_on = $.trim($('#students_record_finished_on').val());
     if (finished_on) {
