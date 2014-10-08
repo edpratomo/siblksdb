@@ -56,7 +56,7 @@ $(function () {
       <div class="form-group">
         <%#= f.date_field :finished_on, class: "form-control" %>
 
-        <div class="input-group date">
+        <div class="input-group date"  id='datetimepicker10'>
           <input type='text' id="students_record_finished_on" name="students_record[finished_on]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" 
                  value="<%= @students_record.finished_on && @students_record.finished_on.to_date %>"/>
           <span class="input-group-addon">
@@ -93,6 +93,7 @@ $(function() {
   $('#remove_date').click(function() { 
     //alert('remove data');
     $('#students_record_finished_on').val('');
+    enable_disable_status_checkbox();
   });
 
   var enable_disable_status_checkbox = function() {
@@ -106,8 +107,8 @@ $(function() {
 
   enable_disable_status_checkbox();
 
-  $('#students_record_finished_on').change(function() {
-    // alert( "Handler for .change() called." );
+  $("#datetimepicker10").on("dp.change", function (e) {
+    // alert( "Handler for dp.change() called." );
     enable_disable_status_checkbox();
   });
 });
