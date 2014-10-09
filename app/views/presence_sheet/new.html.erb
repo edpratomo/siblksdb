@@ -51,3 +51,15 @@
   </div>
 
 <% end %>
+<script type="text/javascript">
+
+$("#print_pdf").change(function() {
+  if (this.checked) {
+    // alert("checked " + "<%= presence_sheet_create_path(format: :pdf) %>");
+    $('form').attr('action', "<%= presence_sheet_create_path(format: :pdf) %>");
+  } else {
+    $('form').attr('action', "<%= presence_sheet_create_path %>");
+  }
+});
+
+</script>
