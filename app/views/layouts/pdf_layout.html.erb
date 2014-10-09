@@ -2,12 +2,7 @@
 <html>
 <head>
 <style>
-table, th, td
-{
-  border-collapse:collapse;
-  border: 1px solid black;
-  width:100%;
-}
+<%= Rails.application.assets.find_asset('application.css').to_s.html_safe %>
 </style>
 </head>
 <body>
