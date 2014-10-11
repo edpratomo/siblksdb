@@ -29,7 +29,6 @@
       <%= f.label :birthplace, "Tempat, Tanggal Lahir", class: "control-label col-sm-3" %>
       <div class="col-sm-7 form-inline">
           <%= f.text_field :birthplace, class: "form-control" %>
-          <%#= f.date_field :birthdate, class: "form-control" %>
 
           <div class='input-group date'>
             <input type='text' id="student_birthdate" name="student[birthdate]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" value="<%= @student.birthdate %>"/>
@@ -45,6 +44,25 @@ $(function () {
 });
 </script>
 
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :street_address, "Alamat", class: "control-label col-sm-3" %>
+      <div class="col-sm-4">
+        <%= f.text_area :street_address, size: "40x3", class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :district, "Kecamatan", class: "control-label sr-only col-sm-3" %>
+      <div class="col-sm-3">
+        <%= f.text_field :district, class: "typeahead", placeholder: "Kecamatan" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :regency_city, "Kota/kabupaten", class: "control-label sr-only col-sm-3" %>
+      <div class="col-sm-3">
+        <%= f.text_field :regency_city, class: "typeahead", placeholder: "Kota/kabupaten" %>
       </div>
     </div>
 
@@ -86,3 +104,62 @@ $(function () {
             min: 1, class: "form-control" %>
       </div>
     </div>
+
+<script type="text/javascript">
+
+var districtNames = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  remote: '<%= district_suggestions_students_url %>.json?q=%QUERY'
+});
+
+var regencyNames = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  remote: '<%= regency_suggestions_students_url %>.json?q=%QUERY'
+});
+
+districtNames.initialize();
+regencyNames.initialize();
+
+// #student_district events
+$('#student_district').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 3
+}, 
+{
+  name: 'district-names',
+  displayKey: 'name',
+  source: districtNames.ttAdapter()
+});
+
+$('#student_district').on('typeahead:selected', function (e, datum) {
+  console.log("district selected");
+  $('#student_district').val(datum.name);
+});
+$('#student_district').on('typeahead:opened', function (e, datum) {
+  console.log("district opened");
+});
+
+// student_regency_city events
+$('#student_regency_city').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 3
+}, 
+{
+  name: 'regency-names',
+  displayKey: 'name',
+  source: regencyNames.ttAdapter()
+});
+
+$('#student_regency_city').on('typeahead:selected', function (e, datum) {
+  console.log("regency/city selected");
+  $('#student_regency_city').val(datum.name);
+});
+$('#student_regency_city').on('typeahead:opened', function (e, datum) {
+  console.log("regency/city opened");
+});
+
+</script>

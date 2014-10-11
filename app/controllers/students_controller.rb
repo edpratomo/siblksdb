@@ -8,6 +8,14 @@ class StudentsController < ApplicationController
     @suggestions = Student.fuzzy_search(name: params[:q])
   end
   
+  def district_suggestions
+    @districts = District.fuzzy_search(name: params[:q])
+  end
+
+  def regency_suggestions
+    @regencies = RegenciesCity.fuzzy_search(name: params[:q])
+  end
+  
   def search
   end
 

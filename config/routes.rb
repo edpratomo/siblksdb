@@ -63,6 +63,8 @@ Rails.application.routes.draw do
 
     collection do
       get 'name_suggestions'
+      get 'district_suggestions'
+      get 'regency_suggestions'
       get 'search'
     end
   end

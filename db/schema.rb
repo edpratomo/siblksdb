@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141004163421) do
+ActiveRecord::Schema.define(version: 20141011093734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(version: 20141004163421) do
   add_index "changes", ["action_tstamp"], name: "changes_action_tstamp", using: :btree
   add_index "changes", ["modified_by"], name: "changes_modified_by", using: :btree
   add_index "changes", ["table_name"], name: "changes_table_name", using: :btree
+
+  create_table "districts", force: true do |t|
+    t.string "code",              limit: 7,  null: false
+    t.string "regency_city_code", limit: 4,  null: false
+    t.string "name",              limit: 30, null: false
+  end
+
+  add_index "districts", ["code"], name: "districts_code_key", unique: true, using: :btree
+  add_index "districts", ["name"], name: "districts_name", using: :btree
 
   create_table "groups", force: true do |t|
     t.text "name", null: false
@@ -81,6 +90,21 @@ ActiveRecord::Schema.define(version: 20141004163421) do
     t.integer "instructor_id"
   end
 
+  create_table "provinces", force: true do |t|
+    t.string "code", limit: 2,  null: false
+    t.string "name", limit: 30, null: false
+  end
+
+  add_index "provinces", ["code"], name: "provinces_code_key", unique: true, using: :btree
+
+  create_table "regencies_cities", force: true do |t|
+    t.string "code",          limit: 4,  null: false
+    t.string "province_code", limit: 2,  null: false
+    t.string "name",          limit: 30, null: false
+  end
+
+  add_index "regencies_cities", ["code"], name: "regencies_cities_code_key", unique: true, using: :btree
+
   create_table "schedules", force: true do |t|
     t.text "label",     null: false
     t.text "time_slot", null: false
@@ -115,9 +139,15 @@ ActiveRecord::Schema.define(version: 20141004163421) do
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.hstore   "biodata"
+    t.text     "religion"
+    t.text     "street_address"
+    t.text     "district"
+    t.text     "regency_city"
+    t.text     "province"
   end
 
   add_index "students", ["name"], name: "students_name", using: :btree
+  add_index "students", ["religion", "sex"], name: "students_religion_sex", using: :btree
 
   create_table "students_pkgs", force: true do |t|
     t.integer "student_id"
