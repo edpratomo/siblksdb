@@ -18,6 +18,14 @@
       </div>
     </div>
 
+    <div class="form-group has-feedback">
+      <%= f.label :religion, "Agama", class: "control-label col-sm-3" %>
+      <div class="col-sm-3">
+        <%= f.text_field :religion, class: "form-control" %>
+        <i class="glyphicon glyphicon-remove form-control-feedback" id="remove_religion"></i>
+      </div>
+    </div>
+
     <div class="form-group">
       <%= f.label :avatar, "Foto", class: "control-label col-sm-3" %>
       <div class="col-xs-4">
@@ -117,6 +125,10 @@ $('#remove_regency_city').click(function() {
   $('#student_regency_city').val('');
 });
 
+$('#remove_religion').click(function() { 
+  $('#student_religion').val('');
+});
+
 var districtNames = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -129,8 +141,16 @@ var regencyNames = new Bloodhound({
   remote: '<%= regency_suggestions_students_url %>.json?q=%QUERY'
 });
 
+var religions = ['Hindu', 'Budha', 'Kong Hu Cu', 'Katolik', 'Kristen', 'Islam'];
+var religionNames = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  local: $.map(religions, function(religion) { return { name: religion }; })
+});
+
 districtNames.initialize();
 regencyNames.initialize();
+religionNames.initialize();
 
 // #student_district events
 $('#student_district').typeahead({
@@ -170,6 +190,23 @@ $('#student_regency_city').on('typeahead:selected', function (e, datum) {
 });
 $('#student_regency_city').on('typeahead:opened', function (e, datum) {
   console.log("regency/city opened");
+});
+
+// religion names events
+$('#student_religion').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'religions',
+  displayKey: 'name',
+  source: religionNames.ttAdapter()
+});
+
+$('#student_religion').on('typeahead:selected', function (e, datum) {
+  console.log("religion selected");
+  $('#student_religion').val(datum.name);
 });
 
 </script>
