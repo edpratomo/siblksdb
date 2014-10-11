@@ -53,16 +53,18 @@ $(function () {
         <%= f.text_area :street_address, size: "40x3", class: "form-control" %>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group has-feedback">
       <%= f.label :district, "Kecamatan", class: "control-label sr-only col-sm-3" %>
       <div class="col-sm-3">
-        <%= f.text_field :district, class: "typeahead", placeholder: "Kecamatan" %>
+        <%= f.text_field :district, class: "form-control", placeholder: "Kecamatan" %>
+        <i class="glyphicon glyphicon-remove form-control-feedback" id="remove_district"></i>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group has-feedback">
       <%= f.label :regency_city, "Kota/kabupaten", class: "control-label sr-only col-sm-3" %>
       <div class="col-sm-3">
-        <%= f.text_field :regency_city, class: "typeahead", placeholder: "Kota/kabupaten" %>
+        <%= f.text_field :regency_city, class: "form-control", placeholder: "Kota / kabupaten" %>
+        <i class="glyphicon glyphicon-remove form-control-feedback" id="remove_regency_city"></i>
       </div>
     </div>
 
@@ -106,6 +108,14 @@ $(function () {
     </div>
 
 <script type="text/javascript">
+
+$('#remove_district').click(function() { 
+  $('#student_district').val('');
+});
+
+$('#remove_regency_city').click(function() { 
+  $('#student_regency_city').val('');
+});
 
 var districtNames = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
