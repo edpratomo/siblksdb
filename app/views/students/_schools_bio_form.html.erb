@@ -14,7 +14,7 @@
           <%= text_field_tag "student[biodata][#{edu} Sampai]", @student.biodata && @student.biodata["#{edu} Sampai"], placeholder: "sampai", class: "form-control" %>
         </div>
           <div class="checkbox form-control">
-            <%= label_tag "student[biodata[#{edu} Lulus]" do %>
+            <%= label_tag "student[biodata][#{edu} Lulus]" do %>
               <%= check_box_tag "student[biodata][#{edu} Lulus]", "ya", @student.biodata && @student.biodata["#{edu} Lulus"] == "ya" %>
               Lulus
             <% end %>

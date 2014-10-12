@@ -19,6 +19,14 @@
         <div class="radio form-control">
           <label><%= f.radio_button :sex, "male" %>Laki-laki</label>
         </div>
+
+          <div class="checkbox form-control">
+            <%= label_tag "student[biodata][Menikah]" do %>
+              <%= check_box_tag "student[biodata][Menikah]", "ya", current_bio("Menikah") == "ya" %>
+              Sudah menikah
+            <% end %>
+          </div>
+
       </div>
     </div>
 
@@ -246,9 +254,22 @@ $('#student_religion').on('typeahead:selected', function (e, datum) {
   $('#student_religion').val(datum.name);
 });
 
+$(function() {
   $('#remove_id_card_expiry_date').click(function() { 
     alert("clicked");
     $('#student_biodata_Tanda_Pengenal_Berlaku').val('');
   });
 
+  if ($('#student_biodata_Menikah').prop("checked") == false) {
+    $('#panel_data_keluarga').hide();
+  }
+
+  $("#student_biodata_Menikah").change(function() {
+    if (this.checked) {
+      $('#panel_data_keluarga').show();
+    } else {
+      $('#panel_data_keluarga').hide();
+    }
+  });
+});
 </script>
