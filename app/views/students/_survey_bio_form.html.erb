@@ -1,7 +1,7 @@
     <div class="form-group">
       <%= f.label "student[biodata][Alasan Mengikuti Kursus]", "Alasan mengikuti kursus", class: "control-label col-sm-3" %>
       <div class="col-sm-7">
-        <%= text_field_tag "student[biodata][Alasan Mengikuti Kursus]", @student.biodata && @student.biodata["Alasan Mengikuti Kursus"], class: "form-control" %>
+        <%= text_area_tag "student[biodata][Alasan Mengikuti Kursus]", current_bio("Alasan Mengikuti Kursus"), size: "40x3", class: "form-control" %>
       </div>
     </div>
 
@@ -9,7 +9,7 @@
       <%= f.label "student[biodata][Sumber info BLK]", "Mengetahui BLK Salesian Don Bosco dari", class: "control-label col-sm-3" %>
       <div class="col-sm-7 form-inline">
         <% curr_value = @student.biodata && @student.biodata["Sumber info BLK"] %>
-        <% %w(teman brosur sticker spanduk).each do |answer| %>
+        <% %w(teman brosur sticker spanduk internet).each do |answer| %>
           <div class="radio form-control">
           <label>
             <%= radio_button_tag "student[biodata][Sumber info BLK]", answer, answer == curr_value %> <%= answer %>
@@ -45,7 +45,7 @@
     <div class="form-group">
       <%= f.label "student[biodata][Kegiatan sehari-hari]", "Kegiatan sehari-hari", class: "control-label col-sm-3" %>
       <div class="col-sm-7">
-        <%= text_field_tag "student[biodata][Kegiatan sehari-hari]", @student.biodata && @student.biodata["Kegiatan sehari-hari"], class: "form-control" %>
+        <%= text_area_tag "student[biodata][Kegiatan sehari-hari]", current_bio("Kegiatan sehari-hari"), size: "40x3", class: "form-control" %>
       </div>
     </div>
 
@@ -53,5 +53,45 @@
       <%= f.label "student[biodata][Sumber biaya kursus]", "Yang akan membiayai kursus ini", class: "control-label col-sm-3" %>
       <div class="col-sm-3">
         <%= text_field_tag "student[biodata][Sumber biaya kursus]", @student.biodata && @student.biodata["Sumber biaya kursus"], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Keinginan]", "Keinginan", class: "control-label col-sm-3" %>
+      <div class="col-sm-7 form-inline">
+        <div class="checkbox form-control">
+          <%= label_tag "student[biodata][Keinginan pribadi]" do %>
+          <%= check_box_tag "student[biodata][Keinginan pribadi]", "ya", current_bio("Keinginan pribadi") == "ya" %>
+              Pribadi
+          <% end %>
+        </div>
+
+        <div class="checkbox form-control">
+          <%= label_tag "student[biodata][Keinginan orangtua]" do %>
+          <%= check_box_tag "student[biodata][Keinginan orangtua]", "ya", current_bio("Keinginan orangtua") == "ya" %>
+              Orangtua
+          <% end %>
+        </div>
+
+        <div class="checkbox form-control">
+          <%= label_tag "student[biodata][Keinginan teman]" do %>
+          <%= check_box_tag "student[biodata][Keinginan teman]", "ya", current_bio("Keinginan teman") == "ya" %>
+              Teman
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Berapa kali tes]", "Berapa kali tes masuk?", class: "control-label col-sm-3" %>
+      <div class="col-sm-7 form-inline">
+        <% curr_value = current_bio("Berapa kali tes") %>
+        <% %w(1 2).each do |answer| %>
+          <div class="radio form-control">
+          <label>
+            <%= radio_button_tag "student[biodata][Berapa kali tes]", answer, answer == curr_value %> <%= answer %>
+          </label>
+          </div>
+        <% end %>
       </div>
     </div>
