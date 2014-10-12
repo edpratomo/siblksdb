@@ -1,2 +1,5 @@
 id:
+  active: "Aktif"
+  abandoned: "Keluar"
   failed: "Tidak Lulus"
+  finished: "Lulus"

@@ -1,4 +1,4 @@
-<%= form_for(@students_record, html: {class: "form-horizontal", role: "form"}) do |f| %>
+<%= form_for(@students_record, html: {class: "form-horizontal", role: "form", style: "padding-top:20px;"}) do |f| %>
   <% if @students_record.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@students_record.errors.count, "error") %> prohibited this record from being saved:</h2>
@@ -30,27 +30,42 @@
     <%= f.label :started_on, "Tanggal mulai", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-      <%#= f.date_field :started_on, class: "form-control" %>
-          <div class='input-group date'>
-            <input type='text' id="students_record_started_on" name="students_record[started_on]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" 
-                   value="<%= @students_record.started_on && @students_record.started_on.to_date %>"/>
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-          </div>
-<script type="text/javascript">
-$(function () {
-  $('.date').datetimepicker({
-    pickTime: false
-  });
-});
-</script>
-
+        <div class='input-group date'>
+          <input type='text' id="students_record_started_on" name="students_record[started_on]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" 
+                 value="<%= @students_record.started_on && @students_record.started_on.to_date %>"/>
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
       </div>
     </div>
   </div>
 
+<% if controller.action_name == "edit" %>
   <div class="form-group">
+    <%= f.label :status, "Status", class: "control-label col-sm-2 " %>
+    <div class="col-sm-7 form-inline">
+      <div class="form-group">
+        <div class="radio form-control">
+          <label><%= f.radio_button :status, "active" %><%= t('active') %></label>
+        </div>
+
+        <div class="radio form-control">
+          <label><%= f.radio_button :status, "abandoned" %><%= t('abandoned') %></label>
+        </div>
+
+        <div class="radio form-control">
+          <label><%= f.radio_button :status, "failed" %><%= t('failed') %></label>
+        </div>
+
+        <div class="radio form-control">
+          <label><%= f.radio_button :status, "finished" %><%= t('finished') %></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group" id="datetimepicker_finished_on">
     <%= f.label :finished_on, "Tanggal selesai", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
@@ -71,17 +86,7 @@ $(function () {
       </div>
     </div>
   </div>
-
-  <div class="form-group">
-    <%= f.label :status, "Tidak lulus", class: "sr-only control-label col-sm-2" %>
-    <div class="col-sm-3">
-      <div class="form-group checkbox">
-          <label>
-            <%= f.check_box :status, {}, "failed", "finished" %> <%= t('failed') %>
-          </label>
-      </div>
-    </div>
-  </div>
+<% end %>
 
   <div class="actions">
     <%= submit_tag %>
@@ -90,26 +95,35 @@ $(function () {
 
 <script type="text/javascript">
 $(function() {
-  $('#remove_date').click(function() { 
-    //alert('remove data');
-    $('#students_record_finished_on').val('');
-    enable_disable_status_checkbox();
+  $('.date').datetimepicker({
+    pickTime: false
   });
 
-  var enable_disable_status_checkbox = function() {
-    var finished_on = $.trim($('#students_record_finished_on').val());
-    if (finished_on) {
-      $('#students_record_status').removeAttr("disabled");
-    } else {
-      $('#students_record_status').attr("disabled", true);
-    }
+  var status_radio = $('input[name="students_record[status]"]');
+  var checked_value = status_radio.filter(':checked').val();
+
+  // set initial states
+  if (checked_value == "active" || checked_value == "abandoned") {
+    $('#datetimepicker_finished_on').hide();
+  }
+  if (checked_value != "active") {
+    $('#students_record_status_active').attr("disabled", true);
   }
 
-  enable_disable_status_checkbox();
+  status_radio.change(function() {
+    if (this.value == "active" || this.value == "abandoned") {
+      $('#datetimepicker_finished_on').hide();
+    } else {
+      $('#datetimepicker_finished_on').show();
+    }
+  });
+ 
+  $('#remove_date').click(function() { 
+    $('#students_record_finished_on').val('');
+  });
 
   $("#datetimepicker10").on("dp.change", function (e) {
     // alert( "Handler for dp.change() called." );
-    enable_disable_status_checkbox();
   });
 });
 </script>

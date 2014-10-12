@@ -21,6 +21,7 @@ class StudentsRecordsController < ApplicationController
   def new
     @students_record = StudentsRecord.new
     @students_record.student = @student
+    @students_record.status = "active"
     @students_record.started_on = Date.today # default value for started_on
   end
 
@@ -33,13 +34,14 @@ class StudentsRecordsController < ApplicationController
   # POST /students_records
   # POST /students_records.json
   def create
-    params[:students_record][:status] = (params[:students_record][:finished_on].empty? ? 'active' : 'finished')
+    #params[:students_record][:status] = (params[:students_record][:finished_on].empty? ? 'active' : 'finished')
     @students_record = StudentsRecord.new(students_record_params)
     @student = Student.find(params[:students_record][:student_id])
 
     respond_to do |format|
       if @student.transaction_user(@current_user) {
-        if params[:students_record][:finished_on].empty?
+        # if params[:students_record][:finished_on].empty?
+        if true
           pkg = Pkg.find(params[:students_record][:pkg_id])
           @student.pkgs << pkg # this student has just started a pkg
         end
