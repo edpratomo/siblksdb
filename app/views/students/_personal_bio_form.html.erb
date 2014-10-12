@@ -81,6 +81,39 @@ $(function () {
     </div>
 
     <div class="form-group">
+      <%= f.label "student[biodata][Tanda Pengenal]", "Tanda Pengenal", class: "control-label col-sm-3" %>
+      <div class="col-sm-4">
+        <%= text_field_tag "student[biodata][Tanda Pengenal Nomor]", current_bio("Tanda Pengenal Nomor"), 
+            class: "form-control", placeholder: "Nomor" 
+        %>
+      </div>
+      <div class="col-sm-2">
+        <%= select_tag "student[biodata][Tanda Pengenal]", 
+            options_for_select(%w[KTP STNK SIM KP], current_bio("Tanda Pengenal")), 
+            class: "form-control" 
+        %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label "student[biodata][Tanda Pengenal Berlaku]", "Tanda Pengenal Berlaku", class: "control-label sr-only col-sm-3" %>
+      <div class="col-sm-7 form-inline">
+        <label for="student[biodata][Tanda Pengenal Berlaku">Berlaku sampai: </label>
+        <div class='input-group date'>
+          <input type='text' id="student_biodata_Tanda_Pengenal_Berlaku" name="student[biodata][Tanda Pengenal Berlaku]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" value="<%= current_bio("Tanda Pengenal Berlaku") %>"/>
+
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-remove" id="remove_id_card_expiry_date"></span>
+          </span>
+
+          <span class="input-group-addon  datepickerbutton">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
       <%= f.label :phone, "Telpon", class: "control-label col-sm-3" %>
       <div class="col-xs-2">
         <%= f.telephone_field :phone, class: "form-control" %>
@@ -212,5 +245,10 @@ $('#student_religion').on('typeahead:selected', function (e, datum) {
   console.log("religion selected");
   $('#student_religion').val(datum.name);
 });
+
+  $('#remove_id_card_expiry_date').click(function() { 
+    alert("clicked");
+    $('#student_biodata_Tanda_Pengenal_Berlaku').val('');
+  });
 
 </script>
