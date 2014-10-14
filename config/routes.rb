@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'report/new_disnaker'
+
+  get 'report/create_disnaker'
+
   get 'settings/edit'
 
   patch 'settings/update'
