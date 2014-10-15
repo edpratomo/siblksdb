@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy, :remove_pkg]
+  before_action :set_student, only: [:show, :edit, :update, :destroy, :attending, :remove_pkg]
   before_action :set_current_user
   
   helper_method :sort_column, :sort_direction
@@ -17,6 +17,21 @@ class StudentsController < ApplicationController
   end
   
   def search
+  end
+
+  def attending
+    now = DateTime.now
+    today = now.strftime("%a").downcase
+    my_schedules = @student.students_pkgs_instructors_schedules
+    @present_schedule = my_schedules.find do |my_schedule|
+      if my_schedule.instructors_schedule.day == today
+        start_time, end_time = my_schedule.instructors_schedule.schedule.time_slot.split(/\s+-\s+/).map {|e| Time.parse(e)}
+        true if now > start_time - 30.minutes and now < start_time + 30.minutes
+      end
+    end
+    respond_to do |format|
+      format.text
+    end
   end
 
   # DELETE

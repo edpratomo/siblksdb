@@ -65,6 +65,8 @@ Rails.application.routes.draw do
       get 'district_suggestions'
       get 'regency_suggestions'
       get 'search'
+
+      get ':id/attending' => 'students#attending', as: "attending"
     end
   end
 
