@@ -56,7 +56,6 @@ Rails.application.routes.draw do
 
   resources :students do
     member do
-      get 'manage_pkg'
       delete ':pid/remove_pkg' => 'students#remove_pkg', as: 'remove_pkg'
       delete ':pid/finish_pkg' => 'students#finish_pkg', as: "finish_pkg"
     end

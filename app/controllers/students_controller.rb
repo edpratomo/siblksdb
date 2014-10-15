@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg, :remove_pkg]
+  before_action :set_student, only: [:show, :edit, :update, :destroy, :remove_pkg]
   before_action :set_current_user
   
   helper_method :sort_column, :sort_direction
@@ -31,21 +31,6 @@ class StudentsController < ApplicationController
     end
   end
       
-  def manage_pkg
-    @my_packages = @student.pkgs.order(:id)
-    ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
-    
-    all_pkgs = Pkg.order(pkg: :desc).order(:level)
-    pkg_hash = all_pkgs.inject({}) do |m,o|
-      m[o.pkg] ||= OpenStruct.new(pkg_name: o.pkg, levels: [])
-      m[o.pkg].levels << OpenStruct.new(level: "#{o.pkg} Level #{o.level}", id: o.id)
-      m
-    end
-
-    # finally create the collection obj
-    @packages = ordered_pkg_names.map {|e| pkg_hash[e] }
-  end
-  
   # GET /students
   # GET /students.json
   def index
