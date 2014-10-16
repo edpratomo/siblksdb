@@ -1,7 +1,8 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy, :attending, :remove_pkg]
-  before_action :set_current_user
-  
+  before_action :set_current_user, except: [:attending]
+  skip_before_action :authorize, only: [:attending]
+
   helper_method :sort_column, :sort_direction
   
   def name_suggestions
