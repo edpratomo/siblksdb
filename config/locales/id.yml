@@ -3,3 +3,7 @@ id:
   abandoned: "Keluar"
   failed: "Tidak Lulus"
   finished: "Lulus"
+  will_paginate:
+    previous_label: "Sebelum"
+    next_label: "Berikut"
+    page_gap: "…"

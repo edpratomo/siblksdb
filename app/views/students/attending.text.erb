@@ -1,3 +1,2 @@
 <%= @student.name %>
-<%= @present_schedule && @present_schedule.students_pkg.pkg.pkg %>
-<%= @present_schedule && @present_schedule.instructors_schedule.schedule.time_slot %>
+<%= @present_schedule && @present_schedule.students_pkg.pkg.pkg + " (" + @study_time + ")" %>

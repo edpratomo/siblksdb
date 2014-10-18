@@ -30,6 +30,9 @@ class StudentsController < ApplicationController
         true if now > start_time - 30.minutes and now < start_time + 30.minutes
       end
     end
+    if @present_schedule
+      @study_time = @present_schedule.instructors_schedule.schedule.time_slot.split(/\s+-\s+/).first
+    end
     respond_to do |format|
       format.text
     end
