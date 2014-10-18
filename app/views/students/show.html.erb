@@ -21,6 +21,35 @@
   </div>
 </div>
 
+<div class="panel-group" id="accordion" style="padding-top: 30px;">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Data Orang Tua</a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'parents_bio' %>
+        </div>
+      </div>
+    </div>
+
+  <% if current_bio("Menikah") == "ya" %>
+    <div class="panel panel-default" id="panel_data_keluarga">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Data Keluarga (bagi yang sudah menikah)</a>
+        </h4>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'family_bio' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 <div style="padding-top: 30px;">
 <p style="">
@@ -39,4 +68,3 @@
 </p>
 </div>
 
-<%#= link_to 'Back', students_path %>
