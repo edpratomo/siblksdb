@@ -1,27 +1,26 @@
-<%= render partial: 'shared/student_navbar' %>
 <p id="notice"><%= notice %></p>
 
-<h2><%= @student.name %></h2>
+<%= render partial: 'shared/student_navbar' %>
 
-<div class="clearfix" style="padding-top:20px;">
-<%= image_tag @student.avatar.url(:medium), style: "float:left;padding-bottom:20px;padding-right:20px;" %>
+<div id="biodata" class="clearfix" style="padding-top:20px;">
+  <div class="pic">
+    <a href="#"><%= image_tag @student.avatar.url(:medium) %></a>
+  </div>
 
-<dl style="font-size:large;">
-  <dt sytle="float:left;width:50px;">Jenis kelamin</dt>
-  <dd style="margin-left:100px;"><%= @student.sex == 'male' ? 'Laki-laki' : 'Perempuan' %></dd>
-</dl>
-
-<dl style="font-size:large;">
-  <dt style="white-space:normal;">Tempat, tanggal lahir</dt>
-  <dd><%= @student.birthplace %>, <%= @student.birthdate %></dd>
-</dl>
-
-<dl style="font-size:large;">
-  <dt>Nomor Telpon</dt>
-  <dd><%= @student.phone %></dd>
-</dl>
-
+  <div class="data">
+    <h1><%= @student.name %> <span class="ionicons ion-<%= @student.sex %>" style="padding-left:20px"></span></h1>
+    <h3>Kelahiran <%= @student.birthdate %>, di <%= @student.birthplace %></h3>
+    <h3><i class="glyphicon glyphicon-phone"></i> <%= @student.phone %></h3>
+    <div class="sep"></div>
+    <% if @student.street_address %>
+      <% @student.street_address.split("\n").each do |addr_line| %>
+        <h4><%= addr_line %></h4>
+      <% end %>
+    <% end %>
+    <h4><%= @student.district %>, <%= @student.regency_city %></h4>
+  </div>
 </div>
+
 
 <div style="padding-top: 30px;">
 <p style="">
