@@ -24,10 +24,23 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Data Orang Tua</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Data Pribadi</a>
         </h4>
       </div>
       <div id="collapseOne" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'personal_bio' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Data Orang Tua</a>
+        </h4>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse">
         <div class="panel-body">
         <%= render partial: 'parents_bio' %>
         </div>
@@ -38,10 +51,10 @@
     <div class="panel panel-default" id="panel_data_keluarga">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Data Keluarga (bagi yang sudah menikah)</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Data Keluarga (bagi yang sudah menikah)</a>
         </h4>
       </div>
-      <div id="collapseTwo" class="panel-collapse collapse">
+      <div id="collapseThree" class="panel-collapse collapse">
         <div class="panel-body">
         <%= render partial: 'family_bio' %>
         </div>
