@@ -19,4 +19,15 @@
 #biodata .data ul.numbers { list-style: none; width: 320px; padding-top: 7px; margin-top: 0; border-top: 1px solid #fff; color: #676767; }
 #biodata .data ul.numbers li { width: 95px; float: left; display: block; padding-left: 8px; height: 50px; border-right: 1px dotted #bbb; text-transform: uppercase; }
 #biodata .data ul.numbers li strong { color: #434343; display: block; font-size: 3.4em; line-height: 1.1em; font-weight: bold; }
- 
+
+#biodata .regdate {
+  position:absolute;
+  bottom:0;
+  right:0;
+}
+#biodata .regdate p {
+  font-family:Arial,sans-serif;
+  font-size:small;
+  margin-bottom:3px;
+  margin-right:3px;
+}
