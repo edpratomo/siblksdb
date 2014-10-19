@@ -1,43 +1,78 @@
-<%= render partial: 'shared/student_navbar' %>
 <p id="notice"><%= notice %></p>
+<%= render partial: 'shared/student_navbar' %>
 
-<h2><%= @student.name %></h2>
+<div id="biodata" class="clearfix" style="padding-top:20px;">
+  <div class="pic">
+    <a href="#"><%= image_tag @student.avatar.url(:medium) %></a>
+  </div>
 
-<div class="clearfix" style="padding-top:20px;">
-<%= image_tag @student.avatar.url(:medium), style: "float:left;padding-bottom:20px;padding-right:20px;" %>
+  <div class="data">
+    <h1><%= @student.name %> <span class="ionicons ion-<%= @student.sex %>" style="padding-left:20px"></span></h1>
+    <h3>Kelahiran <%= @student.birthdate %>, di <%= @student.birthplace %></h3>
+    <h3><i class="glyphicon glyphicon-phone"></i> <%= @student.phone %></h3>
+    <div class="sep"></div>
+    <% if @student.street_address %>
+      <% @student.street_address.split("\n").each do |addr_line| %>
+        <h4><%= addr_line %></h4>
+      <% end %>
+    <% end %>
+    <h4><%= @student.district %>, <%= @student.regency_city %></h4>
 
-<dl style="font-size:large;">
-  <dt sytle="float:left;width:50px;">Jenis kelamin</dt>
-  <dd style="margin-left:100px;"><%= @student.sex == 'male' ? 'Laki-laki' : 'Perempuan' %></dd>
-</dl>
-
-<dl style="font-size:large;">
-  <dt style="white-space:normal;">Tempat, tanggal lahir</dt>
-  <dd><%= @student.birthplace %>, <%= @student.birthdate %></dd>
-</dl>
-
-<dl style="font-size:large;">
-  <dt>Nomor Telpon</dt>
-  <dd><%= @student.phone %></dd>
-</dl>
-
+    <div class="regdate">
+      <p>Tanggal pendaftaran <%= @student.created_at.to_date %></p>
+    </div>
+  </div>
 </div>
 
-<div style="padding-top: 30px;">
-<p style="">
-  <strong>Created at:</strong>
-  <%= @student.created_at %>
-</p>
+<div class="panel-group" id="accordion" style="padding-top: 30px; max-width: 862px;">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Data Pribadi</a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'personal_bio' %>
+        </div>
+      </div>
+    </div>
 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Data Orang Tua</a>
+        </h4>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'parents_bio' %>
+        </div>
+      </div>
+    </div>
+
+  <% if current_bio("Menikah") == "ya" %>
+    <div class="panel panel-default" id="panel_data_keluarga">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Data Keluarga (bagi yang sudah menikah)</a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse">
+        <div class="panel-body">
+        <%= render partial: 'family_bio' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div style="padding-top: 30px; text-align: right; max-width: 862px;">
 <p>
-  <strong>Modified at:</strong>
+  <strong>Perubahan terakhir:</strong>
   <%= @student.modified_at %>
-</p>
-
-<p>
-  <strong>Modified by:</strong>
+  <strong>oleh:</strong>
   <%= @student.modified_by %>
 </p>
 </div>
 
-<%#= link_to 'Back', students_path %>

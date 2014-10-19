@@ -22,7 +22,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to "sistem informasi BLK Salesian Don Bosco", nil, class: "navbar-brand" %>
+          <%= link_to image_tag("smaller-logo2.png", :alt => "BLK Don Bosco logo", style: "margin-top: -10px;"), '#', class: "navbar-brand" %> 
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -38,9 +38,11 @@
             <li><a href="">Help</a></li>
           </ul>
 <%= bootstrap_form_tag(method: :get, html: {class: "navbar-form navbar-right"}) do %>
-<%= hidden_field_tag 'hfield' %>
-<div id="remote"><input class="typeahead" type="text" placeholder="Cari nama siswa.."></div>
-
+  <%= hidden_field_tag 'hfield' %>
+  <div class="form-group has-feedback">
+    <input id="search_student" class="form-control" type="text" placeholder="Cari nama siswa.."/>
+    <i class="glyphicon glyphicon-search form-control-feedback"></i>
+  </div>
 <% end %>
         </div>
       </div>
@@ -83,7 +85,7 @@ var studentNames = new Bloodhound({
 
 studentNames.initialize();
 
-$('#remote .typeahead').typeahead({
+$('#search_student').typeahead({
   hint: true,
   highlight: true,
   minLength: 3
@@ -91,10 +93,13 @@ $('#remote .typeahead').typeahead({
 {
   name: 'student-names',
   displayKey: 'name',
-  source: studentNames.ttAdapter()
+  source: studentNames.ttAdapter(),
+  templates: {
+    suggestion: Handlebars.compile('<p><strong>{{name}}</strong> – {{birthplace}}, {{local_birthdate}}</p>')
+  }
 });
 
-$('#remote .typeahead').on('typeahead:selected', function (e, datum) {
+$('#search_student').on('typeahead:selected', function (e, datum) {
   console.log("selected");
   var hfield = document.getElementById('hfield');
   hfield.value = datum.id;
@@ -102,7 +107,7 @@ $('#remote .typeahead').on('typeahead:selected', function (e, datum) {
   console.log("url: " + url);
   $(location).attr('href', url);
 });
-$('#remote .typeahead').on('typeahead:opened', function (e, datum) {
+$('#search_student').on('typeahead:opened', function (e, datum) {
   console.log("opened");
 });
 

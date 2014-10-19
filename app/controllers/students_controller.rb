@@ -1,7 +1,8 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy, :manage_pkg, :remove_pkg]
-  before_action :set_current_user
-  
+  before_action :set_student, only: [:show, :edit, :update, :destroy, :attending, :remove_pkg]
+  before_action :set_current_user, except: [:attending]
+  skip_before_action :authorize, only: [:attending]
+
   helper_method :sort_column, :sort_direction
   
   def name_suggestions
@@ -19,6 +20,24 @@ class StudentsController < ApplicationController
   def search
   end
 
+  def attending
+    now = DateTime.now
+    today = now.strftime("%a").downcase
+    my_schedules = @student.students_pkgs_instructors_schedules
+    @present_schedule = my_schedules.find do |my_schedule|
+      if my_schedule.instructors_schedule.day == today
+        start_time, end_time = my_schedule.instructors_schedule.schedule.time_slot.split(/\s+-\s+/).map {|e| Time.parse(e)}
+        true if now > start_time - 30.minutes and now < start_time + 30.minutes
+      end
+    end
+    if @present_schedule
+      @study_time = @present_schedule.instructors_schedule.schedule.time_slot.split(/\s+-\s+/).first
+    end
+    respond_to do |format|
+      format.text
+    end
+  end
+
   # DELETE
   def remove_pkg
     @student.transaction_user(@current_user) do
@@ -31,21 +50,6 @@ class StudentsController < ApplicationController
     end
   end
       
-  def manage_pkg
-    @my_packages = @student.pkgs.order(:id)
-    ordered_pkg_names = Pkg.select("distinct pkg").order(pkg: :desc).map {|e| e.pkg}
-    
-    all_pkgs = Pkg.order(pkg: :desc).order(:level)
-    pkg_hash = all_pkgs.inject({}) do |m,o|
-      m[o.pkg] ||= OpenStruct.new(pkg_name: o.pkg, levels: [])
-      m[o.pkg].levels << OpenStruct.new(level: "#{o.pkg} Level #{o.level}", id: o.id)
-      m
-    end
-
-    # finally create the collection obj
-    @packages = ordered_pkg_names.map {|e| pkg_hash[e] }
-  end
-  
   # GET /students
   # GET /students.json
   def index

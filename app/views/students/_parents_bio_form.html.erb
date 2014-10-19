@@ -23,7 +23,7 @@
       <%= f.label "student[biodata][Status Pernikahan Ayah]", "Status Pernikahan", class: "control-label col-sm-2" %>
       <div class="col-sm-7 form-inline">
         <% curr_value = @student.biodata && @student.biodata["Status Pernikahan Ayah"] %>
-        <% %w(cerai tidak).each do |answer| %>
+        <% ["cerai", "tidak cerai"].each do |answer| %>
           <div class="radio form-control">
           <label>
             <%= radio_button_tag "student[biodata][Status Pernikahan Ayah]", answer, answer == curr_value %> <%= answer %>
@@ -72,7 +72,7 @@
       <%= f.label "student[biodata][Status Pernikahan Ibu]", "Status Pernikahan", class: "control-label col-sm-2" %>
       <div class="col-sm-7 form-inline">
         <% curr_value = @student.biodata && @student.biodata["Status Pernikahan Ibu"] %>
-        <% %w(cerai tidak).each do |answer| %>
+        <% ["cerai", "tidak cerai"].each do |answer| %>
           <div class="radio form-control">
           <label>
             <%= radio_button_tag "student[biodata][Status Pernikahan Ibu]", answer, answer == curr_value %> <%= answer %>
