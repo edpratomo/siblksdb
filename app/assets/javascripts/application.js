@@ -19,3 +19,4 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require moment/id
+//= require handlebars-v2.0.0

@@ -91,7 +91,10 @@ $('#remote .typeahead').typeahead({
 {
   name: 'student-names',
   displayKey: 'name',
-  source: studentNames.ttAdapter()
+  source: studentNames.ttAdapter(),
+  templates: {
+    suggestion: Handlebars.compile('<p><strong>{{name}}</strong> – {{birthplace}}, {{local_birthdate}}</p>')
+  }
 });
 
 $('#remote .typeahead').on('typeahead:selected', function (e, datum) {
