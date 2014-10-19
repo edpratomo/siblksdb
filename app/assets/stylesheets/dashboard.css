@@ -80,6 +80,7 @@ body {
 
 .main {
   padding: 20px;
+/*  background-color: #E6E6E6; */
 }
 @media (min-width: 768px) {
   .main {

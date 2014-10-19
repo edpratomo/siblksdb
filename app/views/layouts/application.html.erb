@@ -38,9 +38,11 @@
             <li><a href="">Help</a></li>
           </ul>
 <%= bootstrap_form_tag(method: :get, html: {class: "navbar-form navbar-right"}) do %>
-<%= hidden_field_tag 'hfield' %>
-<div id="remote"><input class="typeahead" type="text" placeholder="Cari nama siswa.."></div>
-
+  <%= hidden_field_tag 'hfield' %>
+  <div class="form-group has-feedback">
+    <input id="search_student" class="form-control" type="text" placeholder="Cari nama siswa.."/>
+    <i class="glyphicon glyphicon-search form-control-feedback"></i>
+  </div>
 <% end %>
         </div>
       </div>
@@ -83,7 +85,7 @@ var studentNames = new Bloodhound({
 
 studentNames.initialize();
 
-$('#remote .typeahead').typeahead({
+$('#search_student').typeahead({
   hint: true,
   highlight: true,
   minLength: 3
@@ -97,7 +99,7 @@ $('#remote .typeahead').typeahead({
   }
 });
 
-$('#remote .typeahead').on('typeahead:selected', function (e, datum) {
+$('#search_student').on('typeahead:selected', function (e, datum) {
   console.log("selected");
   var hfield = document.getElementById('hfield');
   hfield.value = datum.id;
@@ -105,7 +107,7 @@ $('#remote .typeahead').on('typeahead:selected', function (e, datum) {
   console.log("url: " + url);
   $(location).attr('href', url);
 });
-$('#remote .typeahead').on('typeahead:opened', function (e, datum) {
+$('#search_student').on('typeahead:opened', function (e, datum) {
   console.log("opened");
 });
 
