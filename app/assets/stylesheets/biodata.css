@@ -7,7 +7,7 @@
 #biodata .pic { float: left; display: block; margin-right: 10px; }
 #biodata .pic a img { padding: 7px; background: #fff; border: 1px solid #ccc; }
 
-#biodata .data { float: left; display: block; position:  relative; width: 550px; height: 314px; padding: 4px; padding-left: 15px; background: #CECEF6; overflow:  hidden; box-sizing: border-box; -moz-box-sizing: border-box; }
+#biodata .data { float: left; display: block; position:  relative; width: 550px; height: 314px; padding: 4px; padding-left: 15px; background: #CED8F6; overflow:  hidden; box-sizing: border-box; -moz-box-sizing: border-box; }
 #biodata .data h1 { color: #474747; line-height: 1.6em; text-shadow: 0px 1px 1px #fff; }
 #biodata .data h3 { color: #666; line-height: 0.9em; margin-bottom: 5px; }
 #biodata .data h4 { font-size: 1.2em; line-height: 1.3em; }
