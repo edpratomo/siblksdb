@@ -70,6 +70,10 @@ body {
   color: #0000ff; 
 }
 
+.nav-pills > li > a:hover {
+  color: #0000ff; 
+}
+
 /*
  * Main content
  */
