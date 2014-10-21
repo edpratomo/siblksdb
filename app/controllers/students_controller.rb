@@ -59,6 +59,8 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
+    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)  #.order(params[:started_on])
+    # @students_records = @student.records
   end
 
   # GET /students/new
