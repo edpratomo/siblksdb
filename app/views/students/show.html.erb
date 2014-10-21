@@ -11,7 +11,10 @@
   <div class="data">
     <h1><%= @student.name %> <span class="ionicons ion-<%= @student.sex %>" style="padding-left:20px"></span></h1>
     <h3>Kelahiran <%= @student.birthdate %>, di <%= @student.birthplace %></h3>
-    <h3><i class="glyphicon glyphicon-phone"></i> <%= @student.phone %></h3>
+    <h3>
+      <i class="glyphicon glyphicon-phone"></i> <%= @student.phone %> 
+      <i class="glyphicon glyphicon-envelope" style="padding-left:30px;"></i> <%= @student.email %>
+    </h3>
     <div class="sep"></div>
     <% if @student.street_address %>
       <% @student.street_address.split("\n").each do |addr_line| %>
@@ -33,23 +36,23 @@
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
-      <th>Kursus</th>
-      <th style="max-width:30px;text-align:center;">Mulai</th>
-      <th style="max-width:30px;text-align:center;">Selesai</th>
-      <th style="max-width:30px;">Status</th>
-      <th colspan="2" style="max-width:40px;"></th>
+      <th style="max-width:200px;">Kursus</th>
+      <th style="max-width:40px;text-align:center;">Mulai</th>
+      <th style="max-width:40px;text-align:center;">Selesai</th>
+      <th style="max-width:40px;">Status</th>
+      <th colspan="2" style="max-width:50px;"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @records.each do |record| %>
       <tr>
-        <td><%= record.pkg.pkg %> Lev.<%= record.pkg.level %></td>
-        <td style="max-width:30px;text-align:center;"><%= record.started_on.strftime("%d %b %Y") %></td>
-        <td style="max-width:30px;text-align:center;"><%= record.finished_on && record.finished_on.strftime("%d %b %Y") %></td>
-        <td style="max-width:30px;"><%= t(record.status) %></td>
+        <td style="max-width:200px;"><%= record.pkg.program.program %> - <%= record.pkg.pkg %> Lev.<%= record.pkg.level %></td>
+        <td style="max-width:40px;text-align:center;"><%= record.started_on.strftime("%d %b %Y") %></td>
+        <td style="max-width:40px;text-align:center;"><%= record.finished_on && record.finished_on.strftime("%d %b %Y") %></td>
+        <td style="max-width:40px;"><%= t(record.status) %></td>
         <td style="max-width:20px;text-align:center;"><%= link_to 'Edit', edit_students_record_path(record) %></td>
-        <td style="max-width:20px;text-align:center;"><%= link_to 'Jadwal', edit_student_schedule_index_path(@student, record.pkg) unless record.finished_on %></td>
+        <td style="max-width:30px;text-align:center;"><%= link_to 'Jadwal', edit_student_schedule_index_path(@student, record.pkg) unless record.finished_on %></td>
       </tr>
     <% end %>
   </tbody>
