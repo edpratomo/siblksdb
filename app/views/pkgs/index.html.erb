@@ -3,8 +3,8 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr>
-      <th>Kursus</th>
       <th>Program</th>
+      <th>Kursus</th>
       <th>Level</th>
       <th colspan="2"></th>
     </tr>
@@ -13,8 +13,8 @@
   <tbody>
     <% @pkgs.each do |pkg| %>
       <tr>
-        <td><%= pkg.pkg %></td>
         <td><%= pkg.program.program %></td>
+        <td><%= pkg.pkg %></td>
         <td><%= pkg.level %></td>
         <td><%= link_to 'Edit', edit_pkg_path(pkg) %></td>
         <td><%= link_to 'Destroy', pkg, method: :delete, data: { confirm: 'Are you sure?' } %></td>

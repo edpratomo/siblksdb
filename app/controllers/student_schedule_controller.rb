@@ -107,7 +107,7 @@ class StudentScheduleController < ApplicationController
         [sched.time_slot, *instructors_schedules]
       end
       {
-        name: "#{pkg.pkg} Level #{pkg.level}",
+        name: "#{pkg.program.program} - #{pkg.pkg} Level #{pkg.level}",
         students_pkg: students_pkg,
         rowspan: instructors.size, 
         rows: timeslot_vs_day,

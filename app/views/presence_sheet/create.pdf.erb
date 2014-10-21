@@ -18,8 +18,12 @@
     <% @student_vs_day.each do |row| %>
       <tr>
         <td style="height:60px;vertical-align:middle;"><%= row.shift %></td>
-        <% row.each do |col| %>
-          <td <%= col ? raw('class="info small"') : '' %>><%= col || '' %></td>
+        <% row.each_with_index do |col,idx| %>
+          <% if @holidays[idx] %>
+            <td class="danger" style="text-align:center;vertical-align:middle;word-wrap: break-word; max-width: 80px;"><%= @holidays[idx] %></td>
+          <% else %>
+            <td <%= col ? raw('class="info small"') : '' %>><%= col || '' %></td>
+          <% end %>
         <% end %>
       </tr>
     <% end %>

@@ -59,6 +59,8 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
+    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)  #.order(params[:started_on])
+    # @students_records = @student.records
   end
 
   # GET /students/new
@@ -139,7 +141,7 @@ class StudentsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :note, 
+      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :email, 
                                       :street_address, :district, :regency_city, :religion,
                                       :avatar, :crop_x, :crop_y, :crop_w, :crop_h).tap do |whitelisted|
                                         if params[:student][:biodata]

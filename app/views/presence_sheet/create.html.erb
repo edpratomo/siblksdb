@@ -20,7 +20,7 @@
         <td style="height:60px;vertical-align:middle;"><%= row.shift %></td>
         <% row.each_with_index do |col,idx| %>
           <% if @holidays[idx] %>
-            <td class="danger" style="text-align:center;vertical-align:middle;"><%= @holidays[idx] %></td>
+            <td class="danger" style="text-align:center;vertical-align:middle;word-wrap: break-word; max-width: 80px;"><%= @holidays[idx] %></td>
           <% else %>
             <td <%= col ? raw('class="info small"') : '' %>><%= col || '' %></td>
           <% end %>
