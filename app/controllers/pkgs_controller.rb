@@ -5,7 +5,7 @@ class PkgsController < ApplicationController
   # GET /pkgs
   # GET /pkgs.json
   def index
-    @pkgs = Pkg.all
+    @pkgs = Pkg.order(:program_id, :pkg, :level)
   end
 
   # GET /pkgs/1

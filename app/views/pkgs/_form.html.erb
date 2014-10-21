@@ -15,7 +15,7 @@
     <%= f.text_field :pkg, label: "Kursus" %>
   </div>
   <div class="field">
-    <%= f.select :program_id, Program.all.to_a.map {|e| [e.program, e.id]}, control_col: "col-xs-2" %>
+    <%= f.select :program_id, Program.all.to_a.map {|e| [e.program, e.id]}, control_col: "col-sm-3" %>
   </div>
   <div class="field">
     <%= f.number_field :level, label: "Level", min: 1, control_col: "col-xs-1" %>
