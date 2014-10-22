@@ -1,2 +1,69 @@
 <h1>Report#create_disnaker</h1>
 <p>Find me in app/views/report/create_disnaker.html.erb</p>
+<table class="table table-bordered" style="background-color:white;">
+  <thead>
+    <tr>
+      <th rowspan="3">Kejuruan</th>
+      <th rowspan="3" style="text-align:center;">Tingkat</th>
+      <th style="text-align:center;" colspan="6"><%= @columns[0] %></th>
+      <th style="text-align:center;" colspan="6"><%= @columns[1] %></th>
+      <th style="text-align:center;" colspan="6"><%= @columns[2] %></th>
+    </tr>
+    <tr>
+      <td style="text-align:center;" colspan="3">Sedang Dilatih</td>
+      <td style="text-align:center;" colspan="3">Lulus</td>
+      <td style="text-align:center;" colspan="3">Sedang Dilatih</td>
+      <td style="text-align:center;" colspan="3">Lulus</td>
+      <td style="text-align:center;" colspan="3">Sedang Dilatih</td>
+      <td style="text-align:center;" colspan="3">Lulus</td>
+    </tr>
+    <tr>
+      <td style="text-align:center;">L</td>
+      <td style="text-align:center;">P</td>
+      <td style="text-align:center;">Jumlah</td>
+      <td style="text-align:center;">L</td>
+      <td style="text-align:center;">P</td>
+      <td style="text-align:center;">Jumlah</td>
+      <td style="text-align:center;">L</td>
+      <td style="text-align:center;">P</td>
+      <td style="text-align:center;">Jumlah</td>
+      <td style="text-align:center;">L</td>
+      <td style="text-align:center;">P</td>
+      <td style="text-align:center;">Jumlah</td>
+      <td style="text-align:center;">L</td>
+      <td style="text-align:center;">P</td>
+      <td style="text-align:center;">Jumlah</td>
+      <td style="text-align:center;">L</td>
+      <td style="text-align:center;">P</td>
+      <td style="text-align:center;">Jumlah</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sorted_keys.each do |key| %>
+      <tr>
+        <td><%= pkg_name(key) %></td>
+        <td style="text-align:center;"><%= level(key) %></td>
+        <td style="text-align:center;"><%= @result[0]['male'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[0]['female'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[0]['any'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[0]['male'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[0]['female'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[0]['any'][:finished][key] %></td>
+
+        <td style="text-align:center;"><%= @result[1]['male'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[1]['female'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[1]['any'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[1]['male'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[1]['female'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[1]['any'][:finished][key] %></td>
+
+        <td style="text-align:center;"><%= @result[2]['male'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[2]['female'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[2]['any'][:active][key] %></td>
+        <td style="text-align:center;"><%= @result[2]['male'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[2]['female'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[2]['any'][:finished][key] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
