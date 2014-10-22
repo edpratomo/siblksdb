@@ -1,4 +1,4 @@
-<h2>Laporan Siswa Aktif</h2>
+<h2>Laporan Bulanan Siswa Aktif</h2>
 
 <%= form_tag(report_create_active_students_path, {method: :get, class: "form-horizontal", role: "form"}) do %>
 
@@ -37,9 +37,9 @@
 
 $("#print_pdf").change(function() {
   if (this.checked) {
-    $('form').attr('action', "<%= report_create_disnaker_path(format: :pdf) %>");
+    $('form').attr('action', "<%= report_create_active_students_path(format: :pdf) %>");
   } else {
-    $('form').attr('action', "<%= report_create_disnaker_path %>");
+    $('form').attr('action', "<%= report_create_active_students_path %>");
   }
 });
 

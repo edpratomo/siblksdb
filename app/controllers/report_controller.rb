@@ -16,9 +16,10 @@ class ReportController < ApplicationController
   end
   
   def create_disnaker
-    now = DateTime.now
+    month, year = params[:month].to_i, params[:year].to_i
+    now = DateTime.new(year, month)
     @columns = []
-    @result = [3, 2, 1].map do |e|
+    @result = [2, 1, 0].map do |e|
       dt = now - e.month
       month, year = dt.month, dt.year
       @columns.push "#{dt.strftime("%B")} #{year}"
