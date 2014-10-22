@@ -1,0 +1,37 @@
+
+<table class="table table-bordered" style="background-color:white;">
+  <caption style="padding-top:20px;padding-bottom:20px">
+    <p style="font-size:x-large">Daftar Peserta Kursus yang Sedang Dilatih<p>
+    <p style="font-size:x-large">per <%= @month_year_for_title %></p>
+  </caption>
+  <thead>
+    <tr>
+      <th style="text-align:right;">No.</th>
+      <th>Nama</th>
+      <th style="text-align:center;">L/P</th>
+      <th>Kecamatan</th>
+      <th>Alamat</th>
+      <th>Tempat</th>
+      <th>Tanggal</th>
+      <th>Agama</th>
+      <th>Mulai</th>
+      <th>Program</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @students.each_with_index do |student,idx| %>
+      <tr>
+        <td style="text-align:right;"><%= idx + 1 %></td>
+        <td><%= student.student.name %></td>
+        <td style="text-align:center;"><%= student.student.sex == "male" ? "L" : "P" %></td>
+        <td><%= student.student.district %></td>
+        <td><%= student.student.street_address %></td>
+        <td><%= student.student.birthplace %></td>
+        <td><%= student.student.birthdate %></td>
+        <td><%= student.student.religion %></td>
+        <td><%= student.started_on.strftime("%d/%m/%Y") %></td>
+        <td><%= sprintf("#{student.pkg.program.program} - #{student.pkg.pkg}") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -13,6 +13,16 @@ class ReportController < ApplicationController
     @students = StudentsRecord.joins(:student).
       where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
       order("students.name")
+
+    respond_to do |format|
+      format.html { render :create }
+      format.pdf { 
+        render pdf: %[Laporan_Siswa_Aktif_#{Date::MONTHNAMES[month]}_#{year}],
+               orientation: 'Landscape',
+               template: 'report/create_active_students.pdf.erb',
+               layout: 'pdf_layout.html.erb'
+      }
+    end
   end
   
   def create_disnaker
@@ -66,6 +76,16 @@ class ReportController < ApplicationController
       m = m | o['any'][:active].keys | o['any'][:finished].keys
       m
     end.sort
+
+    respond_to do |format|
+      format.html { render :create }
+      format.pdf { 
+        render pdf: %[Laporan_Pelaksanaan_Pelatihan_#{Date::MONTHNAMES[month]}_#{year}],
+               orientation: 'Landscape',
+               template: 'report/create_disnaker.pdf.erb',
+               layout: 'pdf_layout.html.erb'
+      }
+    end
   end
   
   private
