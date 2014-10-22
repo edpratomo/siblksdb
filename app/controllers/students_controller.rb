@@ -21,7 +21,7 @@ class StudentsController < ApplicationController
   end
 
   def attending
-    now = DateTime.now
+    now = DateTime.now.in_time_zone
     today = now.strftime("%a").downcase
     my_schedules = @student.students_pkgs_instructors_schedules
     @present_schedule = my_schedules.find do |my_schedule|

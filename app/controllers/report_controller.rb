@@ -7,7 +7,7 @@ class ReportController < ApplicationController
 
   def create_active_students
     month, year = params[:month].to_i, params[:year].to_i
-    dt = DateTime.new(year, month)
+    dt = DateTime.new(year, month).in_time_zone
     @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
 
     @students = StudentsRecord.joins(:student).
@@ -27,7 +27,7 @@ class ReportController < ApplicationController
   
   def create_disnaker
     month, year = params[:month].to_i, params[:year].to_i
-    now = DateTime.new(year, month)
+    now = DateTime.new(year, month).in_time_zone
     @columns = []
     @result = [2, 1, 0].map do |e|
       dt = now - e.month

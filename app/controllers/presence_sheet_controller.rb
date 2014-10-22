@@ -7,9 +7,9 @@ class PresenceSheetController < ApplicationController
   
   def create
     start_day = if params[:time_range] == "next_week"
-      DateTime.now.to_date.beginning_of_week.advance(:days => 7)
+      DateTime.now.in_time_zone.to_date.beginning_of_week.advance(:days => 7)
     else
-      DateTime.now.to_date.beginning_of_week
+      DateTime.now.in_time_zone.to_date.beginning_of_week
     end
 
     # table heading contains dates from mon to sat
