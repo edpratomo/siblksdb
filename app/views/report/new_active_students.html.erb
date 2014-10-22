@@ -1,0 +1,46 @@
+<h2>Laporan Siswa Aktif</h2>
+
+<%= form_tag(report_create_active_students_path, {method: :get, class: "form-horizontal", role: "form"}) do %>
+
+  <div class="form-group">
+    <%= label_tag :month, "Bulan", class: "control-label col-sm-2" %>
+    <div class="col-sm-3">
+      <%= select_tag :month, options_for_select((1..12).map {|e| [Date::MONTHNAMES[e], e]}, (DateTime.now - 1.month).month),
+                     class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :year, "Tahun", class: "control-label col-sm-2" %>
+    <div class="col-sm-2">
+      <%= text_field_tag :year, DateTime.now.year, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :prinf_pdf, "PDF", class: "control-label col-sm-2 sr-only" %>
+    <div class="col-sm-3">
+      <div class="checkbox form-control">
+        <%= label_tag :print_pdf do %>
+          <%= check_box_tag :print_pdf, "yes", nil %>
+          PDF
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag "Tampilkan"%>
+  </div>
+<% end %>
+<script type="text/javascript">
+
+$("#print_pdf").change(function() {
+  if (this.checked) {
+    $('form').attr('action', "<%= report_create_disnaker_path(format: :pdf) %>");
+  } else {
+    $('form').attr('action', "<%= report_create_disnaker_path %>");
+  }
+});
+
+</script>
