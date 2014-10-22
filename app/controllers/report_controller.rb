@@ -15,7 +15,7 @@ class ReportController < ApplicationController
       order("students.name")
 
     respond_to do |format|
-      format.html { render :create }
+      format.html { render :create_active_students }
       format.pdf { 
         render pdf: %[Laporan_Siswa_Aktif_#{Date::MONTHNAMES[month]}_#{year}],
                orientation: 'Landscape',
@@ -78,7 +78,7 @@ class ReportController < ApplicationController
     end.sort
 
     respond_to do |format|
-      format.html { render :create }
+      format.html { render :create_disnaker }
       format.pdf { 
         render pdf: %[Laporan_Pelaksanaan_Pelatihan_#{Date::MONTHNAMES[month]}_#{year}],
                orientation: 'Landscape',
