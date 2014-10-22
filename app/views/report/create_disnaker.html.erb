@@ -43,26 +43,26 @@
       <tr>
         <td><%= pkg_name(key) %></td>
         <td style="text-align:center;"><%= level(key) %></td>
-        <td style="text-align:center;"><%= @result[0]['male'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[0]['female'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[0]['any'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[0]['male'][:finished][key] %></td>
-        <td style="text-align:center;"><%= @result[0]['female'][:finished][key] %></td>
-        <td style="text-align:center;"><%= @result[0]['any'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[0]['male'][:active][key] || 0 %></td>
+        <td style="text-align:center;"><%= @result[0]['female'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[0]['any'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[0]['male'][:finished][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[0]['female'][:finished][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[0]['any'][:finished][key] || 0  %></td>
 
-        <td style="text-align:center;"><%= @result[1]['male'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[1]['female'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[1]['any'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[1]['male'][:finished][key] %></td>
-        <td style="text-align:center;"><%= @result[1]['female'][:finished][key] %></td>
-        <td style="text-align:center;"><%= @result[1]['any'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[1]['male'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[1]['female'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[1]['any'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[1]['male'][:finished][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[1]['female'][:finished][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[1]['any'][:finished][key] || 0  %></td>
 
-        <td style="text-align:center;"><%= @result[2]['male'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[2]['female'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[2]['any'][:active][key] %></td>
-        <td style="text-align:center;"><%= @result[2]['male'][:finished][key] %></td>
-        <td style="text-align:center;"><%= @result[2]['female'][:finished][key] %></td>
-        <td style="text-align:center;"><%= @result[2]['any'][:finished][key] %></td>
+        <td style="text-align:center;"><%= @result[2]['male'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[2]['female'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[2]['any'][:active][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[2]['male'][:finished][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[2]['female'][:finished][key] || 0  %></td>
+        <td style="text-align:center;"><%= @result[2]['any'][:finished][key] || 0  %></td>
       </tr>
     <% end %>
   </tbody>

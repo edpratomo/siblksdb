@@ -1,7 +1,20 @@
 class ReportController < ApplicationController
+  def new_active_students
+  end
+
   def new_disnaker
   end
 
+  def create_active_students
+    month, year = params[:month].to_i, params[:year].to_i
+    dt = DateTime.new(year, month)
+    @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
+
+    @students = StudentsRecord.joins(:student).
+      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+      order("students.name")
+  end
+  
   def create_disnaker
     now = DateTime.now
     @columns = []
