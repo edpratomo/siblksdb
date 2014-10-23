@@ -85,6 +85,7 @@ GEM
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
+    railroady (1.2.0)
     rails (4.1.5)
       actionmailer (= 4.1.5)
       actionpack (= 4.1.5)
@@ -171,6 +172,7 @@ DEPENDENCIES
   nokogiri
   paperclip (~> 4.2)
   pg
+  railroady
   rails (= 4.1.5)
   rails-settings-cached (= 0.4.1)
   rails-settings-ui (~> 0.3.0)
