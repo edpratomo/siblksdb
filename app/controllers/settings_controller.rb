@@ -3,6 +3,10 @@ class SettingsController < ApplicationController
   
   def edit
     @current_interval = Setting.change_log_archive_interval
+    @director = Setting.director
+    @kasie_ppk_name = Setting.kasie_ppk_name
+    @kasie_ppk_nip = Setting.kasie_ppk_nip
+    
     @change_log_archive_intervals = %w(4 3 2 1).inject([]) do |m,o|
       m << ["#{o} minggu", "#{o}_week"]
       m
@@ -11,6 +15,10 @@ class SettingsController < ApplicationController
 
   def update
     Setting[:change_log_archive_interval] = params[:change_log_archive_interval]
+    Setting[:director] = params[:director]
+    Setting[:kasie_ppk_name] = params[:kasie_ppk_name]
+    Setting[:kasie_ppk_nip] = params[:kasie_ppk_nip]
+
     if params[:holidays]
       begin
         holidays = JSON.parse(File.read(params[:holidays].original_filename))[2].inject({}) do |m,o|

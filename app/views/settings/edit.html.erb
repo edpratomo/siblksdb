@@ -12,7 +12,7 @@
 <%= form_tag(settings_update_path, {method: :patch, class: "form-horizontal", role: "form", multipart: true}) do %>
 
   <div class="form-group">
-    <%= label_tag :change_log_archive_interval, "Rotasi Log Perubahan setiap", class: "control-label col-sm-3" %>
+    <%= label_tag :change_log_archive_interval, "Rotasi Log Perubahan setiap", class: "control-label col-sm-4" %>
     <div class="col-sm-2">
       <%= select_tag :change_log_archive_interval, options_for_select(@change_log_archive_intervals, @current_interval), 
                      class: "form-control" %>
@@ -20,9 +20,28 @@
   </div>
 
   <div class="form-group">
-    <%= label_tag :holidays, "Upload kalender hari libur", class: "control-label col-sm-3" %>
+    <%= label_tag :holidays, "Upload kalender hari libur", class: "control-label col-sm-4" %>
     <div class="col-sm-3">
       <%= file_field_tag :holidays, class: "form-control", accept: "application/json" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :kasie_ppk_name, "Kepala Seksi Pelatihan dan Produktivitas Kerja", class: "control-label col-sm-4" %>
+    <div class="form-inline col-sm-8">
+      <div class="input-group col-sm-4">
+        <%= text_field_tag :kasie_ppk_name, @kasie_ppk_name, placeholder: "Nama lengkap", class: "form-control" %>
+      </div>
+      <div class="input-group col-sm-3">
+        <%= text_field_tag :kasie_ppk_nip, @kasie_ppk_nip, placeholder: "NIP", class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :director, "Direktur", class: "control-label col-sm-4" %>
+    <div class="col-sm-3">
+      <%= text_field_tag :director, @director, placeholder: "Nama lengkap", class: "form-control" %>
     </div>
   </div>
 
