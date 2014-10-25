@@ -67,8 +67,8 @@ class ReportController < ApplicationController
     dt = DateTime.new(year, month).in_time_zone
     @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
 
-    @students = StudentsRecord.joins(:student).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+    status = params[:status] || 'active'
+    @students = StudentsRecord.joins(:student).send(:where, *args_for_where_clause(status, dt)).
       order("students.name")
 
     respond_to do |format|
@@ -152,5 +152,14 @@ class ReportController < ApplicationController
   private
   def pkg_to_s pkg
     sprintf("#{pkg.program.program} - #{pkg.pkg} - %2d", pkg.level)
+  end
+
+  def args_for_where_clause status, dt
+    case status
+    when "active"
+      [ "started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month ]
+    when "finished", "failed"
+      [ "started_on < ? AND status = '#{status}' AND date_part('month', finished_on) = ?", dt.end_of_month, dt.month ]
+    end
   end
 end
