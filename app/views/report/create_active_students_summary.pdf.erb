@@ -1,0 +1,63 @@
+<table class="table table-bordered" style="background-color:white;">
+  <caption style="padding-top:20px;padding-bottom:20px">
+    <p style="font-size:x-large">Rekapitulasi Siswa Aktif Berdasarkan Kursus<p>
+    <p style="font-size:large">per <%= @month_year_for_title %></p>
+  </caption>
+  <thead>
+    <tr>
+      <th>Kursus</th>
+      <th style="text-align:center;">Laki-laki</th>
+      <th style="text-align:center;">Perempuan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @students_group_by_pkg_sex.each do |pkg, val| %>
+      <tr>
+        <td><%= pkg %></td>
+        <td style="text-align:center;"><%= val["male"] %></td>
+        <td style="text-align:center;"><%= val["female"] %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td style="text-align:right;">Total </td>
+      <td style="text-align:center;"><%= @total_students["male"] %></td>
+      <td style="text-align:center;"><%= @total_students["female"] %></td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="padding-top:20px;">
+<table class="table table-bordered" style="background-color:white;">
+  <caption style="padding-top:20px;padding-bottom:20px">
+    <p style="font-size:x-large">Rekapitulasi Siswa Aktif Berdasarkan Agama<p>
+    <p style="font-size:large">per <%= @month_year_for_title %></p>
+  </caption>
+  <thead>
+    <tr>
+      <th>Agama</th>
+      <th style="text-align:center;">Laki-laki</th>
+      <th style="text-align:center;">Perempuan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sorted_religions.each do |religion| %>
+      <tr>
+        <td><%= religion %></td>
+        <td style="text-align:center;"><%= @students_group_by_religion_and_sex[religion]["male"] %></td>
+        <td style="text-align:center;"><%= @students_group_by_religion_and_sex[religion]["female"] %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td style="text-align:right;">Total </td>
+      <td style="text-align:center;"><%= @total_students["male"] %></td>
+      <td style="text-align:center;"><%= @total_students["female"] %></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p style="font-size:large;padding-top:20px;">
+Jumlah total siswa aktif per <%= @month_year_for_title %>: <%= @total_students["female"] + @total_students["male"] %>
+</p>
+
+<%= render partial: 'signature' %>

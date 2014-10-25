@@ -55,7 +55,11 @@ class ReportController < ApplicationController
   
   def create_active_students
     if params[:summary] 
-      redirect_to report_create_active_students_summary_path(:month => params[:month], :year => params[:year])
+      if params[:print_pdf]
+        redirect_to report_create_active_students_summary_path(:format => 'pdf', :month => params[:month], :year => params[:year])
+      else
+        redirect_to report_create_active_students_summary_path(:month => params[:month], :year => params[:year])
+      end
       return
     end
     
