@@ -2,13 +2,15 @@
   <p id="notice"><%= flash[:alert] %></p>
 <% end %>
 <h1>Welcome</h1>
-<p>
-<%#= image_tag("Salesians_of_Don_Bosco_logo.svg.png", :alt => "Salesians of Don Bosco logo") %>
-</p>
 
 <div class="container-fluid">
 
-<h4>What's New <small>Sep 30, 2014</small></h4>
+<p>
+<%= column_chart Student.group(:sex).group_by_month(:created_at, format: "%B %Y").count %>
+</p>
+
+<h2 style="padding-bottom:0px">What's New</h2>
+<h2><small>Sep 30, 2014</small></h2>
 <ul>
 
 <li>Tiap siswa sekarang memiliki catatan kursus yang pernah dan sedang diambil. Kapan dimulai dan kapan selesai.<br/>
@@ -37,7 +39,7 @@ Catatan kursus siswa ini tidak dapat dihapus, hanya dapat diedit tanggalnya saja
 
 <div class="container-fluid">
 
-<h4>What's New <small>Aug 29, 2014</small></h4>
+<h2><small>Aug 29, 2014</small></h2>
 <ul>
 <li>"Ubah Data Siswa" berfungsi. Dapat digunakan untuk menambahkan maupun menghapus kursus yang diambil siswa. 
 Selain mengedit data siswa.
@@ -48,7 +50,7 @@ Selain mengedit data siswa.
 
 <div class="container-fluid">
 
-<h4>Mengenai Otoritas Group</h4>
+<h2>Mengenai Otoritas Group</h2>
 <p>
 Users terbagi dalam 3 kelompok otorisasi: sysadmin, admin, dan staff.
 <p>
