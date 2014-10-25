@@ -1,6 +1,8 @@
 class Student < ActiveRecord::Base
   include TransactionHelper
   
+  validates_presence_of :religion
+  
   # :students <= :students_records => :pkgs
   has_many :students_records
   has_many :records, through: :students_records, source: :pkg
