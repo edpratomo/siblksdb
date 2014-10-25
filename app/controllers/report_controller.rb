@@ -72,7 +72,10 @@ class ReportController < ApplicationController
       order("students.name")
 
     respond_to do |format|
-      format.html { render :create_active_students }
+      format.html { 
+        @students = @students.paginate(:per_page => 10, :page => params[:page]) 
+        render :create_active_students 
+      }
       format.pdf { 
         render pdf: %[Laporan_Siswa_Aktif_#{Date::MONTHNAMES[month]}_#{year}],
                orientation: 'Landscape',
