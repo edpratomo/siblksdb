@@ -40,6 +40,22 @@ class Student < ActiveRecord::Base
     @geometry[style] ||= Paperclip::Geometry.from_file(avatar.path(style))  
   end  
 
+  def self.get_active_stats last_x_months=6
+    now = DateTime.now.in_time_zone
+    (0..(last_x_months - 1)).to_a.reverse.inject({}) do |m,o|
+      dt = now - o.month
+      month, year = dt.month, dt.year
+
+      active_students = StudentsRecord.joins(:student).
+        where("started_on < ? AND (status = 'active' OR finished_on > ?)", 
+        dt.end_of_month, dt.end_of_month).
+        group(:sex).count
+      
+      %w(male female).each {|e| m[[e, dt.strftime('%b %Y')]] = active_students[e] || 0 }
+      m
+    end
+  end
+  
   private
   def default_url_by_gender
     gender = self.sex

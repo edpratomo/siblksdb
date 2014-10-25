@@ -1,85 +1,10 @@
 <% if flash[:alert] %>
   <p id="notice"><%= flash[:alert] %></p>
 <% end %>
-<h1>Welcome</h1>
 
-<div class="container-fluid">
-
-<p>
-<%= column_chart Student.group(:sex).group_by_month(:created_at, format: "%B %Y").count %>
-</p>
-
-<h2 style="padding-bottom:0px">What's New</h2>
-<h2><small>Sep 30, 2014</small></h2>
-<ul>
-
-<li>Tiap siswa sekarang memiliki catatan kursus yang pernah dan sedang diambil. Kapan dimulai dan kapan selesai.<br/>
-Catatan kursus siswa ini tidak dapat dihapus, hanya dapat diedit tanggalnya saja.
-</li>
-
-<li>Tersedia setting / pengaturan untuk aplikasi:
-<ul>
-  <li>Kapan melakukan rotasi log perubahan (change log), yang artinya di-dump ke file dan diarsip, dan dihapus dari database. 
-  </li>
-  <li>Upload kalender hari libur. Hari libur akan tampil di Lembar Absensi Siswa. 
-  </li>
-</ul>
-</li>
-
-<li>Menu "profile" user sekarang berfungsi, saat ini user dapat mengubah passwordnya sendiri melalui menu ini.</li>
-
-<li>Biodata siswa (mengikuti formulir pendaftaran) sekarang sudah dapat dientri, meskipun belum semuanya lengkap</li>
-
-<li>Tersedia fitur upload foto siswa dan cropping foto. Default avatar ditampilkan untuk data siswa yang belum dilengkapi foto.</li>
-
-<li>Terminologi "paket" diganti menjadi "kursus"</li>
-
-</ul>
-</div>
-
-<div class="container-fluid">
-
-<h2><small>Aug 29, 2014</small></h2>
-<ul>
-<li>"Ubah Data Siswa" berfungsi. Dapat digunakan untuk menambahkan maupun menghapus kursus yang diambil siswa. 
-Selain mengedit data siswa.
-</li>
-<li>Fitur baru "Lembar Absensi Siswa" dapat digunakan.</li>
-</ul>
-</div>
-
-<div class="container-fluid">
-
-<h2>Mengenai Otoritas Group</h2>
-<p>
-Users terbagi dalam 3 kelompok otorisasi: sysadmin, admin, dan staff.
-<p>
-<p>
-Kelompok sysadmin mempunyai tingkat otorisasi tertinggi, yaitu dapat:
-</p>
-<ul>
-<li>menambahkan/edit program dan kursus</li>
-<li>menambahkan/edit slot jadwal</li>
-<li>melihat changes history atau yang biasa disebut juga sbg "audit log" (saat ini implementasi belum selesai)</li>
-<li>dan mencakup privilesi yang dimiliki kelompok admin dan staff</li>
-</ul>
-</p>
-
-<p>
-Kelompok admin memiliki privilesi:
-<ul>
-<li>menambahkan/edit users</li>
-<li>ditambah dengan privilesi yg dimiliki staff</li>
-</ul>
-</p>
-
-<p>
-Kelompok staff memiliki privilesi:
-<ul>
-<li>Mendaftarkan siswa baru</li>
-<li>melihat/mengedit data siswa</li>
-<li>membuat/mengedit jadwal siswa</li>
-<li>melihat daftar program, kursus, slot jadwal, tapi tidak dapat mengubah/menambahkan</li>
-</ul>
+<div class="container-fluid" style="padding-top:20px;">
+<h3>Grafik Jumlah Siswa Aktif 6 Bulan Terakhir</h3>
+<p style="padding-top:10px;">
+<%= column_chart Student.get_active_stats(6) %>
 </p>
 </div>

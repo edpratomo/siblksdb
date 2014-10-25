@@ -85,7 +85,7 @@ class ReportController < ApplicationController
     @result = [2, 1, 0].map do |e|
       dt = now - e.month
       month, year = dt.month, dt.year
-      @columns.push "#{dt.strftime("%B")} #{year}"
+      @columns.push "#{dt.strftime('%B')} #{year}"
       
       [nil, 'female', 'male'].inject({}) do |m,o|
         if o.nil?
