@@ -18,6 +18,14 @@
   </div>
 
   <div class="form-group">
+    <%= label_tag :status, "Status", class: "control-label col-sm-2" %>
+    <div class="col-sm-3">
+      <%= select_tag :status, options_for_select(%w[active finished failed].map {|e| [t(e), e]}, "active"),
+                     class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
     <%= label_tag :prinf_pdf, "PDF", class: "control-label col-sm-2 sr-only" %>
     <div class="col-sm-3">
       <div class="checkbox form-control">
