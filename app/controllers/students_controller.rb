@@ -109,7 +109,11 @@ class StudentsController < ApplicationController
 
     if @student.transaction_user(@current_user) { @student.update(student_params) }
       flash[:notice] = "Successfully updated user."
-      if params[:student][:avatar].blank?  
+      if params[:student][:avatar].blank?
+        if params[:remove_avatar]
+          @student.avatar = nil
+          @student.save
+        end
         redirect_to @student
       else  
         render :action => 'crop'
