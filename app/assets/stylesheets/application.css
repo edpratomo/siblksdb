@@ -26,11 +26,4 @@
        url('../assets/glyphicons-halflings-regular.woff') format('woff'), 
        url('../assets/glyphicons-halflings-regular.ttf') format('truetype'), 
        url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
-
-  font-family: 'Ionicons';
-  src: url("../assets/ionicons.eot?v=1.5.2");
-  src: url("../assets/ionicons.eot?v=1.5.2#iefix") format("embedded-opentype"),
-       url("../assets/ionicons.ttf?v=1.5.2") format("truetype"),
-       url("../assets/ionicons.woff?v=1.5.2") format("woff"),
-       url("../assets/ionicons.svg?v=1.5.2#Ionicons") format("svg");
 }
