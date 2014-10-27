@@ -1,7 +1,8 @@
 class Student < ActiveRecord::Base
   include TransactionHelper
   
-  validates_presence_of :religion
+  validates_presence_of :religion, :name, :birthplace, :birthdate, :sex, :phone, :email
+  validates_presence_of :district, :regency_city
   
   # :students <= :students_records => :pkgs
   has_many :students_records
