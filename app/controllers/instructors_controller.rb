@@ -82,7 +82,7 @@ class InstructorsController < ApplicationController
         format.html { redirect_to @instructor, notice: 'Instructor was successfully created.' }
         format.json { render :show, status: :created, location: @instructor }
       else
-        format.html { render :new }
+        format.html { redirect_to new_instructor_url }
         format.json { render json: @instructor.errors, status: :unprocessable_entity }
       end
     end
