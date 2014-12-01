@@ -78,7 +78,7 @@ class StudentsController < ApplicationController
     @student = Student.new(student_params)
 
     respond_to do |format|
-      if @student.transaction_user(@current_user) { @student.save! }
+      if @student.valid? and @student.transaction_user(@current_user) { @student.save! }
         if params[:student][:avatar].blank?  
           redirect_to @student
           return  
