@@ -63,3 +63,4 @@ gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'
 
 gem 'chartkick'
 gem 'groupdate'
+gem 'declarative_authorization'
