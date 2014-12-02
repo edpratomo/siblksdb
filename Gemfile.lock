@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/stffn/declarative_authorization.git
+  revision: 45e91af20eba71b2828c5c84066bcce3ef032e8a
+  specs:
+    declarative_authorization (1.0.0.pre)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -173,6 +179,7 @@ DEPENDENCIES
   bootstrap_form
   chartkick
   coffee-rails (~> 4.0.0)
+  declarative_authorization!
   groupdate
   jbuilder (~> 2.0)
   jquery-rails

@@ -1,6 +1,7 @@
 class PkgsController < ApplicationController
   before_action :set_pkg, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_sysadmin, only: [:new, :create, :edit, :update, :destroy]
+  # before_action :authorize_sysadmin, only: [:new, :create, :edit, :update, :destroy]
+  filter_resource_access
 
   # GET /pkgs
   # GET /pkgs.json
