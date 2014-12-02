@@ -1,6 +1,7 @@
 class ChangesController < ApplicationController
   before_action :set_change, only: [:show]
-  before_action :authorize_sysadmin
+  # before_action :authorize_sysadmin
+  filter_resource_access
 
   helper_method :sort_column, :sort_direction
 

@@ -5,6 +5,17 @@ authorization do
   end
   
   # permissions on other roles, such as
+  role :sysadmin do
+    [:pkgs, :schedules, :users, :settings, :instructors].each do |controller|
+      has_permission_on controller, :to => :manage
+    end
+    has_permission_on :changes, :to => :read
+  end
+
+  role :admin do
+    has_permission_on :instructors, :to => :manage
+    has_permission_on :users,       :to => :manage
+  end
   # role :admin do
   #   has_permission_on :conferences, :to => :manage
   # end
