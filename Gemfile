@@ -63,5 +63,5 @@ gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'
 
 gem 'chartkick'
 gem 'groupdate'
-gem 'declarative_authorization'
+gem 'declarative_authorization', :git => 'https://github.com/stffn/declarative_authorization.git'
 gem 'rails-i18n', '~> 4.0.0' # For 4.0.x
