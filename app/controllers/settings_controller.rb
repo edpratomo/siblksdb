@@ -1,6 +1,6 @@
 class SettingsController < ApplicationController
   # before_action :authorize_sysadmin
-  filter_resource_access
+  filter_access_to :all
   
   def edit
     @current_interval = Setting.change_log_archive_interval
