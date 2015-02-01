@@ -1,6 +1,7 @@
 class SchedulesController < ApplicationController
   before_action :set_schedule, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_sysadmin, only: [:new, :create, :edit, :update, :destroy]
+  # before_action :authorize_sysadmin, only: [:new, :create, :edit, :update, :destroy]
+  filter_resource_access
 
   # GET /schedules
   # GET /schedules.json

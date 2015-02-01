@@ -1,7 +1,8 @@
 class InstructorsController < ApplicationController
   before_action :set_instructor, only: [:show, :edit, :update, :destroy, :edit_schedule, :update_schedule]
   before_action :set_current_user, only: [:update, :update_schedule, :create, :destroy]
-  before_action :authorize_admin, only: [:create, :edit, :update, :destroy]
+  # before_action :authorize_admin, only: [:create, :edit, :update, :destroy]
+  filter_resource_access
 
   # GET /instructors
   # GET /instructors.json
@@ -82,7 +83,7 @@ class InstructorsController < ApplicationController
         format.html { redirect_to @instructor, notice: 'Instructor was successfully created.' }
         format.json { render :show, status: :created, location: @instructor }
       else
-        format.html { render :new }
+        format.html { redirect_to new_instructor_url }
         format.json { render json: @instructor.errors, status: :unprocessable_entity }
       end
     end

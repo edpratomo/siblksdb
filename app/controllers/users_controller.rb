@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_admin
+  # before_action :authorize_admin
+  filter_resource_access
   
   # GET /users
   # GET /users.json

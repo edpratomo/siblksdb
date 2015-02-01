@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.1.2'
+ruby '2.1.5'
 
 group :development, :test do
   gem 'railroady'
@@ -39,6 +39,12 @@ gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+group :development do
+  gem 'capistrano', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm', require: false
+end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
@@ -63,3 +69,5 @@ gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'
 
 gem 'chartkick'
 gem 'groupdate'
+gem 'declarative_authorization', :git => 'https://github.com/stffn/declarative_authorization.git'
+gem 'rails-i18n', '~> 4.0.0' # For 4.0.x
