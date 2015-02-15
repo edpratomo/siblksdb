@@ -3,7 +3,8 @@ class Student < ActiveRecord::Base
   
   validates_presence_of :religion, :name, :birthplace, :birthdate, :sex, :phone, :email
   validates_presence_of :district, :regency_city
-  
+  validate :registered_at_before_created_at_and_started_on  
+
   # :students <= :students_records => :pkgs
   has_many :students_records
   has_many :records, through: :students_records, source: :pkg
@@ -56,7 +57,20 @@ class Student < ActiveRecord::Base
       m
     end
   end
-  
+
+  # custom validation for :registered_at
+  def registered_at_before_created_at_and_started_on
+    if self.registered_at > self.created_at 
+      errors.add(:registered_at, "tidak dapat diisi tanggal setelah tanggal entri data")
+      return false
+    end
+    first_started_on = StudentsRecord.where(student_id: self.id).minimum(:started_on)
+    if first_started_on and self.registered_at > first_started_on
+      errors.add(:registered_at, "tidak dapat diisi tanggal setelah tanggal kursus")
+      return false
+    end
+  end
+    
   private
   def default_url_by_gender
     gender = self.sex

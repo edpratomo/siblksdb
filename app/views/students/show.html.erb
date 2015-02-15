@@ -24,7 +24,7 @@
     <h4><%= @student.district %>, <%= @student.regency_city %></h4>
 
     <div class="regdate">
-      <p>Tanggal pendaftaran <%= @student.created_at.to_date %></p>
+      <p>Tanggal pendaftaran: <%= @student.registered_at.to_date %>, entri data: <%= @student.created_at.to_date %></p>
     </div>
   </div>
 </div>

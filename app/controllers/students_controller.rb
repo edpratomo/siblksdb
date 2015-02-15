@@ -66,6 +66,7 @@ class StudentsController < ApplicationController
   # GET /students/new
   def new
     @student = Student.new
+    @student.registered_at = DateTime.now.in_time_zone.to_date
   end
 
   # GET /students/1/edit
@@ -146,7 +147,7 @@ class StudentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
       params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :email, 
-                                      :street_address, :district, :regency_city, :religion,
+                                      :street_address, :district, :regency_city, :religion, :registered_at,
                                       :avatar, :crop_x, :crop_y, :crop_w, :crop_h).tap do |whitelisted|
                                         if params[:student][:biodata]
                                           whitelisted[:biodata] = params[:student][:biodata]
