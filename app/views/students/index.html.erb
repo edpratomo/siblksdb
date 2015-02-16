@@ -18,7 +18,11 @@
         <td><%= student.birthplace %>, <%= student.birthdate %></td>
         <td><%= student.registered_at.to_date %></td>
         <td><%= student.created_at.to_date %></td>
-        <td><%= link_to 'Show', student %></td>
+        <td>
+          <span style="font-size:large" 
+            class="ion-ios-lightbulb<%= @active_students.key?(student.id) ? "-outline" : '' %>" data-pack="default">
+          </span>
+        </td>
         <td><%= link_to 'Edit', edit_student_path(student) %></td>
         <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

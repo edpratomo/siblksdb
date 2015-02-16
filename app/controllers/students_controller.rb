@@ -54,6 +54,10 @@ class StudentsController < ApplicationController
   # GET /students.json
   def index
     @students = Student.order(sort_column + ' ' + sort_direction).paginate(:per_page => 10, :page => params[:page]) 
+    @active_students = StudentsRecord.joins(:student).where(student: @students, status: "active").inject({}) do |m,o|
+      m[o.student_id] = true
+      m
+    end
   end
 
   # GET /students/1
