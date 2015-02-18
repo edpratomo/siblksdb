@@ -3,7 +3,8 @@ class Student < ActiveRecord::Base
   
   validates_presence_of :religion, :name, :birthplace, :birthdate, :sex, :phone, :email
   validates_presence_of :district, :regency_city
-  validate :registered_at_before_created_at_and_started_on  
+  # broken at the moment
+  #validate :registered_at_before_created_at_and_started_on  
 
   # :students <= :students_records => :pkgs
   has_many :students_records
