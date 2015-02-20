@@ -81,6 +81,7 @@ class StudentsController < ApplicationController
   # POST /students.json
   def create
     @student = Student.new(student_params)
+    @student.created_at = DateTime.now.in_time_zone
 
     respond_to do |format|
       if @student.valid? and @student.transaction_user(@current_user) { @student.save! }
