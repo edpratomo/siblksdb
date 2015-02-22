@@ -5,6 +5,7 @@ class StudentsRecord < ActiveRecord::Base
   belongs_to :student
   belongs_to :pkg
 
+  validates_presence_of :pkg_id
   validate :finished_on_cant_be_blank
   validate :started_on_cant_be_before_registration
 
