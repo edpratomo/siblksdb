@@ -16,7 +16,7 @@
     <%= f.label :pkg_id, "Kursus", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
       <div class="form-group">
-        <% if controller.action_name == "edit" %>
+        <% if controller.action_name == "edit" or controller.action_name == "update" %>
           <p class="form-control-static"><%= @students_record.pkg.program.program %> - <%= @students_record.pkg.pkg %> Level <%= @students_record.pkg.level %></p>
           <%= f.hidden_field :pkg_id %>
         <% else %>
@@ -41,7 +41,7 @@
     </div>
   </div>
 
-<% if controller.action_name == "edit" %>
+<% if controller.action_name == "edit" or controller.action_name == "update" %>
   <div class="form-group">
     <%= f.label :status, "Status", class: "control-label col-sm-2 " %>
     <div class="col-sm-7 form-inline">
