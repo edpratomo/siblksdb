@@ -18,7 +18,7 @@ id:
       students_record:
         started_on: "tanggal mulai"
         finished_on: "tanggal berakhir"
-        pkg_id: "kursus"
+        pkg: "kursus"
 
   will_paginate:
     previous_label: "Sebelum"
