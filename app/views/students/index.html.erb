@@ -18,10 +18,10 @@
         <td><%= student.birthplace %>, <%= student.birthdate %></td>
         <td><%= student.registered_at.to_date %></td>
         <td><%= student.created_at.to_date %></td>
-        <td>
-          <span style="font-size:large" 
+        <td><div <%= @active_students.key?(student.id) ? raw('class="trigger"') : '' %> id="student_<%= student.id %>">
+          <span style="font-size:large"
             class="ion-ios-lightbulb<%= @active_students.key?(student.id) ? "-outline" : '' %>" data-pack="default">
-          </span>
+          </span></div>
         </td>
         <td><%= link_to 'Edit', edit_student_path(student) %></td>
         <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' } %></td>
