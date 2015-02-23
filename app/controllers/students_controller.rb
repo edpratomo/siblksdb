@@ -55,7 +55,11 @@ class StudentsController < ApplicationController
   def index
     @students = Student.order(sort_column + ' ' + sort_direction).paginate(:per_page => 10, :page => params[:page]) 
     @active_students = StudentsRecord.joins(:student).where(student: @students, status: "active").inject({}) do |m,o|
-      m[o.student_id] = true
+      # all of taken pkgs have schedules?
+      has_schedules = StudentsPkg.where(student: o.student).all? {|sp|
+        sp.instructors_schedules.size > 0
+      }
+      m[o.student_id] = has_schedules
       m
     end
   end
