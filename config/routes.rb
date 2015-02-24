@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   resources :student_schedule, :except => [:edit] do
     collection do
       get ':id/:pkg_id/edit' => 'student_schedule#edit', as: "edit"
+      get ':id/brief' => 'student_schedule#brief'
     end
   end
   

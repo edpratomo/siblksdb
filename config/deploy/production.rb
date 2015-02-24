@@ -6,7 +6,7 @@
 
 #role :app, %w{apps@siblksdb}
 role :web, %w{apps@siblksdb}
-#role :db,  %w{deploy@example.com}
+role :db,  %w{apps@siblksdb}
 
 
 # Extended Server Syntax

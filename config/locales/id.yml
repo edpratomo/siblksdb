@@ -3,6 +3,23 @@ id:
   abandoned: "Keluar"
   failed: "Tidak Lulus"
   finished: "Lulus"
+  activerecord:
+    attributes:
+      student:
+        registered_at: "tanggal pendaftaran"
+        religion: "agama"
+        name: "nama"
+        birthplace: "tempat lahir"
+        birthdate: "tanggal lahir"
+        sex: "jenis kelamin"
+        phone: "telpon"
+        district: "kecamatan"
+        regency_city: "kota/kabupaten"
+      students_record:
+        started_on: "tanggal mulai"
+        finished_on: "tanggal berakhir"
+        pkg: "kursus"
+
   will_paginate:
     previous_label: "Sebelum"
     next_label: "Berikut"

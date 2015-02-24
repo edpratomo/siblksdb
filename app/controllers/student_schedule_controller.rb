@@ -1,5 +1,5 @@
 class StudentScheduleController < ApplicationController
-  before_action :set_student,      only: [:show, :edit]
+  before_action :set_student,      only: [:show, :brief, :edit]
   before_action :set_students_pkg, only: [:update]
   
   def index
@@ -116,6 +116,13 @@ class StudentScheduleController < ApplicationController
     end
   end
 
+  def brief
+    @my_packages = StudentsPkg.where(student: @student).map {|sp|
+      [ "#{sp.pkg.program.program} - #{sp.pkg.pkg} Lev. #{sp.pkg.level}", sp.instructors_schedules.size ]
+    }
+    render :json => @my_packages
+  end
+  
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_student

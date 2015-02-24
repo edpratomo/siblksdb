@@ -39,17 +39,15 @@ class StudentsRecordsController < ApplicationController
     @student = Student.find(params[:students_record][:student_id])
 
     respond_to do |format|
-      if @student.transaction_user(@current_user) {
-        # if params[:students_record][:finished_on].empty?
-        if true
-          pkg = Pkg.find(params[:students_record][:pkg_id])
-          @student.pkgs << pkg # this student has just started a pkg
-        end
-        @students_record.save
+      if @students_record.valid? and @student.transaction_user(@current_user) {
+        @students_record.save!
+        pkg = Pkg.find(params[:students_record][:pkg_id])
+        @student.pkgs << pkg # this student has just started a pkg
       }
         format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully created.' }
         format.json { render :show, status: :created, location: @students_record }
       else
+        set_grouped_pkg_options
         format.html { render :new }
         format.json { render json: @students_record.errors, status: :unprocessable_entity }
       end
@@ -61,7 +59,7 @@ class StudentsRecordsController < ApplicationController
   def update
     @student = @students_record.student
     respond_to do |format|
-      if @students_record.transaction_user(@current_user) {
+      if @students_record.valid? and @students_record.transaction_user(@current_user) {
         unless params[:students_record][:finished_on].empty?
           pkg = Pkg.find(params[:students_record][:pkg_id])
           if pkg
@@ -77,6 +75,7 @@ class StudentsRecordsController < ApplicationController
         format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully updated.' }
         format.json { render :show, status: :ok, location: @students_record }
       else
+        set_grouped_pkg_options
         format.html { render :edit }
         format.json { render json: @students_record.errors, status: :unprocessable_entity }
       end
