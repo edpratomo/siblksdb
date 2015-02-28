@@ -48,7 +48,7 @@ class ReportController < ApplicationController
     respond_to do |format|
       format.html { render :create_monthly_generic_summary }
       format.pdf { 
-        render pdf: %[Laporan_Rekapitulasi_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B %Y")}],
+        render pdf: %[Laporan_Rekapitulasi_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B_%Y")}],
                orientation: 'Portrait',
                template: 'report/create_monthly_generic_summary.pdf.erb',
                layout: 'pdf_layout.html.erb'
@@ -84,7 +84,7 @@ class ReportController < ApplicationController
         render :create_monthly_generic
       }
       format.pdf { 
-        render pdf: %[Laporan_Bulanan_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B %Y")}],
+        render pdf: %[Laporan_Bulanan_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B_%Y")}],
                orientation: 'Landscape',
                template: 'report/create_monthly_generic.pdf.erb',
                layout: 'pdf_layout.html.erb'
@@ -127,8 +127,8 @@ class ReportController < ApplicationController
 
         # finished students
         finished_students = StudentsRecord.joins(:student).
-          where("sex = '#{o}' AND status = 'finished' AND date_part('month', finished_on) = ? AND date_part('year', finished_on) = ?", 
-          month, year).
+          where("sex = ? AND status = 'finished' AND date_part('month', finished_on) = ? AND date_part('year', finished_on) = ?", 
+          o, month, year).
           group(:pkg).count
         
         m[key][:finished] = finished_students.inject({}) do |m1,o1|
@@ -148,7 +148,7 @@ class ReportController < ApplicationController
     respond_to do |format|
       format.html { render :create_disnaker }
       format.pdf { 
-        render pdf: %[Laporan_Pelaksanaan_Pelatihan_#{Date::MONTHNAMES[month]}_#{year}],
+        render pdf: %[Laporan_Pelaksanaan_Pelatihan_#{I18n.l(now, format: "%B_%Y")}],
                orientation: 'Landscape',
                template: 'report/create_disnaker.pdf.erb',
                layout: 'pdf_layout.html.erb'
@@ -166,7 +166,8 @@ class ReportController < ApplicationController
     when "active"
       [ "started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month ]
     when "finished", "failed", "abandoned"
-      [ "started_on < ? AND status = '#{status}' AND date_part('month', finished_on) = ?", dt.end_of_month, dt.month ]
+      [ "started_on < ? AND status = ? AND date_part('month', finished_on) = ? AND date_part('year', finished_on) = ?", 
+        dt.end_of_month, status, dt.month, dt.year ]
     end
   end
 
