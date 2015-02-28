@@ -127,7 +127,9 @@ class ReportController < ApplicationController
 
         # finished students
         finished_students = StudentsRecord.joins(:student).
-          where("sex = ? AND status = 'finished' AND date_part('month', finished_on) = ? AND date_part('year', finished_on) = ?", 
+          where("sex = ? AND status = 'finished' " + 
+                "AND date_part('month', finished_on AT TIME ZONE 'Asia/Jakarta') = ? " +
+                "AND date_part('year', finished_on AT TIME ZONE 'Asia/Jakarta') = ?", 
           o, month, year).
           group(:pkg).count
         
@@ -166,8 +168,10 @@ class ReportController < ApplicationController
     when "active"
       [ "started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month ]
     when "finished", "failed", "abandoned"
-      [ "started_on < ? AND status = ? AND date_part('month', finished_on) = ? AND date_part('year', finished_on) = ?", 
-        dt.end_of_month, status, dt.month, dt.year ]
+      [ "started_on < ? AND status = ? " +
+        "AND date_part('month', finished_on AT TIME ZONE 'Asia/Jakarta') = ? " +
+        "AND date_part('year', finished_on AT TIME ZONE 'Asia/Jakarta') = ?", 
+        dt.end_of_month, status, dt.month, dt.year]
     end
   end
 
