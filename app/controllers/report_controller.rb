@@ -1,11 +1,11 @@
 class ReportController < ApplicationController
-  def new_active_students
+  def new_monthly_generic
   end
 
   def new_disnaker
   end
 
-  def create_active_students_summary
+  def create_monthly_generic_summary
     @status = params[:status] || 'active'
     @status_for_title = status_for_title @status
 
@@ -46,23 +46,23 @@ class ReportController < ApplicationController
     #logger.info(@students_group_by_religion_and_sex)
         
     respond_to do |format|
-      format.html { render :create_active_students_summary }
+      format.html { render :create_monthly_generic_summary }
       format.pdf { 
         render pdf: %[Laporan_Rekapitulasi_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B %Y")}],
                orientation: 'Portrait',
-               template: 'report/create_active_students_summary.pdf.erb',
+               template: 'report/create_monthly_generic_summary.pdf.erb',
                layout: 'pdf_layout.html.erb'
       }
     end
   end
   
-  def create_active_students
+  def create_monthly_generic
     if params[:summary] 
       if params[:print_pdf]
-        redirect_to report_create_active_students_summary_path(:format => 'pdf', :status => params[:status], 
+        redirect_to report_create_monthly_generic_summary_path(:format => 'pdf', :status => params[:status], 
                                                                :month => params[:month], :year => params[:year])
       else
-        redirect_to report_create_active_students_summary_path(:status => params[:status], 
+        redirect_to report_create_monthly_generic_summary_path(:status => params[:status], 
                                                                :month => params[:month], :year => params[:year])
       end
       return
@@ -81,12 +81,12 @@ class ReportController < ApplicationController
     respond_to do |format|
       format.html { 
         @students = @students.paginate(:per_page => 10, :page => params[:page]) 
-        render :create_active_students 
+        render :create_monthly_generic
       }
       format.pdf { 
         render pdf: %[Laporan_Bulanan_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B %Y")}],
                orientation: 'Landscape',
-               template: 'report/create_active_students.pdf.erb',
+               template: 'report/create_monthly_generic.pdf.erb',
                layout: 'pdf_layout.html.erb'
       }
     end

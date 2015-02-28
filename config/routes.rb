@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
 
-  get 'report/new_active_students'
+  get 'report/new_monthly_generic'
   
-  get 'report/create_active_students_summary'
+  get 'report/create_monthly_generic_summary'
   
-  get 'report/create_active_students'
+  get 'report/create_monthly_generic'
   
   get 'report/new_disnaker'
 
