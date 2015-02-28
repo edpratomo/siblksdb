@@ -10,8 +10,9 @@ class ReportController < ApplicationController
     dt = DateTime.new(year, month).in_time_zone
     @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
 
+    @status = params[:status] || 'active'
     pkg_summary = StudentsRecord.joins(:student, :pkg => :program).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+      send(:where, *args_for_where_clause(@status, dt)).
       group(:program, 'pkgs.pkg', :sex).count
 
     @students_group_by_pkg_sex = pkg_summary.inject({}) do |m,o|
@@ -27,13 +28,13 @@ class ReportController < ApplicationController
     end
     
     students_group_by_religion = StudentsRecord.joins(:student).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+      send(:where, *args_for_where_clause(@status, dt)).
       group(:religion).count
 
     @sorted_religions = students_group_by_religion.sort {|a,b| b[1] <=> a[1] }.map {|e| e[0]}
 
     @students_group_by_religion_and_sex = StudentsRecord.joins(:student).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+      send(:where, *args_for_where_clause(@status, dt)).
       group(:religion, :sex).count.
     inject({}) do |m,o|
       m[o[0][0]] ||= {"female" => 0, "male" => 0}
@@ -56,19 +57,27 @@ class ReportController < ApplicationController
   def create_active_students
     if params[:summary] 
       if params[:print_pdf]
-        redirect_to report_create_active_students_summary_path(:format => 'pdf', :month => params[:month], :year => params[:year])
+        redirect_to report_create_active_students_summary_path(:format => 'pdf', :status => params[:status], 
+                                                               :month => params[:month], :year => params[:year])
       else
-        redirect_to report_create_active_students_summary_path(:month => params[:month], :year => params[:year])
+        redirect_to report_create_active_students_summary_path(:status => params[:status], 
+                                                               :month => params[:month], :year => params[:year])
       end
       return
     end
     
+    @status = params[:status] || 'active'
+    @status_for_title = status_for_title @status
+
     month, year = params[:month].to_i, params[:year].to_i
     dt = DateTime.new(year, month).in_time_zone
-    @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
+    @month_year_for_title = if @status == "active"
+      dt.end_of_month
+    else
+      dt
+    end
 
-    status = params[:status] || 'active'
-    @students = StudentsRecord.joins(:student).send(:where, *args_for_where_clause(status, dt)).
+    @students = StudentsRecord.joins(:student).send(:where, *args_for_where_clause(@status, dt)).
       order("students.name")
 
     respond_to do |format|
@@ -158,8 +167,17 @@ class ReportController < ApplicationController
     case status
     when "active"
       [ "started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month ]
-    when "finished", "failed"
+    when "finished", "failed", "abandoned"
       [ "started_on < ? AND status = '#{status}' AND date_part('month', finished_on) = ?", dt.end_of_month, dt.month ]
+    end
+  end
+
+  def status_for_title status
+    case status
+    when "active"
+      "under training"
+    else
+      status
     end
   end
 end

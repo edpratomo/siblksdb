@@ -1,7 +1,7 @@
 
 <table class="table table-bordered" style="background-color:white;">
   <caption style="padding-top:20px;padding-bottom:20px">
-    <p style="font-size:x-large">Rekapitulasi Siswa Aktif Berdasarkan Kursus<p>
+    <p style="font-size:x-large">Rekapitulasi Siswa <%= t(@status) %> Berdasarkan Kursus<p>
     <p style="font-size:large">per <%= @month_year_for_title %></p>
   </caption>
   <thead>
@@ -30,7 +30,7 @@
 <div style="padding-top:20px;">
 <table class="table table-bordered" style="background-color:white;">
   <caption style="padding-top:20px;padding-bottom:20px">
-    <p style="font-size:x-large">Rekapitulasi Siswa Aktif Berdasarkan Agama<p>
+    <p style="font-size:x-large">Rekapitulasi Siswa <%= t(@status) %> Berdasarkan Agama<p>
     <p style="font-size:large">per <%= @month_year_for_title %></p>
   </caption>
   <thead>
@@ -58,5 +58,5 @@
 </div>
 
 <p style="font-size:medium;padding-top:20px;">
-Jumlah total siswa aktif per <%= @month_year_for_title %>: <%= @total_students["female"] + @total_students["male"] %> orang.
+Jumlah total siswa <%= t(@status) %> per <%= @month_year_for_title %>: <%= @total_students["female"] + @total_students["male"] %> orang.
 </p>
