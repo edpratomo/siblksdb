@@ -6,11 +6,13 @@ class ReportController < ApplicationController
   end
 
   def create_active_students_summary
+    @status = params[:status] || 'active'
+    @status_for_title = status_for_title @status
+
     month, year = params[:month].to_i, params[:year].to_i
     dt = DateTime.new(year, month).in_time_zone
-    @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
+    @month_year_for_title = month_year_for_title @status, dt
 
-    @status = params[:status] || 'active'
     pkg_summary = StudentsRecord.joins(:student, :pkg => :program).
       send(:where, *args_for_where_clause(@status, dt)).
       group(:program, 'pkgs.pkg', :sex).count
@@ -46,7 +48,7 @@ class ReportController < ApplicationController
     respond_to do |format|
       format.html { render :create_active_students_summary }
       format.pdf { 
-        render pdf: %[Laporan_Rekapitulasi_Siswa_Aktif_#{Date::MONTHNAMES[month]}_#{year}],
+        render pdf: %[Laporan_Rekapitulasi_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B %Y")}],
                orientation: 'Portrait',
                template: 'report/create_active_students_summary.pdf.erb',
                layout: 'pdf_layout.html.erb'
@@ -71,11 +73,7 @@ class ReportController < ApplicationController
 
     month, year = params[:month].to_i, params[:year].to_i
     dt = DateTime.new(year, month).in_time_zone
-    @month_year_for_title = if @status == "active"
-      dt.end_of_month
-    else
-      dt
-    end
+    @month_year_for_title = month_year_for_title @status, dt
 
     @students = StudentsRecord.joins(:student).send(:where, *args_for_where_clause(@status, dt)).
       order("students.name")
@@ -178,6 +176,14 @@ class ReportController < ApplicationController
       "under training"
     else
       status
+    end
+  end
+
+  def month_year_for_title status, dt
+    if status == "active"
+      dt.end_of_month
+    else
+      dt
     end
   end
 end

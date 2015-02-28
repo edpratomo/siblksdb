@@ -1,7 +1,11 @@
 <table class="table table-bordered" style="background-color:white;">
   <caption style="padding-top:20px;padding-bottom:20px">
     <p style="font-size:x-large">Rekapitulasi Siswa Aktif Berdasarkan Kursus<p>
-    <p style="font-size:large">per <%= @month_year_for_title %></p>
+    <p style="font-size:large"><%if @status == "active" %>
+      per <%= l(@month_year_for_title, format: "%d %B %Y") %>
+    <% else %>
+      <%= t("in month") %> <%= l(@month_year_for_title, format: "%B %Y") %>
+    <% end %></p>
   </caption>
   <thead>
     <tr>
@@ -30,7 +34,11 @@
 <table class="table table-bordered" style="background-color:white;">
   <caption style="padding-top:20px;padding-bottom:20px">
     <p style="font-size:x-large">Rekapitulasi Siswa Aktif Berdasarkan Agama<p>
-    <p style="font-size:large">per <%= @month_year_for_title %></p>
+    <p style="font-size:large"><%if @status == "active" %>
+      per <%= l(@month_year_for_title, format: "%d %B %Y") %>
+    <% else %>
+      <%= t("in month") %> <%= l(@month_year_for_title, format: "%B %Y") %>
+    <% end %></p>
   </caption>
   <thead>
     <tr>
@@ -57,7 +65,13 @@
 </div>
 
 <p style="font-size:medium;padding-top:20px;">
-Jumlah total siswa aktif per <%= @month_year_for_title %>: <%= @total_students["female"] + @total_students["male"] %> orang.
+Jumlah total siswa aktif 
+<%if @status == "active" %>
+  per <%= l(@month_year_for_title, format: "%d %B %Y") %>
+<% else %>
+  <%= t("in month") %> <%= l(@month_year_for_title, format: "%B %Y") %>
+<% end %>: 
+<%= @total_students["female"] + @total_students["male"] %> orang.
 </p>
 
 <%= render partial: 'signature' %>
