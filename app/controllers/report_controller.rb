@@ -86,7 +86,7 @@ class ReportController < ApplicationController
         render :create_active_students 
       }
       format.pdf { 
-        render pdf: %[Laporan_Siswa_Aktif_#{Date::MONTHNAMES[month]}_#{year}],
+        render pdf: %[Laporan_Bulanan_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B %Y")}],
                orientation: 'Landscape',
                template: 'report/create_active_students.pdf.erb',
                layout: 'pdf_layout.html.erb'
