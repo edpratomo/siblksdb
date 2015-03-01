@@ -3,6 +3,8 @@ id:
   abandoned: "Keluar"
   failed: "Tidak Lulus"
   finished: "Lulus"
+  "under training": "Sedang Dilatih"
+  "in month": "dalam bulan"
   activerecord:
     attributes:
       student:

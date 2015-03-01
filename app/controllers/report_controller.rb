@@ -1,17 +1,20 @@
 class ReportController < ApplicationController
-  def new_active_students
+  def new_monthly_generic
   end
 
   def new_disnaker
   end
 
-  def create_active_students_summary
+  def create_monthly_generic_summary
+    @status = params[:status] || 'active'
+    @status_for_title = status_for_title @status
+
     month, year = params[:month].to_i, params[:year].to_i
     dt = DateTime.new(year, month).in_time_zone
-    @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
+    @month_year_for_title = month_year_for_title @status, dt
 
     pkg_summary = StudentsRecord.joins(:student, :pkg => :program).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+      send(:where, *args_for_where_clause(@status, dt)).
       group(:program, 'pkgs.pkg', :sex).count
 
     @students_group_by_pkg_sex = pkg_summary.inject({}) do |m,o|
@@ -27,13 +30,13 @@ class ReportController < ApplicationController
     end
     
     students_group_by_religion = StudentsRecord.joins(:student).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+      send(:where, *args_for_where_clause(@status, dt)).
       group(:religion).count
 
     @sorted_religions = students_group_by_religion.sort {|a,b| b[1] <=> a[1] }.map {|e| e[0]}
 
     @students_group_by_religion_and_sex = StudentsRecord.joins(:student).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+      send(:where, *args_for_where_clause(@status, dt)).
       group(:religion, :sex).count.
     inject({}) do |m,o|
       m[o[0][0]] ||= {"female" => 0, "male" => 0}
@@ -43,43 +46,47 @@ class ReportController < ApplicationController
     #logger.info(@students_group_by_religion_and_sex)
         
     respond_to do |format|
-      format.html { render :create_active_students_summary }
+      format.html { render :create_monthly_generic_summary }
       format.pdf { 
-        render pdf: %[Laporan_Rekapitulasi_Siswa_Aktif_#{Date::MONTHNAMES[month]}_#{year}],
+        render pdf: %[Laporan_Rekapitulasi_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B_%Y")}],
                orientation: 'Portrait',
-               template: 'report/create_active_students_summary.pdf.erb',
+               template: 'report/create_monthly_generic_summary.pdf.erb',
                layout: 'pdf_layout.html.erb'
       }
     end
   end
   
-  def create_active_students
+  def create_monthly_generic
     if params[:summary] 
       if params[:print_pdf]
-        redirect_to report_create_active_students_summary_path(:format => 'pdf', :month => params[:month], :year => params[:year])
+        redirect_to report_create_monthly_generic_summary_path(:format => 'pdf', :status => params[:status], 
+                                                               :month => params[:month], :year => params[:year])
       else
-        redirect_to report_create_active_students_summary_path(:month => params[:month], :year => params[:year])
+        redirect_to report_create_monthly_generic_summary_path(:status => params[:status], 
+                                                               :month => params[:month], :year => params[:year])
       end
       return
     end
     
+    @status = params[:status] || 'active'
+    @status_for_title = status_for_title @status
+
     month, year = params[:month].to_i, params[:year].to_i
     dt = DateTime.new(year, month).in_time_zone
-    @month_year_for_title = dt.end_of_month.strftime("%d %B %Y")
+    @month_year_for_title = month_year_for_title @status, dt
 
-    @students = StudentsRecord.joins(:student).
-      where("started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month).
+    @students = StudentsRecord.joins(:student).send(:where, *args_for_where_clause(@status, dt)).
       order("students.name")
 
     respond_to do |format|
       format.html { 
         @students = @students.paginate(:per_page => 10, :page => params[:page]) 
-        render :create_active_students 
+        render :create_monthly_generic
       }
       format.pdf { 
-        render pdf: %[Laporan_Siswa_Aktif_#{Date::MONTHNAMES[month]}_#{year}],
+        render pdf: %[Laporan_Bulanan_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B_%Y")}],
                orientation: 'Landscape',
-               template: 'report/create_active_students.pdf.erb',
+               template: 'report/create_monthly_generic.pdf.erb',
                layout: 'pdf_layout.html.erb'
       }
     end
@@ -120,8 +127,10 @@ class ReportController < ApplicationController
 
         # finished students
         finished_students = StudentsRecord.joins(:student).
-          where("sex = '#{o}' AND status = 'finished' AND date_part('month', finished_on) = ? AND date_part('year', finished_on) = ?", 
-          month, year).
+          where("sex = ? AND status = 'finished' " + 
+                "AND date_part('month', finished_on AT TIME ZONE 'Asia/Jakarta') = ? " +
+                "AND date_part('year', finished_on AT TIME ZONE 'Asia/Jakarta') = ?", 
+          o, month, year).
           group(:pkg).count
         
         m[key][:finished] = finished_students.inject({}) do |m1,o1|
@@ -141,7 +150,7 @@ class ReportController < ApplicationController
     respond_to do |format|
       format.html { render :create_disnaker }
       format.pdf { 
-        render pdf: %[Laporan_Pelaksanaan_Pelatihan_#{Date::MONTHNAMES[month]}_#{year}],
+        render pdf: %[Laporan_Pelaksanaan_Pelatihan_#{I18n.l(now, format: "%B_%Y")}],
                orientation: 'Landscape',
                template: 'report/create_disnaker.pdf.erb',
                layout: 'pdf_layout.html.erb'
@@ -152,5 +161,34 @@ class ReportController < ApplicationController
   private
   def pkg_to_s pkg
     sprintf("#{pkg.program.program} - #{pkg.pkg} - %2d", pkg.level)
+  end
+
+  def args_for_where_clause status, dt
+    case status
+    when "active"
+      [ "started_on < ? AND (status = 'active' OR finished_on > ?)", dt.end_of_month, dt.end_of_month ]
+    when "finished", "failed", "abandoned"
+      [ "started_on < ? AND status = ? " +
+        "AND date_part('month', finished_on AT TIME ZONE 'Asia/Jakarta') = ? " +
+        "AND date_part('year', finished_on AT TIME ZONE 'Asia/Jakarta') = ?", 
+        dt.end_of_month, status, dt.month, dt.year]
+    end
+  end
+
+  def status_for_title status
+    case status
+    when "active"
+      "under training"
+    else
+      status
+    end
+  end
+
+  def month_year_for_title status, dt
+    if status == "active"
+      dt.end_of_month
+    else
+      dt
+    end
   end
 end

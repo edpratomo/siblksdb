@@ -1,8 +1,12 @@
 
 <table class="table table-bordered" style="background-color:white;">
   <caption style="padding-top:20px;padding-bottom:20px">
-    <p style="font-size:x-large">Daftar Peserta Kursus yang Sedang Dilatih<p>
-    <p style="font-size:x-large">per <%= @month_year_for_title %></p>
+    <p style="font-size:x-large">Daftar Peserta Kursus yang <%= t(@status_for_title) %><p>
+    <p style="font-size:x-large"><%if @status == "active" %>
+      per <%= l(@month_year_for_title, format: "%d %B %Y") %>
+    <% else %>
+      <%= t("in month") %> <%= l(@month_year_for_title, format: "%B %Y") %>
+    <% end %></p>
   </caption>
   <thead>
     <tr>
@@ -15,6 +19,7 @@
       <th>Tanggal</th>
       <th>Agama</th>
       <th>Mulai</th>
+      <% if @status != "active" %><th>Sampai</th><% end %>
       <th>Program</th>
     </tr>
   </thead>
@@ -30,6 +35,9 @@
         <td><%= student.student.birthdate %></td>
         <td><%= student.student.religion %></td>
         <td><%= student.started_on.strftime("%d/%m/%Y") %></td>
+       <% if @status != "active" %>
+        <td><%= student.finished_on.strftime("%d/%m/%Y") %></td>
+       <% end %>
         <td><%= sprintf("#{student.pkg.program.program} - #{student.pkg.pkg}") %></td>
       </tr>
     <% end %>

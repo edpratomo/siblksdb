@@ -1,6 +1,6 @@
-<h2>Laporan Bulanan Siswa Aktif</h2>
+<h2>Laporan Bulanan Data Siswa</h2>
 
-<%= form_tag(report_create_active_students_path, {method: :get, class: "form-horizontal", role: "form"}) do %>
+<%= form_tag(report_create_monthly_generic_path, {method: :get, class: "form-horizontal", role: "form"}) do %>
 
   <div class="form-group">
     <%= label_tag :month, "Bulan", class: "control-label col-sm-2" %>
@@ -14,6 +14,14 @@
     <%= label_tag :year, "Tahun", class: "control-label col-sm-2" %>
     <div class="col-sm-2">
       <%= text_field_tag :year, DateTime.now.year, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :status, "Status", class: "control-label col-sm-2" %>
+    <div class="col-sm-3">
+      <%= select_tag :status, options_for_select(%w[active finished failed abandoned].map {|e| [t(e), e]}, "active"),
+                     class: "form-control" %>
     </div>
   </div>
 
@@ -49,9 +57,9 @@
 
 $("#print_pdf").change(function() {
   if (this.checked) {
-    $('form').attr('action', "<%= report_create_active_students_path(format: :pdf) %>");
+    $('form').attr('action', "<%= report_create_monthly_generic_path(format: :pdf) %>");
   } else {
-    $('form').attr('action', "<%= report_create_active_students_path %>");
+    $('form').attr('action', "<%= report_create_monthly_generic_path %>");
   }
 });
 

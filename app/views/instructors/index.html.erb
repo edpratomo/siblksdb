@@ -5,6 +5,7 @@
     <tr>
       <th>Nama Lengkap</th>
       <th>Nick</th>
+      <th style="text-align:center;">Kapasitas</th>
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -14,6 +15,7 @@
       <tr>
         <td><%= instructor.name %></td>
         <td><%= instructor.nick %></td>
+        <td style="text-align:center;"><%= instructor.capacity %></td>
         <td><%= link_to 'Show', instructor %></td>
         <td><%= link_to 'Edit', edit_instructor_path(instructor) %></td>
         <td><%= link_to 'Jadwal', edit_schedule_instructor_path(instructor) %></td>

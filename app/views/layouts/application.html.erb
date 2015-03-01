@@ -57,7 +57,7 @@
             <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
             <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
             <li class="<%= active_tab_class(presence_sheet_new_path) %>"><%= link_to "Lembar Absensi Siswa", presence_sheet_new_path %></li>
-            <li class="<%= active_tab_class(report_new_active_students_path, report_create_active_students_path) %>"><%= link_to "Laporan Siswa Aktif", report_new_active_students_path %></li>
+            <li class="<%= active_tab_class(report_new_monthly_generic_path,  report_new_monthly_generic_path, report_create_monthly_generic_path) %>"><%= link_to "Laporan Bulanan Siswa", report_new_monthly_generic_path %></li>
             <li class="<%= active_tab_class(report_new_disnaker_path, report_create_disnaker_path) %>"><%= link_to "Laporan Pelaksanaan Pelatihan", report_new_disnaker_path %></li>
           </ul>
           <ul class="nav nav-sidebar">
