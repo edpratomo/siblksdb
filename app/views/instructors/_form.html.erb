@@ -26,7 +26,7 @@
   <div class="form-group">
     <%= f.label :capacity, "Kapasitas Siswa", class: "control-label col-sm-2" %>
     <div class="col-xs-2">
-      <%= f.number_field :capacity, class: "form-control", min: 1, value: 10 %>
+      <%= f.number_field :capacity, class: "form-control", min: 1, value: @instructor.capacity || 10 %>
     </div>
   </div>
   <div class="form-group">
