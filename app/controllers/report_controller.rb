@@ -48,6 +48,7 @@ class ReportController < ApplicationController
     respond_to do |format|
       format.html { render :create_monthly_generic_summary }
       format.pdf { 
+        @signature_date = signature_date dt
         render pdf: %[Laporan_Rekapitulasi_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B_%Y")}],
                orientation: 'Portrait',
                template: 'report/create_monthly_generic_summary.pdf.erb',
@@ -84,6 +85,7 @@ class ReportController < ApplicationController
         render :create_monthly_generic
       }
       format.pdf { 
+        @signature_date = signature_date dt
         render pdf: %[Laporan_Bulanan_Siswa_#{I18n.t(@status).capitalize}_#{I18n.l(dt, format: "%B_%Y")}],
                orientation: 'Landscape',
                template: 'report/create_monthly_generic.pdf.erb',
@@ -150,6 +152,7 @@ class ReportController < ApplicationController
     respond_to do |format|
       format.html { render :create_disnaker }
       format.pdf { 
+        @signature_date = signature_date now
         render pdf: %[Laporan_Pelaksanaan_Pelatihan_#{I18n.l(now, format: "%B_%Y")}],
                orientation: 'Landscape',
                template: 'report/create_disnaker.pdf.erb',
@@ -190,5 +193,9 @@ class ReportController < ApplicationController
     else
       dt
     end
+  end
+  
+  def signature_date dt
+    DateTime.now.in_time_zone
   end
 end
