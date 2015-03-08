@@ -17,6 +17,7 @@
  *= require rails_bootstrap_forms
  *= require bootstrap-datetimepicker
  *= require ionicons.min
+ *= require bootstrap-dialog
  */
 
 @font-face {

@@ -85,7 +85,17 @@ $(function() {
 
   $('input[type="checkbox"]').change(function() {
     if (this.checked) {
-      var checked_id = this.id
+      var checked_id = this.id;
+      var avail_seat = $(this).attr("seat");
+      if (avail_seat < 1) {
+        BootstrapDialog.alert({
+          title: 'WARNING',
+          type: BootstrapDialog.TYPE_WARNING,
+          message: 'Jadwal ini tidak dapat dipilih karena sudah penuh!',
+        });
+        $(this).attr("checked", false);
+        return false;
+      }
       checked_prefix = checked_id.replace(/_\d+$/, '_');
       checked_subprefix = checked_id.replace(/_\d+_\d+$/, '_');
 
