@@ -1,10 +1,13 @@
 id:
+  please: silakan
+  sign in: login
   active: "Aktif"
   abandoned: "Keluar"
   failed: "Tidak Lulus"
   finished: "Lulus"
   "under training": "Sedang Dilatih"
   "in month": "dalam bulan"
+  remember me: tetap mengingat saya
   activerecord:
     attributes:
       student:
