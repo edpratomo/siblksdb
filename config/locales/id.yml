@@ -24,11 +24,29 @@ id:
         started_on: "tanggal mulai"
         finished_on: "tanggal berakhir"
         pkg: "kursus"
+    models:
+      line_item:
+        zero:  line items
+        one:   line item
+        few:   line items
+        other: line items
 
   will_paginate:
     previous_label: "Sebelum"
     next_label: "Berikut"
     page_gap: "…"
+    page_entries_info:
+      single_page:
+        zero:  "No %{model} found"
+        one:   "Displaying 1 %{model}"
+        other: "Displaying all %{count} %{model}"
+      single_page_html:
+        zero:  "No %{model} found"
+        one:   "Displaying <b>1</b> %{model}"
+        other: "Displaying <b>all&nbsp;%{count}</b> %{model}"
+
+      multi_page: "Displaying %{model} %{from} - %{to} of %{count} in total"
+      multi_page_html: "Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total"
 
   errors:
     # The default format to use in full error messages.
@@ -56,3 +74,6 @@ id:
       other_than: "must be other than %{count}"
       odd: "must be odd"
       even: "must be even"
+  date:
+    formats:
+      default: "%d/%m/%Y"

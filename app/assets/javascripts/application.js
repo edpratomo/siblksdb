@@ -22,6 +22,9 @@
 //= require handlebars-v2.0.0
 //= require jquery.poshytip
 //= require bootstrap-dialog
+//= require bootstrap-datepicker/core
+//= require bootstrap-datepicker/locales/bootstrap-datepicker.id.js
+//= require filterrific/filterrific-jquery
 
 $(function(){
 

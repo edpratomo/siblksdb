@@ -71,6 +71,53 @@ class Student < ActiveRecord::Base
     end
   end
     
+  # filter list
+  filterrific(
+    default_filter_params: { sorted_by: 'name_asc' },
+    available_filters: [
+      :sorted_by,
+      :with_religion,
+      :with_registered_at_gt,
+      :with_registered_at_lt
+    ]
+  )
+
+  # define ActiveRecord scopes for
+  # :sorted_by, :with_religion
+  scope :sorted_by, ->(column_order) { 
+    if Regexp.new('^(.+)_(asc|desc)$', Regexp::IGNORECASE).match(column_order)
+      reorder("#{$1} #{$2}")
+    end
+  }
+
+  scope :with_religion, ->(religion) {
+    where(:religion => [*religion])
+  }
+
+  scope :with_registered_at_gt, ->(ref_date) {
+    where('students.registered_at > ?', ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
+  }
+
+  scope :with_registered_at_lt, ->(ref_date) {
+    where('students.registered_at < ?', ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
+  }
+
+  def self.options_for_sorted_by
+    [
+      ['Nama (a-z)', 'name_asc'],
+      ['Tanggal pendaftaran (baru -> lama)', 'registered_at_desc'],
+      ['Tanggal pendaftaran (lama -> baru)', 'registered_at_asc'],
+    ]
+  end
+
+  def self.options_for_religion
+    select(:religion).distinct.map {|e| [ e[:religion].gsub(' ', '_'), e[:religion] ] }.sort_by {|e| e[0] }
+  end
+
+  def decorated_created_at
+    created_at.to_date.to_s(:long)
+  end
+
   private
   def default_url_by_gender
     gender = self.sex

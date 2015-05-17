@@ -18,6 +18,7 @@
  *= require bootstrap-datetimepicker
  *= require ionicons.min
  *= require bootstrap-dialog
+ *= require bootstrap-datepicker3
  */
 
 @font-face {

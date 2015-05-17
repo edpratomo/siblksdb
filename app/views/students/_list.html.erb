@@ -1,0 +1,49 @@
+
+<div class='well well-small'>
+  <div class='pull-right' data-intro='Reset the filter settings to defaults.' data-position='bottom'>
+    <%= link_to "Reset filters", reset_filterrific_url, :class => 'btn btn-default btn-sm' %>
+  </div>
+  <div>
+    <%= page_entries_info students, :model => 'student' %>
+  </div>
+  <div>
+    <%= render_filterrific_spinner %>
+  </div>
+</div>
+
+<table class="table pretty table-hover table-striped">
+  <thead>
+    <tr>
+      <th><%= sortable "name", "Nama" %></th>
+      <th>Tempat, Tanggal Lahir</th>
+      <th><%= sortable "registered_at", "Pendaftaran" %></th>
+      <th><%= sortable "created_at", "Entri Data" %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% students.each do |student| %>
+      <tr>
+        <td><%= link_to "#{student.name} (#{student.sex == "male" ? "L" : "P"})", student %></td>
+        <td><%= student.birthplace %>, <%= student.birthdate %></td>
+        <td><%= student.registered_at.to_date %></td>
+        <td><%= student.created_at.to_date %></td>
+        <td>
+          <span style="font-size:large;" 
+            class="ion-ios-lightbulb<%= active_students.key?(student.id) ? "-outline" : '' %>" data-pack="default">
+          </span>
+          <% if active_students[student.id] %>
+          <span style="font-size:large; color:green" class="ion-checkmark-circled" />
+          <% elsif active_students.key?(student.id) %>
+          <span style="font-size:large; color:red" class="ion-alert-circled" />
+          <% end %>
+        </td>
+        <td><%= link_to 'Edit', edit_student_path(student) %></td>
+        <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate students, renderer: BootstrapPagination::Rails %>
+<br>

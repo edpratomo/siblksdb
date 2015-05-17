@@ -53,7 +53,17 @@ class StudentsController < ApplicationController
   # GET /students
   # GET /students.json
   def index
-    @students = Student.order(sort_column + ' ' + sort_direction).paginate(:per_page => 10, :page => params[:page]) 
+    @filterrific = initialize_filterrific(
+      Student,
+      params[:filterrific],
+      :select_options => {
+        sorted_by: Student.options_for_sorted_by,
+        with_religion: Student.options_for_religion
+      }
+    ) or return
+    # @students = @filterrific.find.page(params[:page])
+    @students = Student.filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
+
     @active_students = StudentsRecord.joins(:student).where(student: @students, status: "active").inject({}) do |m,o|
       # all of taken pkgs have schedules?
       has_schedules = StudentsPkg.where(student: o.student).all? {|sp|
@@ -61,6 +71,11 @@ class StudentsController < ApplicationController
       }
       m[o.student_id] = has_schedules
       m
+    end
+
+    respond_to do |format|
+      format.html
+      format.js
     end
   end
 
