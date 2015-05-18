@@ -32,8 +32,17 @@
     <div class="form-group has-feedback">
       <%= f.label :religion, "Agama", class: "control-label col-sm-3" %>
       <div class="col-sm-3">
+      <% if current_page?(action: 'new') %>
+        <%# harcode religion input %>
+        <%= f.select :religion, 
+                     ['Islam', 'Katolik', 'Kristen', 'Hindu', 'Budha', 'Kong Hu Cu'], 
+                     {  :include_blank => '- Pilih -' }, 
+                     { class: "form-control" }
+        %>
+      <% else %>
         <%= f.text_field :religion, class: "form-control" %>
         <i class="glyphicon glyphicon-remove form-control-feedback" id="remove_religion"></i>
+      <% end %>
       </div>
     </div>
 
@@ -251,22 +260,24 @@ $('#student_regency_city').on('typeahead:opened', function (e, datum) {
   console.log("regency/city opened");
 });
 
-// religion names events
-$('#student_religion').typeahead({
-  hint: true,
-  highlight: true,
-  minLength: 1
-},
-{
-  name: 'religions',
-  displayKey: 'name',
-  source: religionNames.ttAdapter()
-});
+if ($('#student_religion').is('input:text')) {
+  // religion names events
+  $('#student_religion').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+  {
+    name: 'religions',
+    displayKey: 'name',
+    source: religionNames.ttAdapter()
+  });
 
-$('#student_religion').on('typeahead:selected', function (e, datum) {
-  console.log("religion selected");
-  $('#student_religion').val(datum.name);
-});
+  $('#student_religion').on('typeahead:selected', function (e, datum) {
+    console.log("religion selected");
+    $('#student_religion').val(datum.name);
+  });
+}
 
 $(function() {
   $('#remove_id_card_expiry_date').click(function() { 
