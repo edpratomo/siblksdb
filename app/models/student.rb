@@ -95,11 +95,11 @@ class Student < ActiveRecord::Base
   }
 
   scope :with_registered_at_gt, ->(ref_date) {
-    where('students.registered_at > ?', ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
+    where("students.registered_at AT TIME ZONE 'Asia/Jakarta' > ?", ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
   }
 
   scope :with_registered_at_lt, ->(ref_date) {
-    where('students.registered_at < ?', ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
+    where("students.registered_at AT TIME ZONE 'Asia/Jakarta' < ?", ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
   }
 
   def self.options_for_sorted_by
