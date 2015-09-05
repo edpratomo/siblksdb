@@ -77,7 +77,11 @@ class UsersController < ApplicationController
       params.require(:user).permit(:group_id, :username, :fullname, :password,
                                    :password_confirmation, :email).tap do |whitelisted|
                                       if params[:instructor_id]
-                                        whitelisted[:instructor] = Instructor.find(params[:instructor_id])
+                                        if params[:instructor_id].empty?
+                                          whitelisted[:instructor] = nil
+                                        else
+                                          whitelisted[:instructor] = Instructor.find(params[:instructor_id])
+                                        end
                                       end
                                     end
     end

@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="field">
-    <%= f.select :group_id, Group.all.to_a.map {|e| [e.name, e.id]}, control_col: "col-xs-2" %>
+    <%= f.select :group_id, Group.all.to_a.map {|e| [e.name, e.id]}, {control_col: "col-xs-2", include_blank: "- Pilih -" } %>
   </div>
   <div class="field">
     <%= f.text_field :username, class: "form-control", control_col: "col-xs-2" %>
@@ -29,8 +29,9 @@
   <div class="field">
     <%= f.text_field :email, control_col: "col-xs-3" %>
   </div>
-  <% if @user.group and %w[admin sysadmin instructor].member?(@user.group.name) %>
-  <div class="field">
+  <% if controller.action_name == "new" or
+        (controller.action_name == "edit" and @user.group and %w[admin sysadmin instructor].member?(@user.group.name)) %>
+  <div class="field" id="instructors">
     <div class="form-group">
       <%= label_tag :instructor_id, "Link to instructor", class: "control-label col-sm-2" %>
       <div class="col-xs-3">
@@ -48,3 +49,21 @@
     <%= f.submit %>
   </div>
 <% end %>
+<script type="text/javascript">
+$(document).ready(function() {
+<% if controller.action_name == "new" %>
+  $('#instructors').hide();
+<% end %>
+  $('#user_group_id').change(function() {
+    switch ($("#user_group_id option:selected").text()) {
+      case "sysadmin":
+      case "admin":
+      case "instructor":
+        $('#instructors').slideDown('fast');
+        break;
+      default:
+        $('#instructors').slideUp('fast');
+    }
+  });
+});
+</script>
