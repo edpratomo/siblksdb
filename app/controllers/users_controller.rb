@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_instructor, only: [:show, :edit, :update, :destroy]
+  before_action :set_instructor_options
+
   # before_action :authorize_admin
   filter_resource_access
   
@@ -71,6 +74,23 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:group_id, :username, :fullname, :password, :password_confirmation, :email)
+      params.require(:user).permit(:group_id, :username, :fullname, :password,
+                                   :password_confirmation, :email).tap do |whitelisted|
+                                      if params[:instructor_id]
+                                        whitelisted[:instructor] = Instructor.find(params[:instructor_id])
+                                      end
+                                    end
+    end
+
+    def set_instructor
+      if @user
+        @instructor = UsersInstructor.find_by(user: @user).instructor rescue nil
+      end
+    end
+
+    def set_instructor_options
+      linked_instructors = UsersInstructor.all.map {|e| e.instructor_id}
+      @instructor_options = Instructor.all.map {|e| [e.nick, e.id]}
+      @instructor_options_disabled = linked_instructors
     end
 end

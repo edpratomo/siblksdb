@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  # include TransactionHelper
+
   belongs_to :role, foreign_key: "group_id"
   belongs_to :group
 
@@ -7,6 +9,10 @@ class User < ActiveRecord::Base
   has_many :students_pkgs
   has_many :students_pkgs_schedule
   
+  # link user to instructor
+  has_one :users_instructor
+  has_one :instructor, through: :users_instructor
+
   validate :username, presence: true, uniqueness: true
   has_secure_password
 

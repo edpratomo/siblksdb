@@ -236,3 +236,6 @@ DEPENDENCIES
   will_paginate
   will_paginate-bootstrap
   wkhtmltopdf-binary
+
+BUNDLED WITH
+   1.10.2

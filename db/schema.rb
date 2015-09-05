@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141021131106) do
+ActiveRecord::Schema.define(version: 20150829055811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_trgm"
   enable_extension "hstore"
+  enable_extension "pg_trgm"
+  enable_extension "uuid-ossp"
 
   create_table "changes", force: true do |t|
     t.text     "table_name",                                  null: false
@@ -144,9 +145,11 @@ ActiveRecord::Schema.define(version: 20141021131106) do
     t.text     "district"
     t.text     "regency_city"
     t.text     "province"
+    t.datetime "registered_at",       default: "clock_timestamp()", null: false
   end
 
   add_index "students", ["name"], name: "students_name", using: :btree
+  add_index "students", ["registered_at"], name: "students_registered_at", using: :btree
   add_index "students", ["religion", "sex"], name: "students_religion_sex", using: :btree
 
   create_table "students_pkgs", force: true do |t|
@@ -189,5 +192,12 @@ ActiveRecord::Schema.define(version: 20141021131106) do
     t.text    "password_digest", null: false
     t.text    "email"
   end
+
+  create_table "users_instructors", force: true do |t|
+    t.integer "user_id"
+    t.integer "instructor_id"
+  end
+
+  add_index "users_instructors", ["user_id", "instructor_id"], name: "user_instructor_unique", unique: true, using: :btree
 
 end
