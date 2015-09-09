@@ -102,3 +102,8 @@ INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 14);
 
 UPDATE exams SET modified_by = 'homer';
 UPDATE exams SET published_at = '2015-09-09', published_by = 'homer';
+
+CREATE TRIGGER exams_if_modified 
+ AFTER INSERT OR UPDATE OR DELETE ON exams
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+;
