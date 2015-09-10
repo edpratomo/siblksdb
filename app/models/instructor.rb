@@ -19,4 +19,6 @@ class Instructor < ActiveRecord::Base
   # link instructor to user
   has_one :users_instructor
   has_one :user, through: :users_instructor
+
+  has_many :grade_sheets
 end

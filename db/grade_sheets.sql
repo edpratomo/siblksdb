@@ -41,8 +41,8 @@ CREATE TABLE grade_sheets (
   id SERIAL PRIMARY KEY,
   instructor_id INTEGER REFERENCES instructors(id),
   students_record_id INTEGER REFERENCES students_records(id),
-  exam_id INTEGER REFERENCES exams(id),
-  grade FLOAT NOT NULL DEFAULT 0
+  exams_exam_component_id INTEGER REFERENCES exams_exam_components(id),
+  grade FLOAT
 );
 
 INSERT INTO exams(pkg_id, name) VALUES(1, 'Obesitas');
