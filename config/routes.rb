@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :grades
+
   resources :grade_sheets
 
   get 'report/new_monthly_generic'

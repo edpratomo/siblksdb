@@ -1,7 +1,7 @@
 class StudentsRecord < ActiveRecord::Base
   include TransactionHelper
 
-  has_many :grade_sheets
+  has_many :grades
 
   # :students <= :students_records => :pkgs
   belongs_to :student

@@ -20,5 +20,5 @@ class Instructor < ActiveRecord::Base
   has_one :users_instructor
   has_one :user, through: :users_instructor
 
-  has_many :grade_sheets
+  has_many :grades
 end

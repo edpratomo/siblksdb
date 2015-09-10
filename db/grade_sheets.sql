@@ -36,8 +36,8 @@ CREATE TABLE exams_exam_components (
   exam_component_id INTEGER REFERENCES exam_components(id),
   CONSTRAINT exam_unique UNIQUE(exam_id, exam_component_id)
 );
-  
-CREATE TABLE grade_sheets (
+
+CREATE TABLE grades (
   id SERIAL PRIMARY KEY,
   instructor_id INTEGER REFERENCES instructors(id),
   students_record_id INTEGER REFERENCES students_records(id),
