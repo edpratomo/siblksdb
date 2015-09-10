@@ -3,6 +3,8 @@ class StudentsController < ApplicationController
   before_action :set_current_user, except: [:attending]
   skip_before_action :authorize, only: [:attending]
 
+  filter_resource_access
+
   helper_method :sort_column, :sort_direction
   
   def name_suggestions
