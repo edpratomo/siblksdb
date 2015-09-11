@@ -10,36 +10,31 @@
   </div>
 </div>
 
+<% unless grades.empty? %>
 <table class="table pretty table-hover table-striped">
   <thead>
     <tr>
+      <th>Nama</th>
     <% exam.components.sort_by {|e| e.sequence}.each do |component| %>
       <th><%= component.name %></th>
     <% end %>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="5"></th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% grades.each do |grade| %>
+    <% grades.each do |gr| %>
       <tr>
-        <td><%= grade.students_record.student.name %></td>
-        <td><%= grade.exam.name %></td>
-        <td><%= grade.grade || 'N/A' %>
-        <td><%= link_to 'Show', grade %></td>
-        <td><%= link_to 'Edit', edit_grade_path(grade) %></td>
+        <td><%= gr.students_record.student.name %></td>
+        <% gr.grade.keys.sort {|a,b| a.to_i <=> b.to_i }.each do |component| %>
+        <td><%= gr.grade[component] || 'N/A' %>
+        <% end %>
+        <td><%= link_to 'Edit', edit_grade_path(gr) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+<% end %>
 
 <%= will_paginate grades, renderer: BootstrapPagination::Rails %>
 <br>

@@ -1,7 +1,7 @@
 class StudentsRecord < ActiveRecord::Base
   include TransactionHelper
 
-  has_many :grades
+  has_many :grades # bisa mengulang?
 
   # :students <= :students_records => :pkgs
   belongs_to :student

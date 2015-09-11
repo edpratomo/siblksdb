@@ -1,11 +1,7 @@
 class Grade < ActiveRecord::Base
   belongs_to :instructor
   belongs_to :students_record
-
-  belongs_to :exams_exam_component
-  belongs_to :exam_component, class_name: "ExamsExamComponent", foreign_key: "exams_exam_component_id"
-
-  delegate :exam, :to => :exams_exam_component, :allow_nil => true
+  belongs_to :exam
 
   # filter list
   filterrific(
@@ -24,10 +20,10 @@ class Grade < ActiveRecord::Base
   }
 
   scope :with_exam, ->(exam) {
-    where(:exam_component => ExamsExamComponent.where(exam: exam))
+    where(:exam => exam)
   }
 
-  scope :with_instructor, ->(instructor_id) {
-    where(:instructor_id => instructor_id)
+  scope :with_instructor, ->(instructor) {
+    where(:instructor => instructor)
   }
 end

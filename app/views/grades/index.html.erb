@@ -3,9 +3,9 @@
 <div class="well">
 <%= form_for_filterrific @filterrific do |f| %>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div class="form-group">
-        <label>Ujian</label>
+        <label>Judul Ujian</label>
         <%= f.select :with_exam, @filterrific.select_options[:with_exam],
                      { :include_blank => '- Pilih -' },
                      { :class => 'form-control' }
