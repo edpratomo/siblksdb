@@ -70,7 +70,7 @@ class Student < ActiveRecord::Base
       return false
     end
   end
-    
+
   # filter list
   filterrific(
     default_filter_params: { sorted_by: 'name_asc' },

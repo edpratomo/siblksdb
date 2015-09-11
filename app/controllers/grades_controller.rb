@@ -1,12 +1,32 @@
 class GradesController < ApplicationController
   before_action :set_grade, only: [:show, :edit, :update, :destroy]
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_instructor, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
+
+  filter_resource_access
 
   # GET /grades
   # GET /grades.json
   def index
-    @grades = Grade.all
+    if @instructor
+      @filterrific = initialize_filterrific(
+        Grade,
+        params_for_filterrific(@instructor),
+        :select_options => {
+          with_exam: @instructor.options_for_exam
+        }
+      ) or return
+
+      @grades = Grade.filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
+
+      # for table heading
+      @exam = Exam.find(params[:filterrific][:with_exam]) rescue nil
+
+    else # for non-instructor viewer
+      # if params[:instructor_id] 
+      # else
+      #redirect_to grades_url, notice: 'Grade was successfully destroyed.' }
+    end
   end
 
   # GET /grades/1
@@ -76,5 +96,12 @@ class GradesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_params
       params[:grade]
+    end
+
+    def params_for_filterrific instructor
+      params[:filterrific] ||= {:with_exam => 0}
+      params[:filterrific].tap do |e|
+        e[:with_instructor] = instructor.id
+      end
     end
 end

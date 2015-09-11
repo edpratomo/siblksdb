@@ -15,6 +15,7 @@ authorization do
   role :admin do
     has_permission_on :instructors, :to => :manage
     has_permission_on :users,       :to => :manage
+    has_permission_on :grades,      :to => :read
   end
 
   role :instructor do
