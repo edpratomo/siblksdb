@@ -60,6 +60,9 @@
             <% permitted_to? :read, :grades do %>
               <li class="<%= active_tab_class(grades_path) %>"><%= link_to "Lihat Daftar Nilai", grades_path %></li>
             <% end %>
+            <% permitted_to? :read, :exams do %>
+              <li class="<%= active_tab_class(exams_path) %>"><%= link_to "Formulir Nilai", exams_path %></li>
+            <% end %>
           </ul>
           <ul class="nav nav-sidebar">
             <% permitted_to? :read, :programs do %>
