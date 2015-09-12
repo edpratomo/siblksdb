@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150829055811) do
+ActiveRecord::Schema.define(version: 20150912024930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,43 @@ ActiveRecord::Schema.define(version: 20150829055811) do
 
   add_index "districts", ["code"], name: "districts_code_key", unique: true, using: :btree
   add_index "districts", ["name"], name: "districts_name", using: :btree
+
+  create_table "exam_components", force: true do |t|
+    t.text    "name",            null: false
+    t.integer "sequence",        null: false
+    t.float   "scale",           null: false
+    t.integer "grade_weight_id"
+  end
+
+  create_table "exams", force: true do |t|
+    t.integer  "pkg_id"
+    t.text     "name",         default: "Generic",           null: false
+    t.text     "annotation"
+    t.datetime "created_at",   default: "clock_timestamp()", null: false
+    t.datetime "modified_at",  default: "clock_timestamp()", null: false
+    t.text     "modified_by"
+    t.datetime "published_at"
+    t.text     "published_by"
+  end
+
+  create_table "exams_exam_components", force: true do |t|
+    t.integer "exam_id"
+    t.integer "exam_component_id"
+  end
+
+  add_index "exams_exam_components", ["exam_id", "exam_component_id"], name: "exam_unique", unique: true, using: :btree
+
+  create_table "grade_weights", force: true do |t|
+    t.text  "name",   null: false
+    t.float "weight"
+  end
+
+  create_table "grades", force: true do |t|
+    t.integer "instructor_id"
+    t.integer "students_record_id"
+    t.integer "exam_id"
+    t.hstore  "grade",              default: {}, null: false
+  end
 
   create_table "groups", force: true do |t|
     t.text "name", null: false
