@@ -57,6 +57,11 @@
             <li class="<%= active_tab_class(report_new_disnaker_path, report_create_disnaker_path) %>"><%= link_to "Laporan Pelaksanaan Pelatihan", report_new_disnaker_path %></li>
           </ul>
           <ul class="nav nav-sidebar">
+            <% permitted_to? :read, :grades do %>
+              <li class="<%= active_tab_class(grades_path) %>"><%= link_to "Lihat Daftar Nilai", grades_path %></li>
+            <% end %>
+          </ul>
+          <ul class="nav nav-sidebar">
             <% permitted_to? :read, :programs do %>
               <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
             <% end %>

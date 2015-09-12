@@ -6,7 +6,7 @@ authorization do
   
   # permissions on other roles, such as
   role :sysadmin do
-    [:students, :pkgs, :schedules, :users, :settings, :instructors, :grades].each do |controller|
+    [:students, :programs, :pkgs, :schedules, :users, :settings, :instructors, :grades].each do |controller|
       has_permission_on controller, :to => :manage
     end
     has_permission_on :changes, :to => :read

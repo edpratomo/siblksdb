@@ -1,6 +1,8 @@
 class ProgramsController < ApplicationController
   before_action :set_program, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_sysadmin, only: [:new, :create, :edit, :update, :destroy]
+
+  # before_action :authorize_sysadmin, only: [:new, :create, :edit, :update, :destroy]
+  filter_resource_access
 
   # GET /programs
   # GET /programs.json
