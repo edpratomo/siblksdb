@@ -5,6 +5,7 @@
     <tr>
       <th>Nama Lengkap</th>
       <th>Nick</th>
+      <th>Program</th>
       <th style="text-align:center;">Kapasitas</th>
       <th colspan="4"></th>
     </tr>
@@ -15,6 +16,7 @@
       <tr>
         <td><%= instructor.name %></td>
         <td><%= instructor.nick %></td>
+        <td><%= instructor.programs.sort_by {|e| e.id}.map {|e| e.program}.join(", ") %>
         <td style="text-align:center;"><%= instructor.capacity %></td>
         <td><%= link_to 'Show', instructor %></td>
         <td><%= link_to 'Edit', edit_instructor_path(instructor) %></td>
