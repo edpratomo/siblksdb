@@ -22,8 +22,15 @@ class Instructor < ActiveRecord::Base
 
   has_many :grades
 
-  def options_for_exam
-    Exam.joins(:pkg).where("pkgs.program_id" => programs).order("pkgs.program_id", "pkgs.level").
-      map {|ex| [ "#{ex.pkg.pkg} - Level #{ex.pkg.level} (#{ex.name})", ex.id ] }
+  def options_for_exam published=true
+    if published
+      Exam.joins(:pkg).where("pkgs.program_id" => programs).where.not('published_by' => nil).
+        order("pkgs.program_id", "pkgs.level").
+        map {|ex| [ "#{ex.pkg.pkg} - Level #{ex.pkg.level} (#{ex.name})", ex.id ] }
+    else
+      Exam.joins(:pkg).where("pkgs.program_id" => programs).
+        order("pkgs.program_id", "pkgs.level").
+        map {|ex| [ "#{ex.pkg.pkg} - Level #{ex.pkg.level} (#{ex.name})", ex.id ] }
+    end
   end
 end

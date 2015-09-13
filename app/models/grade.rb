@@ -3,6 +3,17 @@ class Grade < ActiveRecord::Base
   belongs_to :students_record
   belongs_to :exam
 
+  def ordered_grade components
+    if grade.empty?
+      components.map {|e| 'N/A'}
+    else
+      orders = components.inject({}) {|m,o| m[o.id.to_s] = o.sequence; m}
+      # fill in gaps
+      grade_dup = components.inject(grade) {|m,o| m[o.id.to_s] ||= '-'; m}
+      grade_dup.keys.sort {|a,b| orders[a] <=> orders[b]}.map {|e| grade_dup[e]}
+    end
+  end
+
   # filter list
   filterrific(
     default_filter_params: { sorted_by: 'id_asc', with_exam: 0 },

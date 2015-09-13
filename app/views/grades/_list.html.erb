@@ -27,8 +27,8 @@
     <% grades.each do |gr| %>
       <tr>
         <td><%= gr.students_record.student.name %></td>
-        <% gr.grade.keys.sort {|a,b| a.to_i <=> b.to_i }.each do |component| %>
-        <td><%= gr.grade[component] || 'N/A' %>
+        <% gr.ordered_grade(exam.components).each do |component_grade| %>
+        <td><%= component_grade %>
         <% end %>
         <td><%= link_to 'Edit', edit_grade_path(gr) %></td>
       </tr>

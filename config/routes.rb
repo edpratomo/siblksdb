@@ -2,7 +2,12 @@ Rails.application.routes.draw do
 
   resources :exams
 
-  resources :grades
+  resources :grades do
+    member do
+      get 'edit_students'
+      patch 'update_students'
+    end
+  end
 
   get 'report/new_monthly_generic'
   
