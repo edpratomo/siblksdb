@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20150912024930) do
     t.integer  "pkg_id"
     t.text     "name",         default: "Generic",           null: false
     t.text     "annotation"
+    t.datetime "expired_at"
     t.datetime "created_at",   default: "clock_timestamp()", null: false
     t.datetime "modified_at",  default: "clock_timestamp()", null: false
     t.text     "modified_by"
@@ -73,10 +74,13 @@ ActiveRecord::Schema.define(version: 20150912024930) do
   end
 
   create_table "grades", force: true do |t|
-    t.integer "instructor_id"
-    t.integer "students_record_id"
-    t.integer "exam_id"
-    t.hstore  "grade",              default: {}, null: false
+    t.integer  "instructor_id"
+    t.integer  "students_record_id"
+    t.integer  "exam_id"
+    t.hstore   "grade",              default: {},                  null: false
+    t.datetime "created_at",         default: "clock_timestamp()", null: false
+    t.datetime "modified_at",        default: "clock_timestamp()", null: false
+    t.text     "modified_by"
   end
 
   create_table "groups", force: true do |t|

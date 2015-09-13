@@ -1,6 +1,6 @@
 class CreateGrades < ActiveRecord::Migration
   def up
-    files = %w(grade_sheets.sql)
+    files = %w(grade_sheets.sql trigger_grade_sheets.sql)
     files.each do |fn|
       execute File.read(File.join(Rails.root, "db", fn))
     end

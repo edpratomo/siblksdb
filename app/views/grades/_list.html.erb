@@ -10,7 +10,8 @@
   </div>
 </div>
 
-<% unless grades.empty? %>
+<%# unless grades.empty? %>
+<% if grades.size > 0 and exam %>
 <table class="table pretty table-hover table-striped">
   <thead>
     <tr>

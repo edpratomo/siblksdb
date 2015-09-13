@@ -5,6 +5,7 @@ CREATE TABLE exams(
   pkg_id INTEGER REFERENCES pkgs(id),
   name TEXT NOT NULL DEFAULT 'Generic',
   annotation TEXT,
+  expired_at TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT,
@@ -42,7 +43,10 @@ CREATE TABLE grades (
   instructor_id INTEGER REFERENCES instructors(id),
   students_record_id INTEGER REFERENCES students_records(id),
   exam_id INTEGER REFERENCES exams(id),
-  grade hstore NOT NULL DEFAULT ''
+  grade hstore NOT NULL DEFAULT '',
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_by TEXT
 );
 
 INSERT INTO exams(pkg_id, name) VALUES(1, 'Obesitas');
@@ -100,10 +104,5 @@ INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 12);
 INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 13);
 INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 14);
 
-UPDATE exams SET modified_by = 'homer';
+-- publish all exams
 UPDATE exams SET published_at = '2015-09-09', published_by = 'homer';
-
-CREATE TRIGGER exams_if_modified 
- AFTER INSERT OR UPDATE OR DELETE ON exams
-  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
-;
