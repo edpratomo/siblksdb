@@ -19,7 +19,6 @@
     <% exam.components.sort_by {|e| e.sequence}.each do |component| %>
       <th><%= component.name %></th>
     <% end %>
-      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -28,9 +27,10 @@
       <tr>
         <td><%= gr.students_record.student.name %></td>
         <% gr.ordered_grade(exam.components).each do |component_grade| %>
-        <td><%= component_grade %>
+        <td>
+          <div class="edit" id="<%= component_grade.id %>"><%= component_grade.value %></div>
+        </td>
         <% end %>
-        <td><%= link_to 'Edit', edit_grade_path(gr) %></td>
       </tr>
     <% end %>
   </tbody>
@@ -39,3 +39,14 @@
 
 <%= will_paginate grades, renderer: BootstrapPagination::Rails %>
 <br>
+<script type="text/javascript">
+$(document).ready(function() {
+<% grades.each do |gr| %>
+  $('.edit').editable('<%= update_component_grade_url(gr) %>', {
+    id: 'component_id',
+    name: 'component_value',
+    submitdata: { _method: 'patch' } // required for rails
+  });
+<% end %>
+});
+</script>

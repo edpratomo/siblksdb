@@ -25,6 +25,7 @@
 //= require bootstrap-datepicker/core
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.id.js
 //= require filterrific/filterrific-jquery
+//= require jquery.jeditable
 
 $(function(){
 

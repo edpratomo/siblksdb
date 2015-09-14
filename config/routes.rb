@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     member do
       get 'edit_students'
       patch 'update_students'
+      patch 'update_component'
     end
   end
 
