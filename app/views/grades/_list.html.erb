@@ -12,7 +12,7 @@
 
 <%# unless grades.empty? %>
 <% if grades.size > 0 and exam %>
-<table class="table pretty table-hover table-striped">
+<table id="listing_grade" class="table pretty table-hover table-striped">
   <thead>
     <tr>
       <th>Nama</th>
@@ -39,14 +39,28 @@
 
 <%= will_paginate grades, renderer: BootstrapPagination::Rails %>
 <br>
+
 <script type="text/javascript">
 $(document).ready(function() {
 <% grades.each do |gr| %>
   $('.edit').editable('<%= update_component_grade_url(gr) %>', {
     id: 'component_id',
     name: 'component_value',
+    indicator : 'Saving...',
+    callback : function(value, settings) {
+      // console.log(this);
+      $(this).parents("td").next("td").find("div").click();
+    },
     submitdata: { _method: 'patch' } // required for rails
   });
 <% end %>
+});
+
+$("#listing_grade tr td div").bind('keydown', function(event) {
+  if(event.keyCode == 9){ //for tab key
+    var currentDiv = event.target;
+    $(currentDiv).parents("td").next("td").find("div").click();
+    return false;
+  }
 });
 </script>
