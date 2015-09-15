@@ -4,8 +4,6 @@ Rails.application.routes.draw do
 
   resources :grades do
     member do
-      get 'edit_students'
-      patch 'update_students'
       patch 'update_component'
     end
   end

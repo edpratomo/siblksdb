@@ -4,9 +4,10 @@ class Instructor < ActiveRecord::Base
   validates :name, presence: true
   validates :nick, presence: true
   
-  # :instructors <= :programs_instructors => :programs
+  # :instructors <= :programs_instructors => :programs => :pkgs
   has_many :programs_instructors
   has_many :programs, through: :programs_instructors
+  has_many :pkgs, through: :programs
 
   # :instructors <= :instructors_schedules => :schedules
   has_many :instructors_schedules
@@ -32,5 +33,9 @@ class Instructor < ActiveRecord::Base
         order("pkgs.program_id", "pkgs.level").
         map {|ex| [ "#{ex.pkg.pkg} - Level #{ex.pkg.level} (#{ex.name})", ex.id ] }
     end
+  end
+
+  def options_for_pkg
+    pkgs.map {|e| [ "#{e.pkg.pkg} - Level #{e.pkg.level}", e.id ] }
   end
 end

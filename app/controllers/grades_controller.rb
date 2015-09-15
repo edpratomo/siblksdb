@@ -5,14 +5,6 @@ class GradesController < ApplicationController
 
   filter_resource_access
 
-  def edit_students
-  
-  end
-  
-  def update_students
-  
-  end
-
   # GET /grades
   # GET /grades.json
   def index
@@ -44,7 +36,16 @@ class GradesController < ApplicationController
 
   # GET /grades/new
   def new
-    @grade = Grade.new
+    # @grade = Grade.new
+    @student_filterrific = initialize_filterrific(
+        Student,
+        params_for_student_filterrific(@instructor),
+        :select_options => {
+          with_pkg: @instructor.options_for_pkg # pkgs taught by this instructor
+        }
+    ) or return
+
+    @students = Student.filterrific_find(@student_filterrific).paginate(page: params[:page], per_page: 10)
   end
 
   # GET /grades/1/edit
@@ -72,10 +73,22 @@ class GradesController < ApplicationController
     component_value = params[:component_value]
 
     respond_to do |format|
-      if @grade.update({:grade => @grade.grade.merge({component_id => component_value})})
-        format.html { render :text => component_value }
+      current_grade = @grade.grade
+      unless component_value =~ /^\d+$/
+        format.html {
+          render :text => (current_grade[component_id] || '-'),
+                 :status => :unprocessable_entity
+        }
       else
-        render :text => (@grade.grade[component_id] || '-'), :status => :unprocessable_entity
+        if (current_grade[component_id] and current_grade[component_id] == component_value) or
+           @grade.update({:grade => current_grade.merge({component_id => component_value})})
+          format.html { render :text => component_value }
+        else
+          format.html {
+            render :text => (current_grade[component_id] || '-'),
+                   :status => :unprocessable_entity
+          }
+        end
       end
     end
   end
@@ -121,6 +134,13 @@ class GradesController < ApplicationController
 
     def params_for_filterrific instructor
       params[:filterrific] ||= {:with_exam => 0}
+      params[:filterrific].tap do |e|
+        e[:with_instructor] = instructor.id
+      end
+    end
+
+    def params_for_student_filterrific instructor
+      params[:filterrific] ||= {}
       params[:filterrific].tap do |e|
         e[:with_instructor] = instructor.id
       end
