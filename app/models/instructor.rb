@@ -36,6 +36,6 @@ class Instructor < ActiveRecord::Base
   end
 
   def options_for_pkg
-    pkgs.map {|e| [ "#{e.pkg.pkg} - Level #{e.pkg.level}", e.id ] }
+    pkgs.map {|e| [ "#{e.pkg} - Level #{e.level}", e.id ] }
   end
 end

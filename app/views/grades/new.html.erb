@@ -1,5 +1,28 @@
-<h1>New grade</h1>
+<h1>Edit peserta ujian</h1>
 
-<%= render 'form' %>
+<div class="well">
+<%= form_for_filterrific @student_filterrific do |f| %>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Kursus</label>
+        <%= f.select :with_current_pkg, @student_filterrific.select_options[:with_pkg],
+                     { :include_blank => '- Pilih -' },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+  </div>
+<% end %>
+</div>
 
-<%= link_to 'Back', grades_path %>
+<%= form_tag(grades_path, {class: "form-horizontal", role: "form"}) do %>
+<div id="filterrific_results">
+  <%= render :partial => 'grades/list_students',
+             :locals => { :students => @students, :instructor => @instructor }
+  %>
+</div>
+  <div class="actions">
+    <%#= f.submit %>
+  </div>
+<% end %>

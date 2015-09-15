@@ -79,7 +79,7 @@ class Student < ActiveRecord::Base
       :with_religion,
       :with_registered_at_gt,
       :with_registered_at_lt,
-      :with_pkg,
+      :with_current_pkg,
       :with_instructor
     ]
   )
@@ -104,8 +104,8 @@ class Student < ActiveRecord::Base
     where("students.registered_at AT TIME ZONE 'Asia/Jakarta' < ?", ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
   }
 
-  scope :with_pkg, ->(pkg) {
-    joins(:students_pkgs).where("students_pkgs.pkg_id" => pkg).uniq
+  scope :with_current_pkg, ->(pkg) {
+    joins(:students_pkgs).where("students_pkgs.pkg_id" => pkg)
   }
 
   scope :with_instructor, ->(instructor) {
@@ -127,6 +127,12 @@ class Student < ActiveRecord::Base
 
   def decorated_created_at
     created_at.to_date.to_s(:long)
+  end
+
+  def current_exams pkg
+    sr = StudentsRecord.find_by(pkg: [*pkg], student: self, status: "active")
+    return [] unless sr
+    Grade.where(students_record: sr).map {|e| e.exam}
   end
 
   private

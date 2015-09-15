@@ -1,0 +1,36 @@
+<div class='well well-small'>
+  <div class='pull-right' data-intro='Reset the filter settings to defaults.' data-position='bottom'>
+    <%= link_to "Reset filters", reset_filterrific_url, :class => 'btn btn-default btn-sm' %>
+  </div>
+  <div>
+    <%= page_entries_info students, :model => 'student' %>
+  </div>
+  <div>
+    <%= render_filterrific_spinner %>
+  </div>
+</div>
+
+<% if students.size > 0 %>
+<table id="listing_student" class="table pretty table-hover table-striped">
+  <thead>
+    <tr>
+      <th colspan="1"></th>
+      <th>Nama</th>
+      <th>Judul Soal</th>
+    </tr>
+  </thead>
+
+  <tbody>
+   <% students.each do |student| %>
+    <tr>
+      <td></td>
+      <td><%= student.name %></td>
+      <td><%= student.current_exams(instructor.pkgs).map{|e| "#{e.pkg.pkg} - Level #{e.pkg.level} : #{e.name}"}.join(', ') %></td>
+    </tr>
+   <% end %>
+  </tbody>
+</table>
+<% end %>
+
+<%= will_paginate students, renderer: BootstrapPagination::Rails %>
+<br>

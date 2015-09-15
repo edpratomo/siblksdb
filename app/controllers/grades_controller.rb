@@ -1,6 +1,6 @@
 class GradesController < ApplicationController
   before_action :set_grade, only: [:show, :edit, :update, :update_component, :destroy]
-  before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy, :edit_students, :update_students]
+  before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
 
   filter_resource_access

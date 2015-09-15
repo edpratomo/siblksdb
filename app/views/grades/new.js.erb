@@ -1,0 +1,6 @@
+<% js = escape_javascript(
+  render(
+    partial: 'grades/list_students', 
+    locals: { students: @students, instructor: @instructor })
+) %>
+$("#filterrific_results").html("<%= js %>");
