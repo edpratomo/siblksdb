@@ -1,13 +1,13 @@
-<h1>Edit peserta ujian</h1>
+<h2>Edit peserta ujian</h2>
 
 <div class="well">
 <%= form_for_filterrific @student_filterrific do |f| %>
   <div class="row">
     <div class="col-md-4">
       <div class="form-group">
-        <label>Kursus</label>
+        <label>Tampilkan siswa yang mengikuti kursus</label>
         <%= f.select :with_current_pkg, @student_filterrific.select_options[:with_pkg],
-                     { :include_blank => '- Pilih -' },
+                     { :include_blank => '- Semua -' },
                      { :class => 'form-control' }
         %>
       </div>
@@ -16,13 +16,20 @@
 <% end %>
 </div>
 
-<%= form_tag(grades_path, {class: "form-horizontal", role: "form"}) do %>
+<%= form_tag(grades_path, {class: "form-inline", role: "form"}) do %>
+  <div class="well" style="background:#99CCFF">
+    <%# <legend>Memilih Soal untuk Peserta Ujian</legend>%>
+    <div class="form-group">
+      <%= label_tag :exam, "Pilih soal untuk peserta ujian", style: "padding-right:10px" %>
+        <%= select_tag :exam, options_for_select(@instructor.options_for_exam), 
+                     { :prompt => '- Judul soal -', class: "form-control" } %>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </div>
+
 <div id="filterrific_results">
   <%= render :partial => 'grades/list_students',
              :locals => { :students => @students, :instructor => @instructor }
   %>
 </div>
-  <div class="actions">
-    <%#= f.submit %>
-  </div>
 <% end %>
