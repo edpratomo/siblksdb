@@ -39,8 +39,8 @@ class GradesController < ApplicationController
     # @grade = Grade.new
     @grades = []
     @student_filterrific = initialize_filterrific(
-        Student,
-        params_for_student_filterrific(@instructor),
+        Student.where(instructor: @instructor),
+        params[:filterrific],
         :select_options => {
           sorted_by: Student.options_for_sorted_by,
           with_pkg: @instructor.options_for_pkg # pkgs taught by this instructor
@@ -48,6 +48,8 @@ class GradesController < ApplicationController
     ) or return
 
     @students = Student.filterrific_find(@student_filterrific).paginate(page: params[:page], per_page: 10)
+    store_location
+
   end
 
   # GET /grades/1/edit
@@ -74,11 +76,10 @@ class GradesController < ApplicationController
     respond_to do |format|
       # if @grade.save
       if true
-        format.html { 
-          redirect_to new_grade_url("filterrific[with_current_pkg]" => params[:hfield]), 
-                      notice: 'Grade(s) was successfully created.'
+        format.html {
+          redirect_back_or_default(new_grade_url)
+          # redirect_to new_grade_url, notice: 'Grade(s) was successfully created.'
         }
-        # format.html { redirect_to @grade, notice: 'Grade was successfully created.' }
         format.json { render :show, status: :created, location: @grade }
       else
         format.html { render :new }
@@ -158,11 +159,12 @@ class GradesController < ApplicationController
       end
     end
 
-    def params_for_student_filterrific instructor
-      params[:filterrific] ||= {}
-      params[:filterrific].tap do |e|
-        e[:sorted_by] = 'name_asc'
-        e[:with_instructor] = instructor.id
-      end
+    # http://stackoverflow.com/questions/2139996/how-to-redirect-to-previous-page-in-ruby-on-rails
+    def store_location
+      session[:return_to] = request.fullpath if request.get? and controller_name != "user_sessions" and controller_name != "sessions"
+    end
+  
+    def redirect_back_or_default(default)
+      redirect_to(session[:return_to] || default)
     end
 end
