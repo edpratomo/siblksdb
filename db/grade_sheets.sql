@@ -42,11 +42,13 @@ CREATE TABLE grades (
   id SERIAL PRIMARY KEY,
   instructor_id INTEGER REFERENCES instructors(id),
   students_record_id INTEGER REFERENCES students_records(id),
-  exam_id INTEGER REFERENCES exams(id),
+  exam_id INTEGER NOT NULL REFERENCES exams(id),
   grade hstore NOT NULL DEFAULT '',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
-  modified_by TEXT
+  modified_by TEXT,
+  -- no repeated / duplicate exam for the same students_record
+  CONSTRAINT record_exam_unique UNIQUE(students_record_id, exam_id)
 );
 
 INSERT INTO exams(pkg_id, name) VALUES(1, 'Obesitas');

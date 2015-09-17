@@ -3,6 +3,8 @@ class Grade < ActiveRecord::Base
   belongs_to :students_record
   belongs_to :exam
 
+  validates_uniqueness_of :exam, scope: :students_record
+
   def ordered_grade components
     orders = components.inject({}) {|m,o| m[o.id.to_s] = o.sequence; m}
     if grade.empty?
@@ -11,7 +13,6 @@ class Grade < ActiveRecord::Base
       # fill in gaps
       grade_dup = components.inject(grade) {|m,o| m[o.id.to_s] ||= '-'; m}
       grade_dup.keys.sort {|a,b| orders[a] <=> orders[b]}.map do |k|
-        #grade_dup[k]
         OpenStruct.new(id: k, value: grade_dup[k])
       end
     end

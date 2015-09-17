@@ -1,7 +1,22 @@
 <h2>Edit peserta ujian</h2>
 
+<% @grades.each do |grade| %>
+  <% if grades.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(grade.errors.count, "error") %> prohibited this grade from being saved:</h2>
+
+      <ul>
+      <% grade.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% end %>
+
 <div class="well">
 <%= form_for_filterrific @student_filterrific do |f| %>
+
   <div class="row">
     <div class="col-md-4">
       <div class="form-group">
@@ -17,11 +32,11 @@
 </div>
 
 <%= form_tag(grades_path, {class: "form-inline", role: "form"}) do %>
+  <%= hidden_field_tag 'hfield' %>
   <div class="well" style="background:#99CCFF">
-    <%# <legend>Memilih Soal untuk Peserta Ujian</legend>%>
     <div class="form-group">
       <%= label_tag :exam, "Pilih soal untuk peserta ujian", style: "padding-right:10px" %>
-        <%= select_tag :exam, options_for_select(@instructor.options_for_exam), 
+        <%= select_tag :exam_id, options_for_select(@instructor.options_for_exam), 
                      { :prompt => '- Judul soal -', class: "form-control" } %>
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
@@ -33,3 +48,14 @@
   %>
 </div>
 <% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#filterrific_with_current_pkg").change(function() {
+//    alert("current_pkg: " + this.value);
+    var hfield = document.getElementById('hfield');
+    hfield.value = this.value;
+    alert("hfield: " + hfield.value);
+  });
+});
+</script>

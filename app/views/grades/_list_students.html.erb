@@ -34,3 +34,11 @@
 
 <%= will_paginate students, renderer: BootstrapPagination::Rails %>
 <br>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#select_all").change(function(){
+    $(":checkbox").prop('checked', $(this).prop("checked"));
+  });
+});
+</script>

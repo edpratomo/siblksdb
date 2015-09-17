@@ -37,10 +37,12 @@ class GradesController < ApplicationController
   # GET /grades/new
   def new
     # @grade = Grade.new
+    @grades = []
     @student_filterrific = initialize_filterrific(
         Student,
         params_for_student_filterrific(@instructor),
         :select_options => {
+          sorted_by: Student.options_for_sorted_by,
           with_pkg: @instructor.options_for_pkg # pkgs taught by this instructor
         }
     ) or return
@@ -55,11 +57,28 @@ class GradesController < ApplicationController
   # POST /grades
   # POST /grades.json
   def create
-    @grade = Grade.new(grade_params)
+    # @grade = Grade.new(grade_params)
+    exam = Exam.find(params[:exam_id])
+
+    @grades = params[:student_ids].map do |student_id|
+      # XXX should be in transaction?
+      students_record = StudentsRecord.find_by(pkg: exam.pkg, student: student_id, status: "active")
+      Grade.new(students_record: students_record, instructor: @instructor, exam: exam)
+    end
+
+    logger.debug("grades: #{@grades.size}")
+    @grades.each do |grade|
+      grade.save
+    end
 
     respond_to do |format|
-      if @grade.save
-        format.html { redirect_to @grade, notice: 'Grade was successfully created.' }
+      # if @grade.save
+      if true
+        format.html { 
+          redirect_to new_grade_url("filterrific[with_current_pkg]" => params[:hfield]), 
+                      notice: 'Grade(s) was successfully created.'
+        }
+        # format.html { redirect_to @grade, notice: 'Grade was successfully created.' }
         format.json { render :show, status: :created, location: @grade }
       else
         format.html { render :new }
@@ -142,6 +161,7 @@ class GradesController < ApplicationController
     def params_for_student_filterrific instructor
       params[:filterrific] ||= {}
       params[:filterrific].tap do |e|
+        e[:sorted_by] = 'name_asc'
         e[:with_instructor] = instructor.id
       end
     end

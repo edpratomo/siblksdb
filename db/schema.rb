@@ -76,12 +76,14 @@ ActiveRecord::Schema.define(version: 20150912024930) do
   create_table "grades", force: true do |t|
     t.integer  "instructor_id"
     t.integer  "students_record_id"
-    t.integer  "exam_id"
+    t.integer  "exam_id",                                          null: false
     t.hstore   "grade",              default: {},                  null: false
     t.datetime "created_at",         default: "clock_timestamp()", null: false
     t.datetime "modified_at",        default: "clock_timestamp()", null: false
     t.text     "modified_by"
   end
+
+  add_index "grades", ["students_record_id", "exam_id"], name: "record_exam_unique", unique: true, using: :btree
 
   create_table "groups", force: true do |t|
     t.text "name", null: false
