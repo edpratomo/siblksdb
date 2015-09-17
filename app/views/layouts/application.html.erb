@@ -18,7 +18,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to image_tag("smaller-logo2.png", :alt => "BLK Don Bosco logo", style: "margin-top: -10px;"), '#', class: "navbar-brand" %> 
+          <%= link_to image_tag("smaller-logo2.png", :alt => "BLK Don Bosco logo", style: "margin-top: -10px;"), '#', class: "navbar-brand" %>
+          <% if Rails.env.staging? %><%= image_tag("beta-icon.png", style: "display:block;margin-top:10px") %><% end %>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
