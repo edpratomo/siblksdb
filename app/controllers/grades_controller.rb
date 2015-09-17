@@ -11,16 +11,18 @@ class GradesController < ApplicationController
     if @instructor
       @filterrific = initialize_filterrific(
         Grade,
-        params_for_filterrific(@instructor),
+        params[:filterrific],
         :select_options => {
           with_exam: @instructor.options_for_exam
         }
       ) or return
 
-      @grades = Grade.filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
+      @grades = Grade.with_instructor(@instructor).
+                filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
 
       # for table heading
-      @exam = Exam.find(params[:filterrific][:with_exam]) rescue nil
+      # @exam = Exam.find(params[:filterrific][:with_exam]) rescue nil
+      @exam = Exam.find(@filterrific.to_hash.fetch("with_exam")) unless @grades.empty?
 
     else # for non-instructor viewer
       # if params[:instructor_id] 
@@ -39,7 +41,7 @@ class GradesController < ApplicationController
     # @grade = Grade.new
     @grades = []
     @student_filterrific = initialize_filterrific(
-        Student.where(instructor: @instructor),
+        Student,
         params[:filterrific],
         :select_options => {
           sorted_by: Student.options_for_sorted_by,
@@ -47,9 +49,13 @@ class GradesController < ApplicationController
         }
     ) or return
 
-    @students = Student.filterrific_find(@student_filterrific).paginate(page: params[:page], per_page: 10)
-    store_location
+    @students = Student.with_instructor(@instructor).
+                filterrific_find(@student_filterrific).
+                sorted_by('name_asc'). # hard coded at the moment
+                paginate(page: params[:page], per_page: 10)
 
+    # logger.debug("student_filterrific #{@student_filterrific.to_hash.keys.join(', ')}")
+    store_location
   end
 
   # GET /grades/1/edit
@@ -150,13 +156,6 @@ class GradesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_params
       params[:grade]
-    end
-
-    def params_for_filterrific instructor
-      params[:filterrific] ||= {:with_exam => 0}
-      params[:filterrific].tap do |e|
-        e[:with_instructor] = instructor.id
-      end
     end
 
     # http://stackoverflow.com/questions/2139996/how-to-redirect-to-previous-page-in-ruby-on-rails
