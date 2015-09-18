@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :grades do
     member do
       patch 'update_component'
+      get 'options_for_exam'
     end
   end
 

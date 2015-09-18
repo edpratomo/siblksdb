@@ -48,3 +48,29 @@
   %>
 </div>
 <% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#filterrific_with_current_pkg").change(function() {
+    alert("current_pkg: " + this.value);
+  });
+
+  function populate_options_for_exam(pkg_id) {
+    jQuery.ajax({
+      url: "/grades/" + pkg_id + "/options_for_exam.json",
+      type: "GET",
+      dataType: "json",
+      error: function(XMLHttpRequest, errorTextStatus, error) {
+        alert("Failed: " + errorTextStatus + " ;" + error);
+      },
+      success: function(data) {
+        for (var i in data) {
+          var id = data[i].id;
+          var title = data[i].title;
+          $("#exam_id").append(new Option(title, id));
+        }
+      }
+    });
+  }
+});
+</script>

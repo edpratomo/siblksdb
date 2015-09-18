@@ -5,6 +5,10 @@ class GradesController < ApplicationController
 
   filter_resource_access
 
+  def options_for_exam
+    @options = @instructor.options_for_exam
+  end
+
   # GET /grades
   # GET /grades.json
   def index
