@@ -46,7 +46,7 @@ privileges do
   # default privilege hierarchies to facilitate RESTful Rails apps
   privilege :manage, :includes => [:create, :read, :delete,
                                    :update, :update_schedule, :update_component]
-  privilege :read, :includes => [:index, :show, :options_for_exam]
+  privilege :read, :includes => [:index, :show, :options_for_exam, :name_suggestions]
   privilege :create, :includes => :new
   privilege :update, :includes => :edit
   privilege :update_schedule, :includes => :edit_schedule

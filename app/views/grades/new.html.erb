@@ -33,6 +33,9 @@
 
 <%= form_tag(grades_path, {class: "form-inline", role: "form"}) do %>
   <%= hidden_field_tag 'hfield' %>
+  <div id="exam_not_available" class="alert alert-danger">
+    <strong>Error:</strong> Belum ada judul soal yang terdaftar untuk kursus ini.
+  </div>
   <div id="choose_exam" class="well" style="background:#99CCFF">
     <div class="form-group">
       <%= label_tag :exam, "Pilih soal untuk peserta ujian", style: "padding-right:10px" %>
@@ -52,15 +55,20 @@
 <script type="text/javascript">
 $(document).ready(function() {
   console.log("with_current_pkg: " + $("#filterrific_with_current_pkg").val());
+
+  $("#exam_not_available").hide();
+
   if ($("#filterrific_with_current_pkg").val() == "") {
     $("#choose_exam").hide();
+  } else {
+    populate_options_for_exam($("#filterrific_with_current_pkg").val());
   }
 
   $("#filterrific_with_current_pkg").change(function() {
     if (this.value != "") {
       populate_options_for_exam(this.value);
-      $("#choose_exam").show();
     } else {
+      $("#exam_not_available").hide();
       $("#choose_exam").hide();
     }
   });
@@ -80,6 +88,13 @@ $(document).ready(function() {
           var id = data[i][1];
           var title = data[i][0];
           $("#exam_id").append(new Option(title, id));
+        }
+        if (data.length > 0) {
+          $("#exam_not_available").hide();
+          $("#choose_exam").show();
+        } else {
+          $("#exam_not_available").show();
+          $("#choose_exam").hide();
         }
       }
     });

@@ -3,7 +3,8 @@ class GradesController < ApplicationController
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
 
-  filter_resource_access
+  # filter_resource_access
+  filter_access_to :all, :except => :options_for_exam
 
   def options_for_exam
     @options = @instructor.options_for_exam(params[:id])
