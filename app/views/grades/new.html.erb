@@ -33,10 +33,10 @@
 
 <%= form_tag(grades_path, {class: "form-inline", role: "form"}) do %>
   <%= hidden_field_tag 'hfield' %>
-  <div class="well" style="background:#99CCFF">
+  <div id="choose_exam" class="well" style="background:#99CCFF">
     <div class="form-group">
       <%= label_tag :exam, "Pilih soal untuk peserta ujian", style: "padding-right:10px" %>
-        <%= select_tag :exam_id, options_for_select(@instructor.options_for_exam), 
+        <%= select_tag :exam_id, nil, 
                      { :prompt => '- Judul soal -', class: "form-control" } %>
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
@@ -51,8 +51,19 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+  console.log("with_current_pkg: " + $("#filterrific_with_current_pkg").val());
+  if ($("#filterrific_with_current_pkg").val() == "") {
+    $("#choose_exam").hide();
+  }
+
   $("#filterrific_with_current_pkg").change(function() {
-    alert("current_pkg: " + this.value);
+    // alert("current_pkg: " + this.value);
+    if (this.value != "") {
+      populate_options_for_exam(this.value);
+      $("#choose_exam").show();
+    } else {
+      $("#choose_exam").hide();
+    }
   });
 
   function populate_options_for_exam(pkg_id) {
@@ -60,13 +71,15 @@ $(document).ready(function() {
       url: "/grades/" + pkg_id + "/options_for_exam.json",
       type: "GET",
       dataType: "json",
+      async: true,
       error: function(XMLHttpRequest, errorTextStatus, error) {
         alert("Failed: " + errorTextStatus + " ;" + error);
       },
       success: function(data) {
+        $("#exam_id").find("option").remove().end();
         for (var i in data) {
-          var id = data[i].id;
-          var title = data[i].title;
+          var id = data[i][1]; // data[i].id;
+          var title = data[i][0]; // data[i].title;
           $("#exam_id").append(new Option(title, id));
         }
       }
