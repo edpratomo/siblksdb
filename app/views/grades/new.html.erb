@@ -57,7 +57,6 @@ $(document).ready(function() {
   }
 
   $("#filterrific_with_current_pkg").change(function() {
-    // alert("current_pkg: " + this.value);
     if (this.value != "") {
       populate_options_for_exam(this.value);
       $("#choose_exam").show();
@@ -78,8 +77,8 @@ $(document).ready(function() {
       success: function(data) {
         $("#exam_id").find("option").remove().end();
         for (var i in data) {
-          var id = data[i][1]; // data[i].id;
-          var title = data[i][0]; // data[i].title;
+          var id = data[i][1];
+          var title = data[i][0];
           $("#exam_id").append(new Option(title, id));
         }
       }
