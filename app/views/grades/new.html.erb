@@ -36,7 +36,7 @@
   <div style="display:none" id="exam_not_available" class="alert alert-danger">
     <strong>Error:</strong> Belum ada judul soal yang terdaftar untuk kursus ini.
   </div>
-  <div style="display:none" id="choose_exam" class="well" style="background:#99CCFF">
+  <div id="choose_exam" class="well" style="background:#99CCFF;display:none">
     <div class="form-group">
       <%= label_tag :exam, "Pilih soal untuk peserta ujian", style: "padding-right:10px" %>
         <%= select_tag :exam_id, nil, 
