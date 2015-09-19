@@ -5,18 +5,8 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
-  <style>
-  html {
-    background: url(/images/dark-wall.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-  </style>
 </head>
 <body>
-
     <div class="container">
       <% if flash[:alert] %>
         <p id="notice" class="has-error"><%= flash[:alert] %></p>
@@ -37,3 +27,53 @@
 
 </body>
 </html>
+<script type="text/javascript">
+$(function() {
+  var current = 0;
+  var body = $('body');
+  var backgrounds = ['url(/images/background/dark-wall.jpg)', 
+                     'url(/images/background/depan-gedung.jpg)',
+                     'url(/images/background/computer-course.jpg)',
+                     'url(/images/background/get-to-know.jpg)',
+                     'url(/images/background/learn-active.jpg)',
+                     'url(/images/background/motorbike-maintenance.jpg)'
+                    ];
+
+  function nextBackground() {
+    body.css({
+      'background-image': backgrounds[current = ++current % backgrounds.length],
+      'background-repeat': 'no-repeat',
+      'background-attachment': 'fixed',
+      'background-position': 'center',
+      '-webkit-background-size': 'cover',
+      '-moz-background-size': 'cover',
+      '-o-background-size': 'cover',
+      'background-size': 'cover',
+      '-webkit-transition': 'background 1.5s linear',
+      '-moz-transition': 'background 1.5s linear',
+      '-o-transition': 'background 1.5s linear',
+      '-ms-transition': 'background 1.5s linear',
+      'transition': 'background 1.5s linear'
+    });
+    setTimeout(nextBackground, 5000);
+  }
+
+  setTimeout(nextBackground, 5000);
+
+  body.css({
+    'background-image': backgrounds[0],
+    'background-repeat': 'no-repeat',
+    'background-attachment': 'fixed',
+    'background-position': 'center',
+    '-webkit-background-size': 'cover',
+    '-moz-background-size': 'cover',
+    '-o-background-size': 'cover',
+    'background-size': 'cover',
+    '-webkit-transition': 'background 1.5s linear',
+    '-moz-transition': 'background 1.5s linear',
+    '-o-transition': 'background 1.5s linear',
+    '-ms-transition': 'background 1.5s linear',
+    'transition': 'background 1.5s linear'
+  });
+});
+</script>
