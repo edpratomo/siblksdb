@@ -33,10 +33,10 @@
 
 <%= form_tag(grades_path, {class: "form-inline", role: "form"}) do %>
   <%= hidden_field_tag 'hfield' %>
-  <div id="exam_not_available" class="alert alert-danger">
+  <div style="display:none" id="exam_not_available" class="alert alert-danger">
     <strong>Error:</strong> Belum ada judul soal yang terdaftar untuk kursus ini.
   </div>
-  <div id="choose_exam" class="well" style="background:#99CCFF">
+  <div style="display:none" id="choose_exam" class="well" style="background:#99CCFF">
     <div class="form-group">
       <%= label_tag :exam, "Pilih soal untuk peserta ujian", style: "padding-right:10px" %>
         <%= select_tag :exam_id, nil, 
@@ -56,11 +56,7 @@
 $(document).ready(function() {
   console.log("with_current_pkg: " + $("#filterrific_with_current_pkg").val());
 
-  $("#exam_not_available").hide();
-
-  if ($("#filterrific_with_current_pkg").val() == "") {
-    $("#choose_exam").hide();
-  } else {
+  if ($("#filterrific_with_current_pkg").val() != "") {
     populate_options_for_exam($("#filterrific_with_current_pkg").val());
   }
 
