@@ -21,6 +21,9 @@
           </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><%= t("sign in").capitalize %></button>
+        <div style="padding-top:12px; font-size:16px;">
+        <%= link_to "Lupa password?", new_password_reset_path %>
+        </div>
       <% end %>
 
     </div> <!-- /container -->
