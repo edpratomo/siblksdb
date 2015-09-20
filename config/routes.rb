@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  #get 'password_resets/new'
+  resources :password_resets
   resources :exams
 
   resources :grades do
