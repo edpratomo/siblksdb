@@ -15,11 +15,6 @@
         <h2 class="form-signin-heading"><%= t(:please).capitalize %> <%= t("sign in") %></h2>
         <input type="text" class="form-control" placeholder="Username" name="username" required="" autofocus="">
         <input type="password" class="form-control" placeholder="Password" name="password" required="">
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="remember_me" value="remember-me" disabled> <%= t("remember me").capitalize %>
-          </label>
-        </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><%= t("sign in").capitalize %></button>
         <div style="padding-top:12px; font-size:16px;">
         <%= link_to "Lupa password?", new_password_reset_path %>
