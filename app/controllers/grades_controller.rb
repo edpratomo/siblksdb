@@ -106,7 +106,7 @@ class GradesController < ApplicationController
     @grade = Grade.find(grade_id)
     respond_to do |format|
       current_grade = @grade.grade
-      unless component_value =~ /^\d+$/
+      unless component_value =~ /^\d+(?:\.\d+)?$/
         format.html {
           render :text => (current_grade[component_id] || '-'),
                  :status => :unprocessable_entity
