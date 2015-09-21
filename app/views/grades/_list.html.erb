@@ -28,7 +28,7 @@
         <td><%= gr.students_record.student.name %></td>
         <% gr.ordered_grade(exam.components).each do |component_grade| %>
         <td>
-          <div class="edit" id="<%= component_grade.id %>"><%= component_grade.value %></div>
+          <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         </td>
         <% end %>
       </tr>
@@ -42,10 +42,26 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-<% grades.each do |gr| %>
-  $('.edit').editable('<%= update_component_grade_url(gr) %>', {
-    id: 'component_id',
+  $.editable.addInputType('number', {
+    element : function(settings, original) {
+      var input = $('<input type="number" style="width:50px;" min="0">');
+      $(this).append(input);
+      return(input);
+    },
+    submit : function (settings, original) {
+      if (isNaN($(original).val())) {
+        alert('You must provide a number')
+        return false;
+      } else {
+        return true;
+      }
+    }
+  });
+
+  $('.edit').editable('<%= grades_update_component_url %>', {
+    id: 'grade_component_id',
     name: 'component_value',
+    type: 'number',
     indicator : 'Saving...',
     callback : function(value, settings) {
       // console.log(this);
@@ -53,11 +69,10 @@ $(document).ready(function() {
     },
     submitdata: { _method: 'patch' } // required for rails
   });
-<% end %>
 });
 
 $("#listing_grade tr td div").bind('keydown', function(event) {
-  if(event.keyCode == 9){ //for tab key
+  if (event.keyCode == 9) { //for tab key
     var currentDiv = event.target;
     $(currentDiv).parents("td").next("td").find("div").click();
     return false;

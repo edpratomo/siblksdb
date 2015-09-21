@@ -3,6 +3,8 @@ class Grade < ActiveRecord::Base
   belongs_to :students_record
   belongs_to :exam
 
+  delegate :student, :to => :students_record
+
   validates_uniqueness_of :exam, scope: :students_record
 
   def ordered_grade components

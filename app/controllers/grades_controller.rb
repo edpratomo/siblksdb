@@ -1,5 +1,5 @@
 class GradesController < ApplicationController
-  before_action :set_grade, only: [:show, :edit, :update, :update_component, :destroy]
+  before_action :set_grade, only: [:show, :edit, :update, :destroy]
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
 
@@ -100,9 +100,10 @@ class GradesController < ApplicationController
   end
 
   def update_component
-    component_id = params[:component_id]
+    grade_id, component_id = params[:grade_component_id].split('_')
     component_value = params[:component_value]
 
+    @grade = Grade.find(grade_id)
     respond_to do |format|
       current_grade = @grade.grade
       unless component_value =~ /^\d+$/
