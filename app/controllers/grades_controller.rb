@@ -22,7 +22,7 @@ class GradesController < ApplicationController
         }
       ) or return
 
-      @grades = Grade.with_instructor(@instructor).
+      @grades = Grade.with_instructor(@instructor).joins(:student).sorted_by("students.name_asc").
                 filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
 
       # for table heading

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150919233450) do
+ActiveRecord::Schema.define(version: 20150921151038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20150919233450) do
     t.datetime "created_at",         default: "clock_timestamp()", null: false
     t.datetime "modified_at",        default: "clock_timestamp()", null: false
     t.text     "modified_by"
+    t.integer  "student_id",                                       null: false
   end
 
   add_index "grades", ["students_record_id", "exam_id"], name: "record_exam_unique", unique: true, using: :btree

@@ -2,8 +2,7 @@ class Grade < ActiveRecord::Base
   belongs_to :instructor
   belongs_to :students_record
   belongs_to :exam
-
-  delegate :student, :to => :students_record
+  belongs_to :student
 
   validates_uniqueness_of :exam, scope: :students_record
 
@@ -30,7 +29,7 @@ class Grade < ActiveRecord::Base
     ]
   )
 
-  scope :sorted_by, ->(column_order) { 
+  scope :sorted_by, ->(column_order) {
     if Regexp.new('^(.+)_(asc|desc)$', Regexp::IGNORECASE).match(column_order)
       reorder("#{$1} #{$2}")
     end
