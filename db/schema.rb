@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150921151038) do
+ActiveRecord::Schema.define(version: 20150922040005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,14 +74,15 @@ ActiveRecord::Schema.define(version: 20150921151038) do
   end
 
   create_table "grades", force: true do |t|
-    t.integer  "instructor_id"
-    t.integer  "students_record_id"
+    t.integer  "instructor_id",                                    null: false
+    t.integer  "students_record_id",                               null: false
     t.integer  "exam_id",                                          null: false
     t.hstore   "grade",              default: {},                  null: false
     t.datetime "created_at",         default: "clock_timestamp()", null: false
     t.datetime "modified_at",        default: "clock_timestamp()", null: false
     t.text     "modified_by"
     t.integer  "student_id",                                       null: false
+    t.float    "grade_sum"
   end
 
   add_index "grades", ["students_record_id", "exam_id"], name: "record_exam_unique", unique: true, using: :btree
