@@ -37,7 +37,7 @@
           <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         </td>
         <% end %>
-        <td class="total"></td>
+        <td id="total_<%= gr.id %>"><%= gr.grade_sum || '' %></td>
       </tr>
     <% end %>
   </tbody>
@@ -71,11 +71,30 @@ $(document).ready(function() {
     type: 'number',
     indicator : 'Saving...',
     callback : function(value, settings) {
-      // console.log(this);
+      console.log($(this).attr('id'));
+      var grade_id = $(this).attr('id').split('_').shift();
       $(this).parents("td").next("td").find("div").click();
+      update_total_cell(grade_id);
     },
     submitdata: { _method: 'patch' } // required for rails
   });
+
+  function update_total_cell(id) {
+    jQuery.ajax({
+      url: "/grades/" + id + ".json",
+      type: "GET",
+      dataType: "json",
+      async: true,
+      error: function(XMLHttpRequest, errorTextStatus, error) {
+        alert("Failed: " + errorTextStatus + " ;" + error);
+      },
+      success: function(data) {
+        var grade_id = data.id;
+        var grade_sum = data.grade_sum;
+        $("#total_" + grade_id).html(grade_sum);
+      }
+    });
+  }
 });
 
 $("#listing_grade tr td div").bind('keydown', function(event) {
