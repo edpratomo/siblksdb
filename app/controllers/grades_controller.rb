@@ -60,7 +60,7 @@ class GradesController < ApplicationController
                 paginate(page: params[:page], per_page: 10)
 
     # logger.debug("student_filterrific #{@student_filterrific.to_hash.keys.join(', ')}")
-    store_location
+    #store_location
   end
 
   # GET /grades/1/edit
@@ -162,14 +162,5 @@ class GradesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_params
       params[:grade]
-    end
-
-    # http://stackoverflow.com/questions/2139996/how-to-redirect-to-previous-page-in-ruby-on-rails
-    def store_location
-      session[:return_to] = request.fullpath if request.get? and controller_name != "user_sessions" and controller_name != "sessions"
-    end
-  
-    def redirect_back_or_default(default)
-      redirect_to(session[:return_to] || default)
     end
 end
