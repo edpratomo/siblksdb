@@ -8,9 +8,13 @@
 </head>
 <body>
     <div class="container">
-      <% if flash[:alert] %>
-        <p id="notice" class="has-error"><%= flash[:alert] %></p>
-      <% end %>
+
+    <div class="span12 text-center">
+    <div style="width:40%;display:inline-block;margin: 0 auto;">
+      <%= flash_messages %>
+    </div>
+    </div>
+
       <%= form_tag({}, {:class => "form-signin", :role => "form"}) do %>
         <h2 class="form-signin-heading"><%= t(:please).capitalize %> <%= t("sign in") %></h2>
         <input type="text" class="form-control" placeholder="Username" name="username" required="" autofocus="">
