@@ -21,7 +21,8 @@ class ApplicationController < ActionController::Base
     if session[:expires_at] and session[:expires_at] < Time.current
       # sign out user
       session[:user_id] = nil
-      redirect_to login_url
+      # caused AbstractController::DoubleRenderError:
+      # redirect_to login_url
     end
   end
 
