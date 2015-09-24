@@ -18,7 +18,8 @@
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
                     <!--EMAIL ADDRESS-->
-                    <%= email_field_tag :email, params[:email], placeholder: "email address", class: "form-control", required: true %>  
+                    <%= email_field_tag :email, params[:email], placeholder: "email address", 
+                                        class: "form-control", required: true, autofocus: "" %>  
                   </div>
                   </div>
                   <div class="form-group">
