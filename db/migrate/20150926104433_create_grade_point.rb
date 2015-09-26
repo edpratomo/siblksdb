@@ -25,7 +25,7 @@ CREATE TABLE pkg_grade_items (
   CONSTRAINT items_sequence_unique UNIQUE(pkg_id, sequence)
 );
 
-ALTER TABLE programs ADD COLUMN head_instructor INTEGER REFERENCES instructors(id);
+ALTER TABLE programs ADD COLUMN head_instructor_id INTEGER REFERENCES instructors(id);
 
 -- MS Word
 INSERT INTO pkg_grade_items(pkg_id, name, sequence) VALUES(1, 'Mengetik (WPM)', 1);

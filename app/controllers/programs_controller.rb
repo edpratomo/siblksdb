@@ -7,7 +7,7 @@ class ProgramsController < ApplicationController
   # GET /programs
   # GET /programs.json
   def index
-    @programs = Program.all
+    @programs = Program.order(:program)
   end
 
   # GET /programs/1
@@ -72,6 +72,6 @@ class ProgramsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def program_params
-      params.require(:program).permit(:program)
+      params.require(:program).permit(:program, :head_instructor_id)
     end
 end

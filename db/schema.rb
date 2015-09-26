@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 20150926104433) do
   end
 
   create_table "programs", force: true do |t|
-    t.text    "program",         null: false
-    t.integer "head_instructor"
+    t.text    "program",            null: false
+    t.integer "head_instructor_id"
   end
 
   add_index "programs", ["program"], name: "programs_program_key", unique: true, using: :btree
