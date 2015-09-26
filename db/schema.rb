@@ -15,9 +15,9 @@ ActiveRecord::Schema.define(version: 20150922040005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "pg_trgm"
   enable_extension "uuid-ossp"
+  enable_extension "pg_trgm"
+  enable_extension "hstore"
 
   create_table "changes", force: true do |t|
     t.text     "table_name",                                  null: false
