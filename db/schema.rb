@@ -11,13 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150922040005) do
+ActiveRecord::Schema.define(version: 20150926104433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
-  enable_extension "pg_trgm"
   enable_extension "hstore"
+  enable_extension "pg_trgm"
+  enable_extension "uuid-ossp"
+
+  create_table "b", id: false, force: true do |t|
+    t.hstore "h"
+  end
 
   create_table "changes", force: true do |t|
     t.text     "table_name",                                  null: false
@@ -68,6 +72,19 @@ ActiveRecord::Schema.define(version: 20150922040005) do
 
   add_index "exams_exam_components", ["exam_id", "exam_component_id"], name: "exam_unique", unique: true, using: :btree
 
+  create_table "grade_points", force: true do |t|
+    t.integer  "instructor_id"
+    t.integer  "students_record_id"
+    t.integer  "student_id"
+    t.float    "theory"
+    t.integer  "practice"
+    t.hstore   "items"
+    t.hstore   "custom_items",       default: {},                  null: false
+    t.datetime "created_at",         default: "clock_timestamp()", null: false
+    t.datetime "modified_at",        default: "clock_timestamp()", null: false
+    t.text     "modified_by"
+  end
+
   create_table "grade_weights", force: true do |t|
     t.text  "name",   null: false
     t.float "weight"
@@ -114,6 +131,14 @@ ActiveRecord::Schema.define(version: 20150922040005) do
 
   add_index "instructors_schedules", ["schedule_id", "instructor_id", "day"], name: "instructor_schedule_day_unique", unique: true, using: :btree
 
+  create_table "pkg_grade_items", force: true do |t|
+    t.integer "pkg_id"
+    t.text    "name",     null: false
+    t.integer "sequence", null: false
+  end
+
+  add_index "pkg_grade_items", ["pkg_id", "sequence"], name: "items_sequence_unique", unique: true, using: :btree
+
   create_table "pkgs", force: true do |t|
     t.text    "pkg",        null: false
     t.integer "program_id"
@@ -126,7 +151,8 @@ ActiveRecord::Schema.define(version: 20150922040005) do
   end
 
   create_table "programs", force: true do |t|
-    t.text "program", null: false
+    t.text    "program",         null: false
+    t.integer "head_instructor"
   end
 
   add_index "programs", ["program"], name: "programs_program_key", unique: true, using: :btree
