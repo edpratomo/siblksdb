@@ -40,7 +40,7 @@
       <th style="max-width:40px;text-align:center;">Mulai</th>
       <th style="max-width:40px;text-align:center;">Selesai</th>
       <th style="max-width:40px;">Status</th>
-      <th colspan="2" style="max-width:50px;"></th>
+      <th colspan="3" style="max-width:50px;"></th>
     </tr>
   </thead>
 
@@ -53,6 +53,7 @@
         <td style="max-width:40px;"><%= t(record.status) %></td>
         <td style="max-width:20px;text-align:center;"><%= link_to 'Edit', edit_students_record_path(record) %></td>
         <td style="max-width:30px;text-align:center;"><%= link_to 'Jadwal', edit_student_schedule_index_path(@student, record.pkg) unless record.finished_on %></td>
+        <td style="max-width:30px;text-align:center;"><%= link_to 'Hapus', students_record_path(record), method: :delete, class: "destroy_students_record_tip", data: { confirm: 'Are you sure?' } if record.destroyable? %></td>
       </tr>
     <% end %>
   </tbody>

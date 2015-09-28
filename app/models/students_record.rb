@@ -54,4 +54,14 @@ class StudentsRecord < ActiveRecord::Base
       return false
     end
   end
+
+  def destroyable?
+    if self.status == "active"
+      sp = StudentsPkg.find_by(pkg: self.pkg, student: self.student)
+      return true unless sp
+      return true if sp.instructors_schedules.size == 0
+    else
+      false
+    end
+  end
 end

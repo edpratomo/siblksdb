@@ -1,7 +1,7 @@
 class StudentsRecordsController < ApplicationController
   # before_action :set_students_record, only: [:show, :edit, :update, :destroy]
-  before_action :set_student, only: [:new, :show, :destroy]
-  before_action :set_students_record, only: [:edit, :update]
+  before_action :set_student, only: [:new, :show]
+  before_action :set_students_record, only: [:edit, :update, :destroy]
   before_action :set_grouped_pkg_options, only: [:new, :update]
   before_action :set_current_user
   
@@ -85,10 +85,22 @@ class StudentsRecordsController < ApplicationController
   # DELETE /students_records/1
   # DELETE /students_records/1.json
   def destroy
-    @students_record.destroy
+    @student = @students_record.student
+    destroyed = @student.transaction_user(@current_user) {
+      if @students_record.destroyable?
+        @student.pkgs.destroy(@students_record.pkg)
+        @students_record.destroy
+      end
+    }
+    logger.info("redirect to #{students_record_url(@student)}")
     respond_to do |format|
-      format.html { redirect_to students_records_url, notice: 'Students record was successfully destroyed.' }
-      format.json { head :no_content }
+      if destroyed
+        format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to students_record_url(@student), notice: 'Students record was NOT destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 
