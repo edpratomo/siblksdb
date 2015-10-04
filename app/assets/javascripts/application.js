@@ -25,6 +25,8 @@
 //= require bootstrap-datepicker/core
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.id.js
 //= require filterrific/filterrific-jquery
+//= require highcharts
+//= require chartkick
 
 $(function(){
 

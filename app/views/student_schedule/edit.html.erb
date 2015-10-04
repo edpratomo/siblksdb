@@ -22,6 +22,13 @@
 <script type="text/javascript">
 
 $(function() {
+  // SSE
+  var es = new EventSource('<%= Rails.configuration.x.sse_base_url %>/seat');
+  es.onmessage = function(e) {
+    // $('<li></li>').text(e.data).appendTo('#numbers');
+    console.log("es: " + e.data);
+  };
+
   var checkbox_ids = $('input[type="checkbox"]')
    .map(function() { return this.id; })
    .get();

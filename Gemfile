@@ -7,7 +7,8 @@ group :development, :test do
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.5'
+gem 'rails', '4.2.4'
+gem 'responders', '~> 2.0'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
@@ -44,6 +45,7 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm', require: false
+  gem 'web-console', '~> 2.0'
 end
 
 # Use debugger
@@ -52,7 +54,8 @@ end
 gem 'bootstrap_form'
 #gem 'rails4-autocomplete'
 #gem 'jquery-ui-rails'
-gem 'textacular', '~> 3.0'
+gem 'textacular', git: 'https://github.com/textacular/textacular.git'
+#gem 'textacular', '~> 3.0'
 
 gem 'rails_12factor', group: :production
 gem 'wicked_pdf'
