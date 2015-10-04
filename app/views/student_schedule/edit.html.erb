@@ -24,9 +24,19 @@
 $(function() {
   // SSE
   var es = new EventSource('<%= Rails.configuration.x.sse_base_url %>/seat');
+  es.onopen = function(e) {
+    //alert("SSE connected");
+    console.log("SSE connected");
+  };
   es.onmessage = function(e) {
-    // $('<li></li>').text(e.data).appendTo('#numbers');
     console.log("es: " + e.data);
+    var ary = e.data.split("_");
+    var selector = "input[value='" + ary[0] + "']";
+    $(selector).attr("seat", ary[1]);
+
+    var old_text = $(".seat_" + ary[0]).text();
+    //alert("old " + old_text);
+    $(".seat_" + ary[0]).text(ary[1]);
   };
 
   var checkbox_ids = $('input[type="checkbox"]')
