@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   enable_extension "hstore"
   enable_extension "pg_trgm"
   enable_extension "uuid-ossp"
+  enable_extension "pg_redispub"
 
   create_table "changes", force: :cascade do |t|
     t.text     "table_name",                                  null: false

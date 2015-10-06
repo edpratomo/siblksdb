@@ -1,10 +1,12 @@
 class NotifySeatChange < ActiveRecord::Migration
   def up
     execute <<-SQL
+CREATE EXTENSION IF NOT EXISTS "pg_redispub";
+
 CREATE OR REPLACE FUNCTION if_avail_seat_change()
   RETURNS TRIGGER AS $body$
 BEGIN
-  PERFORM pg_notify('seat', NEW.id::TEXT || '_' || NEW.avail_seat::TEXT);
+  PERFORM redispub('seat', NEW.id::TEXT || '_' || NEW.avail_seat::TEXT);
   RETURN NEW;
 END;
 $body$
