@@ -78,7 +78,9 @@ class Student < ActiveRecord::Base
       :sorted_by,
       :with_religion,
       :with_registered_at_gt,
-      :with_registered_at_lt
+      :with_registered_at_lt,
+      :with_multiple_completion_on_same_pkg,
+      :who_left_pkg
     ]
   )
 
@@ -100,6 +102,28 @@ class Student < ActiveRecord::Base
 
   scope :with_registered_at_lt, ->(ref_date) {
     where("students.registered_at AT TIME ZONE 'Asia/Jakarta' < ?", ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
+  }
+
+  # more scopes
+  scope :with_multiple_completion_on_same_pkg, ->(flag) {
+    return nil if "0" == flag
+    recset = StudentsRecord.
+             where(status: "finished").group("student_id", "pkg_id").count.
+             select {|k,v| v > 1}.map {|k,v| k[0]}
+    where(id: recset)
+  }
+
+  scope :who_left_pkg, ->(flag) {
+    return nil if "0" == flag
+    students_records = StudentsRecord.arel_table
+    students = Student.arel_table
+
+    where(
+      StudentsRecord \
+        .where(students_records[:student_id].eq(students[:id])) \
+        .where(students_records[:status].eq("finished")) \
+        .exists
+    )
   }
 
   def self.options_for_sorted_by
