@@ -1,7 +1,8 @@
 class StudentsRecord < ActiveRecord::Base
   include TransactionHelper
 
-  has_many :grades # bisa mengulang?
+  has_many :grades # practice exam can be retaken
+  has_one :grade_point
 
   # :students <= :students_records => :pkgs
   belongs_to :student

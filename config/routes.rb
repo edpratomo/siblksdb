@@ -29,6 +29,9 @@ Rails.application.routes.draw do
     collection do
       get 'new/:id' => 'students_records#new', as: "new"
     end
+    member do
+      get 'grade_point'
+    end
   end
 
   resources :changes

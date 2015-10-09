@@ -5,10 +5,10 @@ class CreateGradePoint < ActiveRecord::Migration
 CREATE TABLE grade_points (
   id SERIAL PRIMARY KEY,
   instructor_id INTEGER REFERENCES instructors(id),
-  students_record_id INTEGER REFERENCES students_records(id),
+  students_record_id INTEGER NOT NULL REFERENCES students_records(id),
   student_id INTEGER REFERENCES students(id),
   theory FLOAT,
-  practice INTEGER REFERENCES grades(id),
+  practice_id INTEGER REFERENCES grades(id),
   items hstore, -- generic items
   custom_items hstore NOT NULL DEFAULT '', -- pkg-specific grades defined in pkg_grade_items
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
@@ -26,6 +26,7 @@ CREATE TABLE pkg_grade_items (
 );
 
 ALTER TABLE programs ADD COLUMN head_instructor_id INTEGER REFERENCES instructors(id);
+-- ALTER TABLE grades ADD COLUMN grade_point_id INTEGER REFERENCES grade_points(id);
 
 -- MS Word
 INSERT INTO pkg_grade_items(pkg_id, name, sequence) VALUES(1, 'Mengetik (WPM)', 1);
@@ -62,7 +63,7 @@ SQL
   def down
     execute <<-SQL
 DROP TRIGGER IF EXISTS grade_points_populate_items ON grade_points;
-ALTER TABLE programs DROP COLUMN head_instructor;  
+ALTER TABLE programs DROP COLUMN head_instructor_id;  
 DROP TABLE pkg_grade_items;
 DROP TABLE grade_points;
 SQL

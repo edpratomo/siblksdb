@@ -1,11 +1,16 @@
 class StudentsRecordsController < ApplicationController
   # before_action :set_students_record, only: [:show, :edit, :update, :destroy]
   before_action :set_student, only: [:new, :show]
-  before_action :set_students_record, only: [:edit, :update, :destroy]
+  before_action :set_students_record, only: [:edit, :update, :destroy, :grade_point]
   before_action :set_grouped_pkg_options, only: [:new, :update]
   before_action :set_current_user
   before_action :set_current_group
   
+  def grade_point
+    @grade_point = @students_record.grade_point
+    render layout: false
+  end
+
   # GET /students_records
   # GET /students_records.json
   def index

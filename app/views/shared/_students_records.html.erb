@@ -15,7 +15,7 @@
         <td style="max-width:150px;"><%= record.pkg.program.program %> - <%= record.pkg.pkg %> Lev.<%= record.pkg.level %></td>
         <td style="max-width:40px;text-align:center;"><%= record.started_on.strftime("%d %b %Y") %></td>
         <td style="max-width:40px;text-align:center;"><%= record.finished_on && record.finished_on.strftime("%d %b %Y") %></td>
-        <td style="max-width:30px;"><%= t(record.status) %></td>
+        <td style="max-width:30px;" <% if record.status == "finished" or record.status == "failed" %>class="grade_point grade_point_tip" id="<%= record.id %>"<% end %>><%= t(record.status) %></td>
         <td style="max-width:20px;text-align:center;"><%= link_to 'Edit', edit_students_record_path(record) %></td>
         <td style="max-width:30px;text-align:center;"><%= link_to 'Jadwal', edit_student_schedule_index_path(student, record.pkg) unless record.finished_on %></td>
         <td style="max-width:30px;text-align:center;">

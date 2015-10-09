@@ -74,10 +74,10 @@ ActiveRecord::Schema.define(version: 20150926104433) do
 
   create_table "grade_points", force: true do |t|
     t.integer  "instructor_id"
-    t.integer  "students_record_id"
+    t.integer  "students_record_id",                               null: false
     t.integer  "student_id"
     t.float    "theory"
-    t.integer  "practice"
+    t.integer  "practice_id"
     t.hstore   "items"
     t.hstore   "custom_items",       default: {},                  null: false
     t.datetime "created_at",         default: "clock_timestamp()", null: false

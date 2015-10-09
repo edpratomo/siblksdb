@@ -93,3 +93,19 @@
 </p>
 </div>
 
+<script type="text/javascript">
+$(function() {
+  $(".grade_point").click(function() {
+    var id = $(this).attr('id').split('_').pop();
+    BootstrapDialog.show({
+      buttons: [{
+        label: 'Tutup',
+        action: function(dialogItself) {
+                  dialogItself.close();
+                }
+      }],
+      message: $('<div></div>').load('/students_records/' + id + '/grade_point')
+    });
+  });
+});
+</script>
