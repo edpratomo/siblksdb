@@ -74,6 +74,10 @@ body {
   color: #0000ff; 
 }
 
+.navbar-nav > li > a:link {
+  color: #fff;
+}
+
 /*
  * Main content
  */
