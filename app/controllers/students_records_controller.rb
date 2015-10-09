@@ -15,7 +15,8 @@ class StudentsRecordsController < ApplicationController
   # GET /students_records/1
   # GET /students_records/1.json
   def show
-    @records = StudentsRecord.where(student: @student).order(params[:started_on])
+    #@records = StudentsRecord.where(student: @student).order(params[:started_on])
+    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)
   end
 
   # GET /students_records/new
