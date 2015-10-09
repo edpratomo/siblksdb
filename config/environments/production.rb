@@ -80,5 +80,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.x.sse_base_url = "http://192.168.0.2:9292"
+  config.x.sse_base_url = "http://192.168.0.102:9292"
 end
