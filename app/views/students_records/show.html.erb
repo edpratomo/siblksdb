@@ -26,7 +26,13 @@
         <td><%= t(record.status) %></td>
         <td><%= link_to 'Edit', edit_students_record_path(record) %></td>
         <td><%= link_to 'Jadwal', edit_student_schedule_index_path(@student, record.pkg) unless record.finished_on %></td>
-        <td><%= link_to('Hapus', students_record_path(record), method: :delete, class: "destroy_students_record_tip", data: { confirm: 'Are you sure?' }) if record.destroyable? %></td>
+        <td>
+<% if @current_group == "sysadmin" and record.status != "active" %>
+<%= link_to 'Hapus', students_record_path(record), method: :delete, data: { confirm: 'Are you sure?' } %>
+<% else %>
+<%= link_to 'Hapus', students_record_path(record), method: :delete, class: "destroy_students_record_tip", data: { confirm: 'Are you sure?' } if record.destroyable? %>
+<% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

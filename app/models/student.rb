@@ -153,7 +153,7 @@ class Student < ActiveRecord::Base
     where(
       StudentsRecord \
         .where(students_records[:student_id].eq(students[:id])) \
-        .where(students_records[:status].eq("finished")) \
+        .where(students_records[:status].eq("abandoned")) \
         .exists
     )
   }

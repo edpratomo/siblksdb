@@ -4,6 +4,7 @@ class StudentsRecordsController < ApplicationController
   before_action :set_students_record, only: [:edit, :update, :destroy]
   before_action :set_grouped_pkg_options, only: [:new, :update]
   before_action :set_current_user
+  before_action :set_current_group
   
   # GET /students_records
   # GET /students_records.json
@@ -87,7 +88,8 @@ class StudentsRecordsController < ApplicationController
   def destroy
     @student = @students_record.student
     destroyed = @student.transaction_user(@current_user) {
-      if @students_record.destroyable?
+      if (@current_group == "sysadmin" and @students_record.status != "active") or
+         @students_record.destroyable?
         @student.pkgs.destroy(@students_record.pkg)
         @students_record.destroy
       end
@@ -130,5 +132,9 @@ class StudentsRecordsController < ApplicationController
 
     def set_current_user
       @current_user = current_user.username
+    end
+
+    def set_current_group
+      @current_group = current_user.group.name
     end
 end

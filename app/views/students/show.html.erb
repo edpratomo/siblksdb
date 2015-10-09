@@ -53,7 +53,13 @@
         <td style="max-width:30px;"><%= t(record.status) %></td>
         <td style="max-width:20px;text-align:center;"><%= link_to 'Edit', edit_students_record_path(record) %></td>
         <td style="max-width:30px;text-align:center;"><%= link_to 'Jadwal', edit_student_schedule_index_path(@student, record.pkg) unless record.finished_on %></td>
-        <td style="max-width:30px;text-align:center;"><%= link_to 'Hapus', students_record_path(record), method: :delete, class: "destroy_students_record_tip", data: { confirm: 'Are you sure?' } if record.destroyable? %></td>
+        <td style="max-width:30px;text-align:center;">
+<% if @current_group == "sysadmin" and record.status != "active" %>
+<%= link_to 'Hapus', students_record_path(record), method: :delete, data: { confirm: 'Are you sure?' } %>
+<% else %>
+<%= link_to 'Hapus', students_record_path(record), method: :delete, class: "destroy_students_record_tip", data: { confirm: 'Are you sure?' } if record.destroyable? %>
+<% end %>
+</td>
       </tr>
     <% end %>
   </tbody>
