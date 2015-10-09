@@ -1,6 +1,7 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy, :attending, :remove_pkg]
   before_action :set_current_user, except: [:attending]
+  before_action :set_current_group, except: [:attending]
   skip_before_action :authorize, only: [:attending]
 
   helper_method :sort_column, :sort_direction
@@ -166,6 +167,10 @@ class StudentsController < ApplicationController
 
     def set_current_user
       @current_user = current_user.username
+    end
+
+    def set_current_group
+      @current_group = current_user.group.name
     end
     
     # Never trust parameters from the scary internet, only allow the white list through.

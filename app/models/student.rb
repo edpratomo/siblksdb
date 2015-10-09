@@ -78,7 +78,10 @@ class Student < ActiveRecord::Base
       :sorted_by,
       :with_religion,
       :with_registered_at_gt,
-      :with_registered_at_lt
+      :with_registered_at_lt,
+      :with_multiple_completion_on_same_pkg,
+      :who_left_pkg,
+      :with_broken_pkg_dates
     ]
   )
 
@@ -100,6 +103,59 @@ class Student < ActiveRecord::Base
 
   scope :with_registered_at_lt, ->(ref_date) {
     where("students.registered_at AT TIME ZONE 'Asia/Jakarta' < ?", ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
+  }
+
+  # more scopes
+  scope :with_broken_pkg_dates, ->(flag) {
+    return nil if "0" == flag
+    invalid_start_finish = StudentsRecord.where.not(status: "abandoned").
+                           where("finished_on <= started_on").map {|e| e.student_id}.uniq
+
+    invalid_pkg_dates = {}
+
+    StudentsRecord.joins(:pkg).where.not(status: "abandoned").
+      select("students_records.*, pkgs.program_id as program_id, pkgs.level as level").
+      order("students_records.student_id", "pkgs.program_id", "pkgs.level").
+      inject do |m,o|
+        if o.level > 1
+          if m.program_id != o.program_id # previous level of the same program is missing
+            invalid_pkg_dates[o.student_id] = true
+          else
+            unless m.finished_on # previous level is not finished
+              invalid_pkg_dates[o.student_id] = true
+            else
+              if m.finished_on >= o.started_on # started before previous level completion date
+                invalid_pkg_dates[o.student_id] = true
+              end
+            end
+          end
+        end
+        m = o
+        m
+      end
+
+    where(id: (invalid_start_finish | invalid_pkg_dates.keys))
+  }
+
+  scope :with_multiple_completion_on_same_pkg, ->(flag) {
+    return nil if "0" == flag
+    recset = StudentsRecord.
+             where(status: "finished").group("student_id", "pkg_id").count.
+             select {|k,v| v > 1}.map {|k,v| k[0]}
+    where(id: recset)
+  }
+
+  scope :who_left_pkg, ->(flag) {
+    return nil if "0" == flag
+    students_records = StudentsRecord.arel_table
+    students = Student.arel_table
+
+    where(
+      StudentsRecord \
+        .where(students_records[:student_id].eq(students[:id])) \
+        .where(students_records[:status].eq("abandoned")) \
+        .exists
+    )
   }
 
   def self.options_for_sorted_by
