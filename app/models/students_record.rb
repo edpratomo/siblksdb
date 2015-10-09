@@ -11,8 +11,8 @@ class StudentsRecord < ActiveRecord::Base
   # validates_uniqueness_of :pkg
 
   validate :finished_on_cant_be_blank
-  validate :finished_on_must_be_after_started_on
-  validate :started_on_for_level_above_1
+#  validate :finished_on_must_be_after_started_on
+#  validate :started_on_for_level_above_1
   validate :started_on_cant_be_before_registration
 
   def finished_on_cant_be_blank

@@ -18,7 +18,7 @@
       <th>Tempat, Tanggal Lahir</th>
       <th>Pendaftaran</th>
       <th>Entri Data</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -40,7 +40,7 @@
           <% end %>
         </td>
         <td><%= link_to 'Edit', edit_student_path(student) %></td>
-        <td><%= link_to 'Destroy', student, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <!-- <td><%= link_to 'Hapus', student, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
       </tr>
     <% end %>
   </tbody>
