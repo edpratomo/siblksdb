@@ -83,8 +83,11 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
-    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)  #.order(params[:started_on])
-    # @students_records = @student.records
+    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)
+    if params[:brief]
+      render template: 'students/brief.html.erb',
+             layout: false
+    end
   end
 
   # GET /students/new
