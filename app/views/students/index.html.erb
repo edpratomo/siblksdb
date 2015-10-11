@@ -65,10 +65,62 @@
 </div>
 
 <script type="text/javascript">
-$(function () {
+function show_bootstrap_dialog() {
+  var my_id = $(this).attr("id");
+
+  BootstrapDialog.show({
+    onhidden: function(dialogRef){
+                if (dialogRef.getData("button") == "Edit Data") {
+                  //alert('Dialog is popped down: ' + dialogRef.getData("button"));
+                  window.location = '/students/' + my_id + '/edit';
+                }
+                if (dialogRef.getData("button") == "Edit Riwayat Kursus") {
+                  window.location = '/students_records/' + my_id;
+                }
+              },
+    size: BootstrapDialog.SIZE_WIDE,
+    buttons: [
+      {
+        label: 'Edit Data',
+        cssClass: 'btn-primary',
+        action: function(dialogItself) {
+                  dialogItself.setData("button", "Edit Data")
+                  dialogItself.close();
+                }
+      },
+      {
+        label: 'Edit Riwayat Kursus',
+        cssClass: 'btn-primary',
+        action: function(dialogItself) {
+                  dialogItself.setData("button", "Edit Riwayat Kursus")
+                  dialogItself.close();
+                }
+      },
+      {
+        label: 'Tutup',
+        cssClass: 'btn-warning',
+        icon: 'glyphicon glyphicon-ban-circle',
+        action: function(dialogItself) {
+                  dialogItself.setData("button", "Tutup")
+                  dialogItself.close();
+                }
+      }
+    ],
+    message: $('<div></div>').load('/students/' + my_id + '?brief=1')
+  });
+}
+
+$(function() {
   $('.js-datepicker').datepicker({
     language: "id",
     format: 'dd/mm/yyyy'
   });
+
+  $("body").on("click", ".open_dialog", show_bootstrap_dialog);
+});
+
+$(document).ajaxStop(function() {
+  $("body").off("click", ".open_dialog", show_bootstrap_dialog);
+  $("body").on("click", ".open_dialog", show_bootstrap_dialog);
 });
 </script>

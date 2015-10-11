@@ -1,0 +1,23 @@
+<h3><%= @student.name %></h3>
+
+<div style="padding-top: 20px; max-width: 862px;">
+<% if @records.empty? %>
+<div class="alert alert-danger" role="alert">Belum memiliki catatan kursus.</div>
+<% else %>
+  <%= render :partial => 'shared/students_records',
+             :locals => { brief: true,
+                          student: @student,
+                          records: @records,
+                          current_group: @current_group } %>
+
+<% end %>
+</div>
+
+<div style="padding-top: 30px; text-align: right; max-width: 862px;">
+<p>
+  <strong>Perubahan terakhir:</strong>
+  <%= @student.modified_at %>
+  <strong>oleh:</strong>
+  <%= @student.modified_by %>
+</p>
+</div>
