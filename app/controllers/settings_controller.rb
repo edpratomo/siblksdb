@@ -22,7 +22,8 @@ class SettingsController < ApplicationController
 
     if params[:holidays]
       begin
-        holidays = JSON.parse(File.read(params[:holidays].original_filename))[2].inject({}) do |m,o|
+        uploaded_io = params[:holidays]
+        holidays = JSON.parse(uploaded_io.read))[2].inject({}) do |m,o|
           m[o[0]] = o[1]
           m
         end

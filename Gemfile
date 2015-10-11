@@ -73,3 +73,5 @@ gem 'declarative_authorization', :git => 'https://github.com/stffn/declarative_a
 gem 'rails-i18n', '~> 4.0.0' # For 4.0.x
 gem 'filterrific'
 gem 'bootstrap-datepicker-rails'
+
+gem 'gravtastic'

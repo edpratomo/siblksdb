@@ -69,22 +69,31 @@ function show_bootstrap_dialog() {
   var my_id = $(this).attr("id");
 
   BootstrapDialog.show({
+    onhidden: function(dialogRef){
+                if (dialogRef.getData("button") == "Edit Data") {
+                  //alert('Dialog is popped down: ' + dialogRef.getData("button"));
+                  window.location = '/students/' + my_id + '/edit';
+                }
+                if (dialogRef.getData("button") == "Edit Riwayat Kursus") {
+                  window.location = '/students_records/' + my_id;
+                }
+              },
     size: BootstrapDialog.SIZE_WIDE,
     buttons: [
       {
         label: 'Edit Data',
         cssClass: 'btn-primary',
         action: function(dialogItself) {
+                  dialogItself.setData("button", "Edit Data")
                   dialogItself.close();
-                  window.open('/students/' + my_id + '/edit','_blank');
                 }
       },
       {
         label: 'Edit Riwayat Kursus',
         cssClass: 'btn-primary',
         action: function(dialogItself) {
+                  dialogItself.setData("button", "Edit Riwayat Kursus")
                   dialogItself.close();
-                  window.open('/students_records/' + my_id, '_blank');
                 }
       },
       {
@@ -92,6 +101,7 @@ function show_bootstrap_dialog() {
         cssClass: 'btn-warning',
         icon: 'glyphicon glyphicon-ban-circle',
         action: function(dialogItself) {
+                  dialogItself.setData("button", "Tutup")
                   dialogItself.close();
                 }
       }

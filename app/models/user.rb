@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   # include TransactionHelper
+  include Gravtastic
+  gravtastic default: "identicon"
 
   belongs_to :role, foreign_key: "group_id"
   belongs_to :group

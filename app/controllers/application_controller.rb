@@ -40,4 +40,16 @@ class ApplicationController < ActionController::Base
       redirect_to root_url, alert: "Not authorized"
     end
   end
+
+  def page_key
+    (controller_name + "_page").to_sym
+  end
+
+  def set_current_page
+    if params[:page] then
+      session[page_key] = params[:page]
+    elsif session[page_key]
+      params[:page] = session[page_key]
+    end
+  end
 end
