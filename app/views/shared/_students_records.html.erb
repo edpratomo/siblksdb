@@ -5,7 +5,9 @@
       <th style="max-width:40px;text-align:center;">Mulai</th>
       <th style="max-width:40px;text-align:center;">Selesai</th>
       <th style="max-width:30px;">Status</th>
+<% unless local_assigns.has_key? :brief %>
       <th colspan="3" style="max-width:50px;"></th>
+<% end %>
     </tr>
   </thead>
 
@@ -16,6 +18,8 @@
         <td style="max-width:40px;text-align:center;"><%= record.started_on.strftime("%d %b %Y") %></td>
         <td style="max-width:40px;text-align:center;"><%= record.finished_on && record.finished_on.strftime("%d %b %Y") %></td>
         <td style="max-width:30px;" <% if record.status == "finished" or record.status == "failed" %>class="grade_point grade_point_tip" id="<%= record.id %>"<% end %>><%= t(record.status) %></td>
+        <td style="max-width:30px;"><%= t(record.status) %></td>
+<% unless local_assigns.has_key? :brief %>
         <td style="max-width:20px;text-align:center;"><%= link_to 'Edit', edit_students_record_path(record) %></td>
         <td style="max-width:30px;text-align:center;"><%= link_to 'Jadwal', edit_student_schedule_index_path(student, record.pkg) unless record.finished_on %></td>
         <td style="max-width:30px;text-align:center;">
@@ -25,6 +29,7 @@
 <%= link_to 'Hapus', students_record_path(record), method: :delete, class: "destroy_students_record_tip", data: { confirm: 'Are you sure?' } if record.destroyable? %>
 <% end %>
 </td>
+<% end %>
       </tr>
     <% end %>
   </tbody>

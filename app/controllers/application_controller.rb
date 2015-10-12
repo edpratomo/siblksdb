@@ -76,4 +76,16 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
   end
+
+  def page_key
+    (controller_name + "_page").to_sym
+  end
+
+  def set_current_page
+    if params[:page] then
+      session[page_key] = params[:page]
+    elsif session[page_key]
+      params[:page] = session[page_key]
+    end
+  end
 end

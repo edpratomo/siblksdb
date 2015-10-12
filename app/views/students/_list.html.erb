@@ -25,7 +25,7 @@
   <tbody>
     <% students.each do |student| %>
       <tr>
-        <td><%= link_to "#{student.name} (#{student.sex == "male" ? "L" : "P"})", student %></td>
+        <td id="<%= student.id %>" class="open_dialog"><div class="dialog_tip"><%= "#{student.name} (#{student.sex == "male" ? "L" : "P"})" %></div></td>
         <td><%= student.birthplace %>, <%= student.birthdate %></td>
         <td><%= student.registered_at.to_date %></td>
         <td><%= student.created_at.to_date %></td>

@@ -3,6 +3,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th colspan="1"></th>
       <th>Username</th>
       <th>Fullname</th>
       <th>Group</th>
@@ -14,7 +15,8 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.username %></td>
+        <td><%= image_tag user.gravatar_url(size: 60) %></td>
+        <td><%= link_to user.username, user %></td>
         <td><%= user.fullname %></td>
         <td><%= user.group.name %></td>
         <td><% if user.instructor %>

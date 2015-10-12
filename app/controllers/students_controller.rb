@@ -2,6 +2,8 @@ class StudentsController < ApplicationController
   before_action :set_student, only: [:show, :edit, :update, :destroy, :attending, :remove_pkg]
   before_action :set_current_user, except: [:attending]
   before_action :set_current_group, except: [:attending]
+  before_action :set_current_page, only: [:index] # set default page for paging
+
   skip_before_action :authorize, only: [:attending]
 
   filter_access_to :all, :except => :name_suggestions
@@ -85,8 +87,11 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
-    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)  #.order(params[:started_on])
-    # @students_records = @student.records
+    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)
+    if params[:brief]
+      render template: 'students/brief.html.erb',
+             layout: false
+    end
   end
 
   # GET /students/new
