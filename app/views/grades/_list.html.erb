@@ -13,26 +13,12 @@
 <%# unless grades.empty? %>
 <% if grades.size > 0 and exam %>
 <table id="listing_grade" class="table pretty table-hover table-striped ExcelTable2007">
-  <thead>
-    <tr>
-      <th rowspan="2">Nama</th>
-    <% exam.components.sort_by {|e| e.sequence}.each do |component| %>
-      <th><%= component.name %></th>
-    <% end %>
-      <th rowspan="2">Total</th>
-    </tr>
-    <tr>
-    <% exam.components.sort_by {|e| e.sequence}.each do |component| %>
-      <th><%= component.scale %></th>
-    <% end %>
-    </tr>
-  </thead>
-
+  <%= raw(grade_component_as_table_heading(exam.grade_component.structure)) %>
   <tbody>
     <% grades.each do |gr| %>
       <tr>
         <td><%= gr.students_record.student.name %></td>
-        <% gr.ordered_grade(exam.components).each do |component_grade| %>
+        <% gr.ordered_exam_grade.each do |component_grade| %>
         <td>
           <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         </td>

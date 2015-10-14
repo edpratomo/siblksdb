@@ -6,16 +6,10 @@ class Grade < ActiveRecord::Base
 
   validates_uniqueness_of :exam, scope: :students_record
 
-  def ordered_grade components
-    orders = components.inject({}) {|m,o| m[o.id.to_s] = o.sequence; m}
-    if grade.empty?
-      components.map {|e| OpenStruct.new(id: e.id.to_s, value: '-')}
-    else
-      # fill in gaps
-      grade_dup = components.inject(grade) {|m,o| m[o.id.to_s] ||= '-'; m}
-      grade_dup.keys.sort {|a,b| orders[a] <=> orders[b]}.map do |k|
-        OpenStruct.new(id: k, value: grade_dup[k])
-      end
+  def ordered_exam_grade
+    # convert exam_grade to array, assign non-existent value with '-'
+    exam.grade_component.items.each.with_index.map do |e,idx|
+      OpenStruct.new(id: idx, value: exam_grade[idx.to_s] || '-')
     end
   end
 
