@@ -105,7 +105,7 @@ class GradesController < ApplicationController
 
     @grade = Grade.find(grade_id)
     respond_to do |format|
-      current_grade = @grade.grade
+      current_grade = @grade.exam_grade
       unless component_value =~ /^\d+(?:\.\d+)?$/
         format.html {
           render :text => (current_grade[component_id] || '-'),
@@ -113,7 +113,7 @@ class GradesController < ApplicationController
         }
       else
         if (current_grade[component_id] and current_grade[component_id] == component_value) or
-           @grade.update({:grade => current_grade.merge({component_id => component_value})})
+           @grade.update({:exam_grade => current_grade.merge({component_id => component_value})})
           format.html { render :text => component_value }
         else
           format.html {

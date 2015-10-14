@@ -59,7 +59,7 @@
           </ul>
           <ul class="nav nav-sidebar">
             <% permitted_to? :new, :grades do %>
-              <li class="<%= active_tab_class(new_grade_path) %>"><%= link_to "Peserta Ujian", new_grade_path %></li>
+              <li class="<%= active_tab_class(new_grade_path) %>"><%= link_to "Peserta Ujian Praktek", new_grade_path %></li>
             <% end %>
             <% permitted_to? :read, :grades do %>
               <li class="<%= active_tab_class(grades_path) %>"><%= link_to "Entri Nilai Praktek", grades_path %></li>
