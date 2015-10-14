@@ -8,11 +8,11 @@ class CreateGrades < ActiveRecord::Migration
 
   def down
     execute <<-SQL
+ALTER TABLE pkgs DROP COLUMN course_id;
 DROP TABLE IF EXISTS grades;
-DROP TABLE IF EXISTS exams_exam_components;
-DROP TABLE IF EXISTS exam_components;
-DROP TABLE IF EXISTS grade_weights;
 DROP TABLE IF EXISTS exams;
+DROP TABLE IF EXISTS grade_components;
+DROP TABLE IF EXISTS courses;
 SQL
   end
 end

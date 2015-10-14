@@ -11,17 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150926104433) do
+ActiveRecord::Schema.define(version: 20151004133507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "pg_trgm"
   enable_extension "uuid-ossp"
-
-  create_table "b", id: false, force: true do |t|
-    t.hstore "h"
-  end
+  enable_extension "pg_redispub"
 
   create_table "changes", force: true do |t|
     t.text     "table_name",                                  null: false
@@ -37,6 +34,10 @@ ActiveRecord::Schema.define(version: 20150926104433) do
   add_index "changes", ["modified_by"], name: "changes_modified_by", using: :btree
   add_index "changes", ["table_name"], name: "changes_table_name", using: :btree
 
+  create_table "courses", force: true do |t|
+    t.text "name", null: false
+  end
+
   create_table "districts", force: true do |t|
     t.string "code",              limit: 7,  null: false
     t.string "regency_city_code", limit: 4,  null: false
@@ -46,60 +47,41 @@ ActiveRecord::Schema.define(version: 20150926104433) do
   add_index "districts", ["code"], name: "districts_code_key", unique: true, using: :btree
   add_index "districts", ["name"], name: "districts_name", using: :btree
 
-  create_table "exam_components", force: true do |t|
-    t.text    "name",            null: false
-    t.integer "sequence",        null: false
-    t.float   "scale",           null: false
-    t.integer "grade_weight_id"
-  end
-
   create_table "exams", force: true do |t|
     t.integer  "pkg_id"
-    t.text     "name",         default: "Generic",           null: false
+    t.text     "name",               default: "Generic",           null: false
+    t.integer  "grade_component_id"
     t.text     "annotation"
     t.datetime "expired_at"
-    t.datetime "created_at",   default: "clock_timestamp()", null: false
-    t.datetime "modified_at",  default: "clock_timestamp()", null: false
+    t.datetime "created_at",         default: "clock_timestamp()", null: false
+    t.datetime "modified_at",        default: "clock_timestamp()", null: false
     t.text     "modified_by"
     t.datetime "published_at"
     t.text     "published_by"
   end
 
-  create_table "exams_exam_components", force: true do |t|
-    t.integer "exam_id"
-    t.integer "exam_component_id"
-  end
+  add_index "exams", ["id", "grade_component_id"], name: "exam_unique", unique: true, using: :btree
 
-  add_index "exams_exam_components", ["exam_id", "exam_component_id"], name: "exam_unique", unique: true, using: :btree
-
-  create_table "grade_points", force: true do |t|
-    t.integer  "instructor_id"
-    t.integer  "students_record_id",                               null: false
-    t.integer  "student_id"
-    t.float    "theory"
-    t.integer  "practice_id"
-    t.hstore   "items"
-    t.hstore   "custom_items",       default: {},                  null: false
-    t.datetime "created_at",         default: "clock_timestamp()", null: false
-    t.datetime "modified_at",        default: "clock_timestamp()", null: false
-    t.text     "modified_by"
-  end
-
-  create_table "grade_weights", force: true do |t|
-    t.text  "name",   null: false
-    t.float "weight"
+  create_table "grade_components", force: true do |t|
+    t.text    "name",                   null: false
+    t.text    "type",                   null: false
+    t.text    "structure", default: "", null: false
+    t.integer "pkg_id"
+    t.integer "course_id"
   end
 
   create_table "grades", force: true do |t|
-    t.integer  "instructor_id",                                    null: false
+    t.integer  "instructor_id"
     t.integer  "students_record_id",                               null: false
+    t.integer  "student_id"
     t.integer  "exam_id",                                          null: false
-    t.hstore   "grade",              default: {},                  null: false
+    t.float    "grade_sum"
+    t.hstore   "exam_grade",         default: {},                  null: false
+    t.hstore   "anypkg_grade",       default: {},                  null: false
+    t.hstore   "pkg_grade",          default: {},                  null: false
     t.datetime "created_at",         default: "clock_timestamp()", null: false
     t.datetime "modified_at",        default: "clock_timestamp()", null: false
     t.text     "modified_by"
-    t.integer  "student_id",                                       null: false
-    t.float    "grade_sum"
   end
 
   add_index "grades", ["students_record_id", "exam_id"], name: "record_exam_unique", unique: true, using: :btree
@@ -131,18 +113,11 @@ ActiveRecord::Schema.define(version: 20150926104433) do
 
   add_index "instructors_schedules", ["schedule_id", "instructor_id", "day"], name: "instructor_schedule_day_unique", unique: true, using: :btree
 
-  create_table "pkg_grade_items", force: true do |t|
-    t.integer "pkg_id"
-    t.text    "name",     null: false
-    t.integer "sequence", null: false
-  end
-
-  add_index "pkg_grade_items", ["pkg_id", "sequence"], name: "items_sequence_unique", unique: true, using: :btree
-
   create_table "pkgs", force: true do |t|
     t.text    "pkg",        null: false
     t.integer "program_id"
     t.integer "level",      null: false
+    t.integer "course_id"
   end
 
   create_table "prereqs", force: true do |t|
@@ -151,8 +126,7 @@ ActiveRecord::Schema.define(version: 20150926104433) do
   end
 
   create_table "programs", force: true do |t|
-    t.text    "program",            null: false
-    t.integer "head_instructor_id"
+    t.text "program", null: false
   end
 
   add_index "programs", ["program"], name: "programs_program_key", unique: true, using: :btree

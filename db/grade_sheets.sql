@@ -1,49 +1,75 @@
+CREATE TABLE courses(
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL
+);
+
+INSERT INTO courses(name) VALUES('MS Word');
+INSERT INTO courses(name) VALUES('MS Excel');
+INSERT INTO courses(name) VALUES('MS PowerPoint');
+INSERT INTO courses(name) VALUES('MS Access');
+INSERT INTO courses(name) VALUES('Corel Draw');
+INSERT INTO courses(name) VALUES('Adobe Photoshop');
+INSERT INTO courses(name) VALUES('AutoCAD 2D');
+INSERT INTO courses(name) VALUES('AutoCAD 3D');
+INSERT INTO courses(name) VALUES('AC');
+INSERT INTO courses(name) VALUES('Las Dasar');
+INSERT INTO courses(name) VALUES('Mekanik Bubut');
+INSERT INTO courses(name) VALUES('Sepeda Motor');
+INSERT INTO courses(name) VALUES('Listrik Rumah Tangga & Industri');
+
+ALTER TABLE pkgs ADD COLUMN course_id INTEGER REFERENCES courses(id);
+
+UPDATE pkgs SET course_id = 1 WHERE id IN (1, 2, 3, 4);
+UPDATE pkgs SET course_id = 2 WHERE id IN (5, 6, 7);
+UPDATE pkgs SET course_id = 3 WHERE id IN (8, 9);
+UPDATE pkgs SET course_id = 4 WHERE id IN (10);
+UPDATE pkgs SET course_id = 5 WHERE id IN (11, 12);
+UPDATE pkgs SET course_id = 6 WHERE id IN (13);
+UPDATE pkgs SET course_id = 7 WHERE id IN (14);
+UPDATE pkgs SET course_id = 8 WHERE id IN (15); 
+UPDATE pkgs SET course_id = 9 WHERE id IN (18, 28);
+UPDATE pkgs SET course_id = 10 WHERE id IN (19, 20);
+UPDATE pkgs SET course_id = 11 WHERE id IN (21, 22, 23);
+UPDATE pkgs SET course_id = 12 WHERE id IN (24, 25, 26);
+UPDATE pkgs SET course_id = 13 WHERE id IN (16, 17, 27);
+
+-- komponen-komponen nilai
+CREATE TABLE grade_components (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('ExamGradeComponent','PkgGradeComponent')), -- STI
+  structure TEXT NOT NULL DEFAULT '',
+  pkg_id INTEGER REFERENCES pkgs(id),      -- for ExamGrade
+  course_id INTEGER REFERENCES courses(id) -- for PkgGrade
+);
+
 -- a published exam is read-only, since it is attached to students_records which is permanent.
 -- as long as published_by is NULL, an exam is read/write
 CREATE TABLE exams(
   id SERIAL PRIMARY KEY,
   pkg_id INTEGER REFERENCES pkgs(id),
   name TEXT NOT NULL DEFAULT 'Generic',
+  grade_component_id INTEGER REFERENCES grade_components(id),
   annotation TEXT,
   expired_at TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT,
   published_at TIMESTAMP WITH TIME ZONE,
-  published_by TEXT
-);
-
--- this is optionally used for calculating overall grade (for practice exam).
--- if weight value is not given, it can be used as grouping of components in the grade sheet
-CREATE TABLE grade_weights (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  weight FLOAT
-);
-
-CREATE TABLE exam_components (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  sequence INTEGER NOT NULL,
-  scale FLOAT NOT NULL,
-  grade_weight_id INTEGER REFERENCES grade_weights(id)
-);
-
--- join table for exams and exam_components (many to many)
--- on the UI, this facilitates creating an "alias" of an existing exam.
-CREATE TABLE exams_exam_components (
-  id SERIAL PRIMARY KEY,
-  exam_id INTEGER REFERENCES exams(id),
-  exam_component_id INTEGER REFERENCES exam_components(id),
-  CONSTRAINT exam_unique UNIQUE(exam_id, exam_component_id)
+  published_by TEXT,
+  CONSTRAINT exam_unique UNIQUE(id, grade_component_id)
 );
 
 CREATE TABLE grades (
   id SERIAL PRIMARY KEY,
   instructor_id INTEGER REFERENCES instructors(id),
-  students_record_id INTEGER REFERENCES students_records(id),
+  students_record_id INTEGER NOT NULL REFERENCES students_records(id),
+  student_id INTEGER REFERENCES students(id),
   exam_id INTEGER NOT NULL REFERENCES exams(id),
-  grade hstore NOT NULL DEFAULT '',
+  grade_sum FLOAT,
+  exam_grade hstore NOT NULL DEFAULT '',   -- exam grade - defined in grade_components
+  anypkg_grade hstore NOT NULL DEFAULT '', -- universal components which exist in any pkg
+  pkg_grade hstore NOT NULL DEFAULT '',    -- pkg-specific - defined in grade_components
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT,
@@ -51,60 +77,18 @@ CREATE TABLE grades (
   CONSTRAINT record_exam_unique UNIQUE(students_record_id, exam_id)
 );
 
-INSERT INTO exams(pkg_id, name) VALUES(1, 'Obesitas');
+INSERT INTO grade_components(pkg_id, type, name, structure) VALUES(1, 'ExamGradeComponent', 'set komponen nilai MS Word level 1',
+'[{"group":"Paragraf","members":[{"component":"Indentasi","scale":10},{"component":"Perataan Teks","scale":5},{"component":"Jarak Baris","scale":7.5},{"component":"Highlight","scale":5}]},{"group":"Gambar","members":[{"component":"Simbol","scale":5},{"component":"Text Wrap","scale":10},{"component":"Image Control","scale":5}]},{"group":"Page Setup","members":[{"component":"Margins","scale":5},{"component":"Paper Size","scale":5},{"component":"Effect","scale":10}]},{"group":"Format Font","members":[{"component":"Posisi Karakter","scale":10},{"component":"Spasi Karakter","scale":10}]},{"group":"","members":[{"component":"Header dan Footer","scale":7.5},{"component":"Ketelitian dan Kerapihan","scale":5}]}]');
 
-INSERT INTO grade_weights(name) VALUES('Paragraf');
-INSERT INTO grade_weights(name) VALUES('Gambar');
-INSERT INTO grade_weights(name) VALUES('Page Setup');
-INSERT INTO grade_weights(name) VALUES('Format Font');
+INSERT INTO grade_components(course_id, type, name, structure) VALUES(1, 'PkgGradeComponent', 'set komponen nilai MS Word semua level',
+'[{"component":"Mengetik (WPM)"},{"component":"Mengetik (ACC)"},{"component":"Mengelola Dokumen"},{"component":"Tabel & Grafik"}]');
 
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Indentasi',        1, 10,  1);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Perataan Teks',    2, 5,   1);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Jarak Baris',      3, 7.5, 1);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Highlight',        4, 5,   1);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Simbol',           5, 5,   2);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Text Wrap',        6, 10,  2);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Image Control',    7, 5,   2);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Margins',          8, 5,   3);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Paper Size',       9, 5,   3);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Effect',          10, 10,  3);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Posisi Karakter', 11, 10,  4);
-INSERT INTO exam_components(name, sequence, scale, grade_weight_id) VALUES('Spasi Karakter',  12, 10,  4);
-INSERT INTO exam_components(name, sequence, scale) VALUES('Header dan Footer',                13, 7.5);
-INSERT INTO exam_components(name, sequence, scale) VALUES('Ketelitian dan Kerapihan',         14, 5);
+INSERT INTO grade_components(course_id, type, name, structure) VALUES(1, 'PkgGradeComponent', 'set komponen nilai MS Excel semua level',
+'[{"component":"Pengolahan Formula"},{"component":"Mengatur Lembar Kerja"},{"component":"Grafik"}]');
 
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 1);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 2);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 3);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 4);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 5);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 6);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 7);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 8);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 9);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 10);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 11);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 12);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 13);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(1, 14);
-
--- create more exams for MS Word Level 1, but only aliases due to the same components and weights
-INSERT INTO exams(pkg_id, name) VALUES(1, 'Mata');
-
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 1);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 2);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 3);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 4);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 5);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 6);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 7);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 8);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 9);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 10);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 11);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 12);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 13);
-INSERT INTO exams_exam_components(exam_id, exam_component_id) VALUES(2, 14);
+INSERT INTO exams(pkg_id, name, grade_component_id) VALUES(1, 'Obesitas', 1);
+-- the following shares the same components:
+INSERT INTO exams(pkg_id, name, grade_component_id) VALUES(1, 'Mata', 1);
 
 -- publish all exams
 UPDATE exams SET published_at = '2015-09-09', published_by = 'homer';

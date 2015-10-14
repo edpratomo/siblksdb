@@ -1,7 +1,6 @@
 class Exam < ActiveRecord::Base
-  has_many :exams_exam_components
-  has_many :components, through: :exams_exam_components, source: :exam_component
-  has_many :grades #, through: :exams_exam_components
+  belongs_to :exam_grade_component, foreign_key: 'grade_component_id'
+  has_many :grades
 
   belongs_to :pkg
 end
