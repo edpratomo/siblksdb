@@ -32,7 +32,7 @@
       <div class="input-group col-sm-4">
         <%= text_field_tag :kasie_ppk_name, @kasie_ppk_name, placeholder: "Nama lengkap", class: "form-control" %>
       </div>
-      <div class="input-group col-sm-3">
+      <div class="input-group col-sm-4">
         <%= text_field_tag :kasie_ppk_nip, @kasie_ppk_nip, placeholder: "NIP", class: "form-control" %>
       </div>
     </div>
@@ -42,6 +42,13 @@
     <%= label_tag :director, "Direktur", class: "control-label col-sm-4" %>
     <div class="col-sm-3">
       <%= text_field_tag :director, @director, placeholder: "Nama lengkap", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :anypkg_grade_component, "Upload komponen nilai umum", class: "control-label col-sm-4" %>
+    <div class="col-sm-3">
+      <%= file_field_tag :anypkg_grade_component, class: "form-control", accept: "application/json" %>
     </div>
   </div>
 

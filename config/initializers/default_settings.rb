@@ -8,3 +8,4 @@ Setting.defaults[:kasie_ppk_nip] = '19580517 198102 1003'
 # perl -MJSON=to_json -MCalendar::Indonesia::Holiday=list_id_holidays \
 # -le'print to_json(list_id_holidays(year => 2015, detail => 1)->[2], {utf8 => 1, pretty => 1})'
 Setting.defaults[:holidays] = {} 
+Setting.defaults[:anypkg_grade_component] = {}

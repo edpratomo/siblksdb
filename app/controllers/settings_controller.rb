@@ -39,6 +39,18 @@ class SettingsController < ApplicationController
       end
     end
 
+    if params[:anypkg_grade_component]
+      begin
+        content = params[:anypkg_grade_component].read
+        JSON.parse(content)
+        Setting[:anypkg_grade_component] = content
+      rescue JSON::ParserError
+        alert_msg = "File bukan JSON yang valid."
+        redirect_to settings_edit_path, alert: alert_msg
+        return
+      end
+    end
+
     redirect_to settings_edit_path, notice: 'Setting was successfully updated.'
   end
 end

@@ -11,7 +11,7 @@ class GradeComponent < ActiveRecord::Base
 
   # returns terminal nodes in structure
   def items
-    find_terminals structure # JSON.parse(structure)
+    find_terminals structure
   end
 
   protected
