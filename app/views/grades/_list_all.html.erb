@@ -1,0 +1,91 @@
+<div class='well well-small'>
+  <div class='pull-right' data-intro='Reset the filter settings to defaults.' data-position='bottom'>
+    <%= link_to "Reset filters", reset_filterrific_url, :class => 'btn btn-default btn-sm' %>
+  </div>
+  <div>
+    <%= page_entries_info grades, :model => 'grade' %>
+  </div>
+  <div>
+    <%= render_filterrific_spinner %>
+  </div>
+</div>
+
+<% if grades.size > 0 %>
+<table id="listing_grade" class="table pretty table-hover table-striped ExcelTable2007">
+  <%= raw(grade_component_as_table_heading(AnyPkgGradeComponent.first.structure, {before:"Nama"})) %>
+  <tbody>
+    <% grades.each do |gr| %>
+      <tr>
+        <td><%= gr.students_record.student.name %></td>
+        <% gr.ordered_anypkg_grade.each do |component_grade| %>
+        <td>
+          <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
+        </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+
+<%= will_paginate grades, renderer: BootstrapPagination::Rails %>
+<br>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $.editable.addInputType('number', {
+    element : function(settings, original) {
+      var input = $('<input type="number" style="width:50px;" min="0" step="0.1">');
+      $(this).append(input);
+      return(input);
+    },
+    submit : function (settings, original) {
+      if (isNaN($(original).val())) {
+        alert('You must provide a number')
+        return false;
+      } else {
+        return true;
+      }
+    }
+  });
+
+  $('.edit').editable('<%= grades_update_component_url %>', {
+    id: 'grade_component_id',
+    name: 'component_value',
+    type: 'number',
+    indicator : 'Saving...',
+    callback : function(value, settings) {
+      console.log($(this).attr('id'));
+      var grade_id = $(this).attr('id').split('_').shift();
+      $(this).parents("td").next("td").find("div").click();
+      update_total_cell(grade_id);
+    },
+    submitdata: { _method: 'patch' } // required for rails
+  });
+
+  function update_total_cell(id) {
+    jQuery.ajax({
+      url: "/grades/" + id + ".json",
+      type: "GET",
+      dataType: "json",
+      async: true,
+      error: function(XMLHttpRequest, errorTextStatus, error) {
+        alert("Failed: " + errorTextStatus + " ;" + error);
+      },
+      success: function(data) {
+        var grade_id = data.id;
+        var grade_sum = data.grade_sum;
+        $("#total_" + grade_id).html(grade_sum);
+      }
+    });
+  }
+});
+
+$("#listing_grade tr td div").bind('keydown', function(event) {
+  if (event.keyCode == 9) { //for tab key
+    var currentDiv = event.target;
+    $(currentDiv).parents("td").next("td").find("div").click();
+    return false;
+  }
+});
+</script>

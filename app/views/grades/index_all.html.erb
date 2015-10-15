@@ -1,0 +1,23 @@
+<h2>Daftar Nilai Lengkap</h2>
+
+<div class="well">
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Yang sedang mengikuti kursus</label>
+        <%= f.select :with_pkg, @filterrific.select_options[:with_pkg],
+                     { :include_blank => '- Pilih -' },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+  </div>
+<% end %>
+</div>
+
+<div id="filterrific_results">
+  <%= render :partial => 'grades/list_all',
+             :locals => { :grades => @grades }
+ %>
+</div>
