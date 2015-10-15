@@ -3,13 +3,15 @@ Rails.application.routes.draw do
   resources :password_resets
   resources :exams
 
-  resources :grades, :except => [:edit, :update] do
+  resources :grades, :except => [:edit, :update, :show] do
     member do
       get 'options_for_exam'
     end
   end
 
   patch 'grades/update_component'
+
+  get 'grades/all' => 'grades#index_all'
 
   get 'report/new_monthly_generic'
   

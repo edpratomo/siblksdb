@@ -10,6 +10,25 @@ class GradesController < ApplicationController
     @options = @instructor.options_for_exam(params[:id])
   end
 
+  # complete grades
+  def index_all
+    if @instructor
+      @filterrific = initialize_filterrific(
+        Grade,
+        params[:filterrific],
+        :select_options => {
+          sorted_by: Student.options_for_sorted_by,
+          with_pkg: @instructor.options_for_pkg
+        },
+        default_filter_params: { sorted_by: 'students.name_asc', with_pkg: 0 }
+      ) or return
+
+      @grades = Grade.with_instructor(@instructor).joins(:student).
+                filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
+
+    end
+  end
+
   # GET /grades
   # GET /grades.json
   def index
@@ -19,10 +38,11 @@ class GradesController < ApplicationController
         params[:filterrific],
         :select_options => {
           with_exam: @instructor.options_for_exam
-        }
+        },
+        default_filter_params: { sorted_by: 'students.name_asc', with_exam: 0 }
       ) or return
 
-      @grades = Grade.with_instructor(@instructor).joins(:student).sorted_by("students.name_asc").
+      @grades = Grade.with_instructor(@instructor).joins(:student). #sorted_by("students.name_asc").
                 filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
 
       # for table heading
@@ -43,7 +63,6 @@ class GradesController < ApplicationController
 
   # GET /grades/new
   def new
-    # @grade = Grade.new
     @grades = []
     @student_filterrific = initialize_filterrific(
         Student,
@@ -59,7 +78,6 @@ class GradesController < ApplicationController
                 sorted_by('name_asc'). # hard coded at the moment
                 paginate(page: params[:page], per_page: 10)
 
-    # logger.debug("student_filterrific #{@student_filterrific.to_hash.keys.join(', ')}")
     #store_location
   end
 

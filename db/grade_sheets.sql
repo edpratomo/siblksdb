@@ -37,7 +37,7 @@ UPDATE pkgs SET course_id = 13 WHERE id IN (16, 17, 27);
 CREATE TABLE grade_components (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
-  type TEXT NOT NULL CHECK (type IN ('ExamGradeComponent','PkgGradeComponent')), -- STI
+  type TEXT NOT NULL CHECK (type IN ('ExamGradeComponent','PkgGradeComponent','AnyPkgGradeComponent')), -- STI
   structure TEXT NOT NULL DEFAULT '',
   pkg_id INTEGER REFERENCES pkgs(id),      -- for ExamGrade
   course_id INTEGER REFERENCES courses(id) -- for PkgGrade
@@ -85,6 +85,9 @@ INSERT INTO grade_components(course_id, type, name, structure) VALUES(1, 'PkgGra
 
 INSERT INTO grade_components(course_id, type, name, structure) VALUES(1, 'PkgGradeComponent', 'set komponen nilai MS Excel semua level',
 '[{"component":"Pengolahan Formula"},{"component":"Mengatur Lembar Kerja"},{"component":"Grafik"}]');
+
+INSERT INTO grade_components(course_id, type, name, structure) VALUES(1, 'AnyPkgGradeComponent', 'set komponen generik',
+'[{"group":"Nilai","members":[{"component":"Teori"},{"component":"Praktek"}]},{"component":"Kualitas Pekerjaan"},{"component":"Fisik Mental dan Disiplin (FMD) - Terlambat/Kehadiran"},{"component":"Motivasi Kerja"},{"component":"Inisiatif & Kreativitas"},{"component":"Komunikasi"},{"component":"Rekomendasi"},{"component":"Keterangan"}]');
 
 INSERT INTO exams(pkg_id, name, grade_component_id) VALUES(1, 'Obesitas', 1);
 -- the following shares the same components:

@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include RenderGradeComponent
 
   def active_tab_class(*paths)  
     active = false  
@@ -46,45 +47,5 @@ module ApplicationHelper
       )
     end
     nil
-  end
-
-  # grade_component.structure
-  def grade_component_as_table_heading structure
-    out = {}
-    visit_grade_component out, structure
-    render_visited_grade_component(out)
-  end
-
-  protected
-  def visit_grade_component out, structure, depth=0
-    structure.each.with_index do |e,i|
-      out[depth] ||= []
-      if e.has_key? "members"
-        out[depth][0] ||= []
-        out[depth][0].push %{<th colspan="#{e['members'].size}">#{e['group']}</th>}
-        visit_grade_component(out, e['members'], depth + 1)
-      else
-        out[depth][0] ||= []
-        out[depth][0].push "<th>#{e['component']}</th>"
-        out[depth][1] ||= []
-        out[depth][1].push "<th>#{e['scale'] || 'no scale'}</th>"
-      end
-    end
-  end
-
-  def render_visited_grade_component inp
-    heading_rows = inp.values.inject(0) {|m,o| m += o.size}
-
-    inp.keys.each.with_index.sort {|a,b| a[0].to_i <=> b[0].to_i}.map do |k,i|
-      inp[k].inject('') do |m,o|
-        if i == 0
-          m += %{<tr><th rowspan="#{heading_rows}">Nama</th>} + o.join("") +
-                %{<th rowspan="#{heading_rows}">Total</th></tr>}
-        else
-          m += "<tr>" + o.join("") + "</tr>"
-        end
-        m
-      end
-    end.join("\n")
   end
 end

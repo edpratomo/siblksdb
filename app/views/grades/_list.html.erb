@@ -13,7 +13,7 @@
 <%# unless grades.empty? %>
 <% if grades.size > 0 and exam %>
 <table id="listing_grade" class="table pretty table-hover table-striped ExcelTable2007">
-  <%= raw(grade_component_as_table_heading(exam.grade_component.structure)) %>
+  <%= raw(grade_component_as_table_heading(exam.grade_component.structure, {before:"Nama", after:"Total"})) %>
   <tbody>
     <% grades.each do |gr| %>
       <tr>

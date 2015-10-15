@@ -39,3 +39,6 @@ end
 class PkgGradeComponent < GradeComponent
   belongs_to :course
 end
+
+class AnyPkgGradeComponent < GradeComponent
+end
