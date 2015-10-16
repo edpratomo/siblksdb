@@ -24,10 +24,21 @@ body {padding-bottom: 0;}
   position: relative;
   margin-top: -50px; /* negative value of footer height */
   height: 50px;
+  line-height: 50px;
   clear:both;
-  background: #669999;
+  background-color: #292c2f;
   z-index:2100;
+  font: normal 14px sans-serif;
+  color:  #ffffff;
+  text-align: right;
 } 
+
+#footer a{
+  display:inline-block;
+  /* line-height: 1.8; */
+  text-decoration: none;
+  color: inherit;
+}
 
 /*Opera Fix*/
 body:before {/* thanks to Maleika (Kohoutec)*/
