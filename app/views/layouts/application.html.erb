@@ -8,6 +8,8 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= controller_name %> <%= action_name %>">
+<!-- Header -->
+  <div id="wrap">
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -44,10 +46,12 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid">
+<!-- /Header -->
+<!-- Main -->
+    <div id="main" class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
+          <div class="col-md-2 sidebar">
+          <ul class="nav nav-pills nav-stacked">
             <li class="<%= active_tab_class(root_path) %>"><%= link_to "Beranda", root_path %></li>
             <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
             <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
@@ -55,7 +59,7 @@
             <li class="<%= active_tab_class(report_new_monthly_generic_path,  report_new_monthly_generic_path, report_create_monthly_generic_path) %>"><%= link_to "Laporan Bulanan Siswa", report_new_monthly_generic_path %></li>
             <li class="<%= active_tab_class(report_new_disnaker_path, report_create_disnaker_path) %>"><%= link_to "Laporan Pelaksanaan Pelatihan", report_new_disnaker_path %></li>
           </ul>
-          <ul class="nav nav-sidebar">
+          <ul class="nav nav-pills nav-stacked">
             <% permitted_to? :read, :programs do %>
               <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
             <% end %>
@@ -66,7 +70,7 @@
               <li class="<%= active_tab_class(schedules_path) %>"><%= link_to "Slot Jadwal", schedules_path %></li>
             <% end %>
           </ul>
-          <ul class="nav nav-sidebar">
+          <ul class="nav nav-pills nav-stacked">
             <% permitted_to? :read, :instructors do %>
               <li class="<%= active_tab_class(instructors_path) %>"><%= link_to "Instruktur", instructors_path %></li>
             <% end %>
@@ -85,6 +89,8 @@
         </div>
       </div>
     </div>
+<!-- Main -->
+  </div>
 
 <script type="text/javascript">
 
@@ -123,5 +129,13 @@ $('#search_student').on('typeahead:opened', function (e, datum) {
 });
 
 </script>
+<div id="footer">
+  <span>Powered by</span>
+  <img src="/images/rails.png" alt="Ruby on Rails" style="padding-top:3px;"/>
+  <span style="padding-right:10px"><a target="_blank" href="http://rubyonrails.org"><strong>Ruby on Rails</strong></a></span>
+  <img src="/images/pgsql.jpg" alt="PostgreSQL" style="padding-top:3px;" />
+  <span style="padding-right:10px"><a target="_blank" href="http://postgresql.org"><strong>PostgreSQL</strong></a></span>
+</div>
+
 </body>
 </html>
