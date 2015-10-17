@@ -25,7 +25,7 @@
             <%= f.check_box(:instructors_schedule_ids, 
                             {multiple: true, id: "schedules_#{sched_idx}_#{day_idx}_#{pkg_idx}_#{e.id}", seat: "#{e.avail_seat}"}, 
                             e.id, nil)
-            %> <%= "#{e.avail_seat} (#{e.instructor.nick})" %>
+            %> <span class="seat_<%= e.id %>"><%= e.avail_seat %></span> (<%= e.instructor.nick %>)
             </div>
           <% end %>
           </td>

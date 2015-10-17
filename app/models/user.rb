@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_one :users_instructor
   has_one :instructor, through: :users_instructor
 
-  validate :username, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: true
   has_secure_password
 
   def role_symbols

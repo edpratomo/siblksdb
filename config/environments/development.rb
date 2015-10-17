@@ -39,4 +39,5 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.raise_delivery_errors = true
+  config.x.sse_base_url = "http://localhost:9292"
 end
