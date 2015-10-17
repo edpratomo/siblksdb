@@ -4,6 +4,9 @@ class Grade < ActiveRecord::Base
   belongs_to :exam
   belongs_to :student
 
+  has_one :exam_grade, foreign_key: 'grade_id'
+  has_one :theory_grade, foreign_key: 'grade_id'
+
   delegate :pkg, to: :students_record
 
   validates_uniqueness_of :exam, scope: :students_record

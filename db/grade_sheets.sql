@@ -65,16 +65,27 @@ CREATE TABLE grades (
   instructor_id INTEGER REFERENCES instructors(id),
   students_record_id INTEGER NOT NULL REFERENCES students_records(id),
   student_id INTEGER REFERENCES students(id),
-  exam_id INTEGER NOT NULL REFERENCES exams(id),
-  grade_sum FLOAT,
-  exam_grade hstore NOT NULL DEFAULT '',   -- exam grade - defined in grade_components
   anypkg_grade hstore NOT NULL DEFAULT '', -- universal components which exist in any pkg
   pkg_grade hstore NOT NULL DEFAULT '',    -- pkg-specific - defined in grade_components
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
-  modified_by TEXT,
+  modified_by TEXT
   -- no repeated / duplicate exam for the same students_record
-  CONSTRAINT record_exam_unique UNIQUE(students_record_id, exam_id)
+  -- CONSTRAINT record_exam_unique UNIQUE(students_record_id, exam_id)
+);
+
+CREATE TABLE repeatable_grades (
+  id SERIAL PRIMARY KEY,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_by TEXT,
+  type TEXT NOT NULL CHECK (type IN ('ExamGrade','TheoryGrade')), -- STI
+  students_record_id INTEGER NOT NULL REFERENCES students_records(id),
+  grade_sum FLOAT,
+  grade_id INTEGER REFERENCES grades(id),
+  -- the following are specific to ExamGrade:
+  exam_id INTEGER REFERENCES exams(id),
+  exam_grade hstore DEFAULT ''   -- exam grade - defined in grade_components
 );
 
 INSERT INTO grade_components(pkg_id, type, name, structure) VALUES(1, 'ExamGradeComponent', 'set komponen nilai MS Word level 1',

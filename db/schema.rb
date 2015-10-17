@@ -74,17 +74,12 @@ ActiveRecord::Schema.define(version: 20151004133507) do
     t.integer  "instructor_id"
     t.integer  "students_record_id",                               null: false
     t.integer  "student_id"
-    t.integer  "exam_id",                                          null: false
-    t.float    "grade_sum"
-    t.hstore   "exam_grade",         default: {},                  null: false
     t.hstore   "anypkg_grade",       default: {},                  null: false
     t.hstore   "pkg_grade",          default: {},                  null: false
     t.datetime "created_at",         default: "clock_timestamp()", null: false
     t.datetime "modified_at",        default: "clock_timestamp()", null: false
     t.text     "modified_by"
   end
-
-  add_index "grades", ["students_record_id", "exam_id"], name: "record_exam_unique", unique: true, using: :btree
 
   create_table "groups", force: true do |t|
     t.text "name", null: false
@@ -150,6 +145,18 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   end
 
   add_index "regencies_cities", ["code"], name: "regencies_cities_code_key", unique: true, using: :btree
+
+  create_table "repeatable_grades", force: true do |t|
+    t.datetime "created_at",         default: "clock_timestamp()", null: false
+    t.datetime "modified_at",        default: "clock_timestamp()", null: false
+    t.text     "modified_by"
+    t.text     "type",                                             null: false
+    t.integer  "students_record_id",                               null: false
+    t.float    "grade_sum"
+    t.integer  "grade_id"
+    t.integer  "exam_id"
+    t.hstore   "exam_grade",         default: {}
+  end
 
   create_table "schedules", force: true do |t|
     t.text "label",     null: false

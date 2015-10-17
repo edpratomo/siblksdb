@@ -63,7 +63,7 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION clear_grade()
   RETURNS TRIGGER AS $body$
 BEGIN
-  UPDATE grades SET exam_grade = '' WHERE id = NEW.id;
+  UPDATE repeatable_grades SET exam_grade = '' WHERE id = NEW.id;
   RETURN NEW;
 END;
 $body$
@@ -113,7 +113,7 @@ CREATE TRIGGER grades_01_check_exam_published
 ;
 
 CREATE TRIGGER grades_clear_grade
- AFTER UPDATE OF exam_id ON grades 
+ AFTER UPDATE OF exam_id ON repeatable_grades 
   FOR EACH ROW EXECUTE PROCEDURE clear_grade()
 ;
 
@@ -156,6 +156,6 @@ $body$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER grades_compute_sum
- BEFORE UPDATE OF exam_grade ON grades
+ BEFORE UPDATE OF exam_grade ON repeatable_grades
   FOR EACH ROW EXECUTE PROCEDURE compute_sum()
 ;
