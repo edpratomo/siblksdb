@@ -28,7 +28,7 @@ body {padding-bottom: 0;}
   clear:both;
   background-color: #292c2f;
   z-index:2100;
-  font: normal 14px sans-serif;
+  font: normal 14px;
   color:  #ffffff;
   text-align: right;
 } 
