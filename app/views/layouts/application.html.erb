@@ -52,7 +52,7 @@
     <div id="main" class="container-fluid">
       <div class="row">
           <div class="col-md-2 sidebar">
-          <ul class="nav nav-pills nav-stacked">
+          <ul class="nav nav-sidebar">
             <li class="<%= active_tab_class(root_path) %>"><%= link_to "Beranda", root_path %></li>
             <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
             <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
@@ -60,7 +60,7 @@
             <li class="<%= active_tab_class(report_new_monthly_generic_path,  report_new_monthly_generic_path, report_create_monthly_generic_path) %>"><%= link_to "Laporan Bulanan Siswa", report_new_monthly_generic_path %></li>
             <li class="<%= active_tab_class(report_new_disnaker_path, report_create_disnaker_path) %>"><%= link_to "Laporan Pelaksanaan Pelatihan", report_new_disnaker_path %></li>
           </ul>
-          <ul class="nav nav-pills nav-stacked">
+          <ul class="nav nav-sidebar">
             <% permitted_to? :read, :programs do %>
               <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
             <% end %>
@@ -71,7 +71,7 @@
               <li class="<%= active_tab_class(schedules_path) %>"><%= link_to "Slot Jadwal", schedules_path %></li>
             <% end %>
           </ul>
-          <ul class="nav nav-pills nav-stacked">
+          <ul class="nav nav-sidebar">
             <% permitted_to? :read, :instructors do %>
               <li class="<%= active_tab_class(instructors_path) %>"><%= link_to "Instruktur", instructors_path %></li>
             <% end %>
