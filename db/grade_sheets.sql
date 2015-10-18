@@ -83,6 +83,7 @@ CREATE TABLE repeatable_grades (
   modified_by TEXT,
   type TEXT NOT NULL CHECK (type IN ('ExamGrade','TheoryGrade')), -- STI
   students_record_id INTEGER NOT NULL REFERENCES students_records(id),
+  student_id INTEGER REFERENCES students(id),
   grade_sum FLOAT,
   grade_id INTEGER REFERENCES grades(id),
   -- the following are specific to ExamGrade:

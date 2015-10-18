@@ -34,7 +34,7 @@ class GradesController < ApplicationController
   def index
     if @instructor
       @filterrific = initialize_filterrific(
-        Grade,
+        ExamGrade,
         params[:filterrific],
         :select_options => {
           with_exam: @instructor.options_for_exam
@@ -42,7 +42,7 @@ class GradesController < ApplicationController
         default_filter_params: { sorted_by: 'students.name_asc', with_exam: 0 }
       ) or return
 
-      @grades = Grade.with_instructor(@instructor).joins(:student). #sorted_by("students.name_asc").
+      @grades = ExamGrade.with_instructor(@instructor).joins(:student). #sorted_by("students.name_asc").
                 filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
 
       # for table heading

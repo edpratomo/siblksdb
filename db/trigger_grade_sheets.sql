@@ -24,12 +24,14 @@ CREATE OR REPLACE FUNCTION update_student_cache()
   RETURNS TRIGGER AS $body$
 BEGIN
   UPDATE grades SET student_id = NEW.student_id WHERE students_record_id = OLD.id;
+  UPDATE repeatable_grades SET student_id = NEW.student_id WHERE students_record_id = OLD.id;
   RETURN NEW;
 END;
 $body$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS grades_cache_student ON grades;
+DROP TRIGGER IF EXISTS repeatable_grades_cache_student ON repeatable_grades;
 DROP TRIGGER IF EXISTS grades_update_student_cache ON students_records;
 
 CREATE TRIGGER grades_cache_student
@@ -40,6 +42,11 @@ CREATE TRIGGER grades_cache_student
 CREATE TRIGGER grades_update_student_cache
  AFTER UPDATE OF student_id ON students_records
   FOR EACH ROW EXECUTE PROCEDURE update_student_cache()
+;
+
+CREATE TRIGGER repeatable_grades_cache_student
+ BEFORE INSERT ON repeatable_grades
+  FOR EACH ROW EXECUTE PROCEDURE cache_student()
 ;
 
 -- prevent changes to exam and its grade_component if exam is published

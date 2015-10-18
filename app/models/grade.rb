@@ -1,10 +1,10 @@
 class Grade < ActiveRecord::Base
   belongs_to :instructor
   belongs_to :students_record
-  belongs_to :exam
   belongs_to :student
 
-  has_one :exam_grade, foreign_key: 'grade_id' # exam_grades.grade_id
+  # repeatable_grades.grade_id
+  has_one :exam_grade, foreign_key: 'grade_id'
   has_one :theory_grade, foreign_key: 'grade_id'
 
   delegate :pkg, to: :students_record
@@ -30,7 +30,7 @@ class Grade < ActiveRecord::Base
     # default_filter_params: { sorted_by: 'id_asc', with_exam: 0 },
     available_filters: [
       :sorted_by,
-      :with_exam,
+      #:with_exam,
       :with_instructor,
       :with_pkg
     ]
@@ -42,9 +42,9 @@ class Grade < ActiveRecord::Base
     end
   }
 
-  scope :with_exam, ->(exam) {
-    where(:exam => exam)
-  }
+  # scope :with_exam, ->(exam) {
+  #  where(:exam => exam)
+  #}
 
   scope :with_instructor, ->(instructor) {
     where(:instructor => instructor)

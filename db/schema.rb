@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 20151004133507) do
     t.text     "modified_by"
     t.text     "type",                                             null: false
     t.integer  "students_record_id",                               null: false
+    t.integer  "student_id"
     t.float    "grade_sum"
     t.integer  "grade_id"
     t.integer  "exam_id"
@@ -275,6 +276,7 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   add_foreign_key "regencies_cities", "provinces", column: "province_code", primary_key: "code", name: "regencies_cities_province_code_fkey"
   add_foreign_key "repeatable_grades", "exams", name: "repeatable_grades_exam_id_fkey"
   add_foreign_key "repeatable_grades", "grades", name: "repeatable_grades_grade_id_fkey"
+  add_foreign_key "repeatable_grades", "students", name: "repeatable_grades_student_id_fkey"
   add_foreign_key "repeatable_grades", "students_records", name: "repeatable_grades_students_record_id_fkey"
   add_foreign_key "students_pkgs", "pkgs", name: "students_pkgs_pkg_id_fkey"
   add_foreign_key "students_pkgs", "students", name: "students_pkgs_student_id_fkey"
