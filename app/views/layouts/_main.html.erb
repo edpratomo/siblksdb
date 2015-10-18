@@ -20,6 +20,20 @@
             </li>
           </ul>
           <ul class="nav nav-sidebar">
+            <% permitted_to? :new, :grades do %>
+              <li class="<%= active_tab_class(new_grade_path) %>"><%= link_to "Peserta Ujian Praktek", new_grade_path %></li>
+            <% end %>
+            <% permitted_to? :read, :grades do %>
+              <li class="<%= active_tab_class(grades_path) %>"><%= link_to "Entri Nilai Praktek", grades_path %></li>
+            <% end %>
+            <% permitted_to? :read, :grades do %>
+              <li class="<%= active_tab_class(grades_all_path) %>"><%= link_to "Entri Nilai Lengkap", grades_all_path %></li>
+            <% end %>
+            <% permitted_to? :read, :exams do %>
+              <li class="<%= active_tab_class(exams_path) %>"><%= link_to "Komponen Nilai Praktek", exams_path %></li>
+            <% end %>
+          </ul>
+          <ul class="nav nav-sidebar">
             <% permitted_to? :read, :programs do %>
               <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
             <% end %>
