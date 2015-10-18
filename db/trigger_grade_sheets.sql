@@ -49,10 +49,14 @@ CREATE OR REPLACE FUNCTION check_exam_published()
 DECLARE
   publisher TEXT;
 BEGIN
-  publisher := (SELECT published_by FROM exams WHERE id = NEW.exam_id);
-  IF (publisher IS NULL) THEN
-    RAISE EXCEPTION '[CHECK_EXAM_PUBLISHED] - exam is not published yet';
-    RETURN NULL;
+  IF (NEW.type = 'ExamGrade') THEN
+    publisher := (SELECT published_by FROM exams WHERE id = NEW.exam_id);
+    IF (publisher IS NULL) THEN
+      RAISE EXCEPTION '[CHECK_EXAM_PUBLISHED] - exam is not published yet';
+      RETURN NULL;
+    ELSE
+      RETURN NEW;
+    END IF;
   ELSE
     RETURN NEW;
   END IF;
@@ -63,7 +67,9 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION clear_grade()
   RETURNS TRIGGER AS $body$
 BEGIN
-  UPDATE repeatable_grades SET exam_grade = '' WHERE id = NEW.id;
+  IF (NEW.type = 'ExamGrade') THEN
+    UPDATE repeatable_grades SET exam_grade = '' WHERE id = NEW.id;
+  END IF;
   RETURN NEW;
 END;
 $body$
@@ -99,8 +105,8 @@ END;
 $body$
 LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS grades_01_check_exam_published ON grades;
-DROP TRIGGER IF EXISTS grades_clear_grade ON grades;
+DROP TRIGGER IF EXISTS grades_01_check_exam_published ON repeatable_grades;
+DROP TRIGGER IF EXISTS grades_clear_grade ON repeatable_grades;
 DROP TRIGGER IF EXISTS exams_check_readonly ON exams;
 DROP TRIGGER IF EXISTS grade_components_check_readonly ON grade_components;
 DROP TRIGGER IF EXISTS grades_if_modified ON grades;
@@ -108,7 +114,7 @@ DROP TRIGGER IF EXISTS exams_if_modified ON exams;
 
 -- check if exam has been published before modifying grades
 CREATE TRIGGER grades_01_check_exam_published
- BEFORE INSERT OR UPDATE ON grades
+ BEFORE INSERT OR UPDATE ON repeatable_grades
   FOR EACH ROW EXECUTE PROCEDURE check_exam_published()
 ;
 

@@ -39,6 +39,13 @@ CREATE TABLE grade_components (
   name TEXT NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('ExamGradeComponent','PkgGradeComponent','AnyPkgGradeComponent')), -- STI
   structure TEXT NOT NULL DEFAULT '',
+  annotation TEXT,
+  expired_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
+  modified_by TEXT,
+  published_at TIMESTAMP WITH TIME ZONE,   -- for ExamGrade
+  published_by TEXT,                       -- for ExamGrade
   pkg_id INTEGER REFERENCES pkgs(id),      -- for ExamGrade
   course_id INTEGER REFERENCES courses(id) -- for PkgGrade
 );
@@ -50,11 +57,6 @@ CREATE TABLE exams(
   pkg_id INTEGER REFERENCES pkgs(id),
   name TEXT NOT NULL DEFAULT 'Generic',
   grade_component_id INTEGER REFERENCES grade_components(id),
-  annotation TEXT,
-  expired_at TIMESTAMP WITH TIME ZONE,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
-  modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
-  modified_by TEXT,
   published_at TIMESTAMP WITH TIME ZONE,
   published_by TEXT,
   CONSTRAINT exam_unique UNIQUE(id, grade_component_id)
