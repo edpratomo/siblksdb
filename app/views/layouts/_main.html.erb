@@ -1,0 +1,53 @@
+<!-- Main -->
+    <div id="main" class="container-fluid">
+      <div class="row">
+        <div class="col-md-2 sidebar" id="MainMenu">
+          <ul class="nav nav-sidebar">
+            <li class="<%= active_tab_class(root_path) %>"><%= link_to "Beranda", root_path %></li>
+            <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
+            <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
+            <li class="<%= active_tab_class(presence_sheet_new_path) %>"><%= link_to "Lembar Absensi Siswa", presence_sheet_new_path %></li>
+            <li class="collapse"">
+              <a href="#report_submenu" class="list-group-item" data-toggle="collapse" data-parent="#report_submenu">Laporan <span class="caret"></span></a>
+              <div class="collapse list-group-submenu <%= is_collapsed("report") %>" id="report_submenu">
+                <%= link_to "Laporan Bulanan Siswa", report_new_monthly_generic_path, "data-parent" => "#report_submenu",
+                    class: "list-group-item #{active_tab_class(report_new_monthly_generic_path, report_new_monthly_generic_path, report_create_monthly_generic_path)}"
+                %>
+                <%= link_to "Laporan Pelaksanaan Pelatihan", report_new_disnaker_path, "data-parent" => "#report_submenu",
+                    class: "list-group-item #{active_tab_class(report_new_disnaker_path, report_create_disnaker_path)}"
+                %>
+              </div>
+            </li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <% permitted_to? :read, :programs do %>
+              <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
+            <% end %>
+            <% permitted_to? :read, :pkgs do %>
+              <li class="<%= active_tab_class(pkgs_path) %>"><%= link_to "Kursus", pkgs_path %></li>
+            <% end %>
+            <% permitted_to? :read, :schedules do %>
+              <li class="<%= active_tab_class(schedules_path) %>"><%= link_to "Slot Jadwal", schedules_path %></li>
+            <% end %>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <% permitted_to? :read, :instructors do %>
+              <li class="<%= active_tab_class(instructors_path) %>"><%= link_to "Instruktur", instructors_path %></li>
+            <% end %>
+            <% permitted_to? :read, :users do %>
+              <li class="<%= active_tab_class(users_path) %>"><%= link_to "Users", users_path %></li>
+            <% end %>
+            <% permitted_to? :read, :changes do %>
+              <li class="<%= active_tab_class(changes_path) %>"><%= link_to "Log Perubahan", changes_path %></li>
+            <% end %>
+          </ul>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div class="table-responsive">
+<%= yield %>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- Main -->

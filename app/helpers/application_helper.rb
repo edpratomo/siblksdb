@@ -7,6 +7,14 @@ module ApplicationHelper
     active ? 'active' : ''  
   end  
 
+  def is_collapsed(controller)
+    if controller_name == controller
+      "in"
+    else
+      ""
+    end
+  end
+
   def current_user_fullname
     if session[:user_id]
       user = User.find_by(id: session[:user_id])
