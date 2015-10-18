@@ -1,10 +1,11 @@
-class RepatableGrade < ActiveRecord::Base
+class RepeatableGrade < ActiveRecord::Base
+  belongs_to :students_record
+  belongs_to :grade
 end
 
 class TheoryGrade < RepeatableGrade
-  belongs_to :grade
 end
 
 class ExamGrade < RepeatableGrade
-  belongs_to :grade
+  belongs_to :exam
 end

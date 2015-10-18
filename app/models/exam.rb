@@ -3,6 +3,7 @@ class Exam < ActiveRecord::Base
   alias_method :grade_component, :exam_grade_component
 
   has_many :grades
+  has_one :exam_grade
 
   belongs_to :pkg
 end

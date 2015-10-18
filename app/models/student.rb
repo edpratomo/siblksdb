@@ -188,7 +188,7 @@ class Student < ActiveRecord::Base
   def current_exams pkg
     sr = StudentsRecord.find_by(pkg: [*pkg], student: self, status: "active")
     return [] unless sr
-    Grade.where(students_record: sr).map {|e| e.exam}
+    ExamGrade.where(students_record: sr).map {|e| e.exam}
   end
 
   private
