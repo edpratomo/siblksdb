@@ -9,15 +9,6 @@ class Grade < ActiveRecord::Base
 
   delegate :pkg, to: :students_record
 
-  validates_uniqueness_of :exam, scope: :students_record
-
-  def ordered_exam_grade
-    # convert exam_grade to array, assign non-existent value with '-'
-    exam.grade_component.items.each.with_index.map do |e,idx|
-      OpenStruct.new(id: idx, value: exam_grade[idx.to_s] || '-')
-    end
-  end
-
   def ordered_anypkg_grade
     anypkg_grade = AnyPkgGradeComponent.first
     anypkg_grade.items.each.with_index.map do |e,idx|

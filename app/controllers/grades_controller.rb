@@ -2,6 +2,7 @@ class GradesController < ApplicationController
   before_action :set_grade, only: [:show, :edit, :update, :destroy]
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_current_user
 
   # filter_resource_access
   filter_access_to :all, :except => :options_for_exam
@@ -42,12 +43,12 @@ class GradesController < ApplicationController
         default_filter_params: { sorted_by: 'students.name_asc', with_exam: 0 }
       ) or return
 
-      @grades = ExamGrade.with_instructor(@instructor).joins(:student). #sorted_by("students.name_asc").
-                filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
+      @exam_grades = ExamGrade.with_instructor(@instructor).joins(:student). #sorted_by("students.name_asc").
+                     filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
 
       # for table heading
       # @exam = Exam.find(params[:filterrific][:with_exam]) rescue nil
-      @exam = Exam.find(@filterrific.to_hash.fetch("with_exam")) unless @grades.empty?
+      @exam = Exam.find(@filterrific.to_hash.fetch("with_exam")) unless @exam_grades.empty?
 
     else # for non-instructor viewer
       # if params[:instructor_id] 
@@ -88,33 +89,23 @@ class GradesController < ApplicationController
   # POST /grades
   # POST /grades.json
   def create
-    # @grade = Grade.new(grade_params)
     exam = Exam.find(params[:exam_id])
-
-    @grades = params[:student_ids].map do |student_id|
-      # XXX should be in transaction?
-      students_record = StudentsRecord.find_by(pkg: exam.pkg, student: student_id, status: "active")
-      Grade.new(students_record: students_record, instructor: @instructor, exam: exam)
-    end
-
-    logger.debug("grades: #{@grades.size}")
-    @grades.each do |grade|
-      grade.save
-    end
-
-    respond_to do |format|
-      # if @grade.save
-      if true
-        format.html {
-          redirect_back_or_default(new_grade_url)
-          # redirect_to new_grade_url, notice: 'Grade(s) was successfully created.'
-        }
-        format.json { render :show, status: :created, location: @grade }
-      else
-        format.html { render :new }
-        format.json { render json: @grade.errors, status: :unprocessable_entity }
+    exam.transaction_user(@current_user) do
+      params[:student_ids].map do |student_id|
+        students_record = StudentsRecord.find_by(pkg: exam.pkg, student: student_id, status: "active")
+        if students_record
+          grade = Grade.find_by(students_record: students_record)
+          unless grade
+            grade = Grade.new(students_record: students_record, instructor: @instructor)
+            grade.save
+          end
+          exam_grade = ExamGrade.new(students_record: students_record, exam: exam, grade: grade)
+          exam_grade.save
+        end
       end
     end
+
+    redirect_back_or_default(new_grade_url)
   end
 
   def update_component
@@ -180,5 +171,9 @@ class GradesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_params
       params[:grade]
+    end
+
+    def set_current_user
+      @current_user = current_user.username
     end
 end
