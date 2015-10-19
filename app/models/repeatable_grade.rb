@@ -12,7 +12,7 @@ class ExamGrade < RepeatableGrade
 
   validates_uniqueness_of :exam, scope: :students_record
 
-  def ordered_by_grade_components
+  def ordered_grades
     # convert exam_grade to array, assign non-existent value with '-'
     exam.grade_component.items.each.with_index.map do |e,idx|
       OpenStruct.new(id: idx, value: exam_grade[idx.to_s] || '-')

@@ -21,7 +21,6 @@ class Grade < ActiveRecord::Base
     # default_filter_params: { sorted_by: 'id_asc', with_exam: 0 },
     available_filters: [
       :sorted_by,
-      #:with_exam,
       :with_instructor,
       :with_pkg
     ]

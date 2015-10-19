@@ -1,5 +1,6 @@
 class GradesController < ApplicationController
-  before_action :set_grade, only: [:show, :edit, :update, :destroy]
+  before_action :set_grade, only: [:edit, :update, :destroy]
+  before_action :set_exam_grade, only: [:show]
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_current_user
@@ -112,7 +113,7 @@ class GradesController < ApplicationController
     grade_id, component_id = params[:grade_component_id].split('_')
     component_value = params[:component_value]
 
-    @grade = Grade.find(grade_id)
+    @grade = ExamGrade.find(grade_id)
     respond_to do |format|
       current_grade = @grade.exam_grade
       unless component_value =~ /^\d+(?:\.\d+)?$/
@@ -162,6 +163,10 @@ class GradesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_grade
       @grade = Grade.find(params[:id])
+    end
+
+    def set_exam_grade
+      @exam_grade = ExamGrade.find(params[:id])
     end
 
     def set_instructor

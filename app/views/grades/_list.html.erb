@@ -17,7 +17,7 @@
     <% grades.each do |gr| %>
       <tr>
         <td><%= gr.student.name %></td>
-        <% gr.ordered_by_grade_components.each do |component_grade| %>
+        <% gr.ordered_grades.each do |component_grade| %>
         <td>
           <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         </td>

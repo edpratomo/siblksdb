@@ -1,1 +1,1 @@
-json.extract! @grade, :id, :grade_sum
+json.extract! @exam_grade, :id, :grade_sum
