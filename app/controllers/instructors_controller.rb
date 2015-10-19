@@ -35,13 +35,13 @@ class InstructorsController < ApplicationController
     added.each do |to_add|
       schedule_id, day = to_add.split('_')
       instructor_schedule = InstructorsSchedule.new(instructor: @instructor, schedule_id: schedule_id.to_i, day: day)
-      instructor_schedule.transaction_user(@current_user) { instructor_schedule.save }
+      ActiveRecord::Base.transaction_user(@current_user) { instructor_schedule.save }
     end
 
     deleted.each do |to_add|
       schedule_id, day = to_add.split('_')
       instructor_schedule = InstructorsSchedule.find_by(instructor: @instructor, schedule_id: schedule_id.to_i, day: day)
-      instructor_schedule.transaction_user(@current_user) { instructor_schedule.destroy }
+      ActiveRecord::Base.transaction_user(@current_user) { instructor_schedule.destroy }
     end
 
     respond_to do |format|
@@ -76,7 +76,7 @@ class InstructorsController < ApplicationController
       @instructor.programs = params[:instructor][:program_ids].map {|e| Program.find(e)}.compact
     end
     respond_to do |format|
-      if @instructor.transaction_user(@current_user) { @instructor.save }
+      if ActiveRecord::Base.transaction_user(@current_user) { @instructor.save }
         if params[:init_default_schedule]
           ActiveRecord::Base.connection.execute("SELECT initialize_instructors_schedules(#{@instructor.id})")
         end
@@ -93,7 +93,7 @@ class InstructorsController < ApplicationController
   # PATCH/PUT /instructors/1.json
   def update
     respond_to do |format|
-      if @instructor.transaction_user(@current_user) { @instructor.update(instructor_params) }
+      if ActiveRecord::Base.transaction_user(@current_user) { @instructor.update(instructor_params) }
         format.html { redirect_to @instructor, notice: 'Instructor was successfully updated.' }
         format.json { render :show, status: :ok, location: @instructor }
       else
@@ -106,7 +106,7 @@ class InstructorsController < ApplicationController
   # DELETE /instructors/1
   # DELETE /instructors/1.json
   def destroy
-    @instructor.transaction_user(@current_user) { @instructor.destroy }
+    ActiveRecord::Base.transaction_user(@current_user) { @instructor.destroy }
     respond_to do |format|
       format.html { redirect_to instructors_url, notice: 'Instructor was successfully destroyed.' }
       format.json { head :no_content }

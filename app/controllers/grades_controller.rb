@@ -89,8 +89,8 @@ class GradesController < ApplicationController
   # POST /grades
   # POST /grades.json
   def create
-    exam = Exam.find(params[:exam_id])
-    exam.transaction_user(@current_user) do
+    ActiveRecord::Base.transaction_user(@current_user) do
+      exam = Exam.find(params[:exam_id])
       params[:student_ids].map do |student_id|
         students_record = StudentsRecord.find_by(pkg: exam.pkg, student: student_id, status: "active")
         if students_record

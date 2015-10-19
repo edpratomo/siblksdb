@@ -1,6 +1,4 @@
 class Student < ActiveRecord::Base
-  include TransactionHelper
-  
   validates_presence_of :religion, :name, :birthplace, :birthdate, :sex, :phone, :email
   validates_presence_of :district, :regency_city
   validate :registered_at_before_created_at_and_started_on  

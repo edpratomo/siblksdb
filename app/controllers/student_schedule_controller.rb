@@ -22,7 +22,7 @@ class StudentScheduleController < ApplicationController
 
     unless @students_pkg.instructors_schedules == chosen_instructors_schedules
       logger.debug("Updating students_pkgs_instructors_schedules")
-      @students_pkg.transaction_user(username) {
+      ActiveRecord::Base.transaction_user(username) {
         @students_pkg.instructors_schedules = chosen_instructors_schedules
       }
     end

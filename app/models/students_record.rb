@@ -1,6 +1,4 @@
 class StudentsRecord < ActiveRecord::Base
-  include TransactionHelper
-
   has_many :exam_grades, foreign_key: 'students_record_id'  # repeatable_grades.students_record_id
 
   # :students <= :students_records => :pkgs

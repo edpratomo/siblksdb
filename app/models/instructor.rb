@@ -1,6 +1,4 @@
 class Instructor < ActiveRecord::Base
-  include TransactionHelper
-
   validates :name, presence: true
   validates :nick, presence: true
   
