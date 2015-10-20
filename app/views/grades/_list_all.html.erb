@@ -17,10 +17,16 @@
     <% grades.each do |gr| %>
       <tr>
         <td><%= gr.students_record.student.name %></td>
-        <% gr.ordered_anypkg_grade.each do |component_grade| %>
+        <% gr.ordered_anypkg_grade.each.with_index do |component_grade,i| %>
+        <% if i == 1 %><%# Nilai Praktek %>
+        <td>
+          <div class="select_edit" id="<%= gr.id %>_exam_grade"><%= gr.exam_grade.grade_sum %></div>
+        </td>
+        <% else %>
         <td>
           <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         </td>
+        <% end %><%# end if %>
         <% end %>
       </tr>
     <% end %>
@@ -58,9 +64,16 @@ $(document).ready(function() {
       console.log($(this).attr('id'));
       var grade_id = $(this).attr('id').split('_').shift();
       $(this).parents("td").next("td").find("div").click();
-      update_total_cell(grade_id);
+      //update_total_cell(grade_id);
     },
     submitdata: { _method: 'patch' } // required for rails
+  });
+
+  $('.select_edit').editable('<%= grades_update_exam_grade_path %>', {
+    cssclass: "form-control",
+    loadurl: "/options_for_exam_grade.json",
+    type   : 'select',
+    submit : 'OK'
   });
 
   function update_total_cell(id) {

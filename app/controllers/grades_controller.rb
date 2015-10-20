@@ -1,15 +1,19 @@
 class GradesController < ApplicationController
-  before_action :set_grade, only: [:edit, :update, :destroy]
+  before_action :set_grade, only: [:edit, :update, :destroy, :options_for_exam_grade]
   before_action :set_exam_grade, only: [:show]
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_current_user
 
   # filter_resource_access
-  filter_access_to :all, :except => :options_for_exam
+  filter_access_to :all, :except => [:options_for_exam, :options_for_exam_grade]
 
   def options_for_exam
     @options = @instructor.options_for_exam(params[:id])
+  end
+
+  def options_for_exam_grade
+    @options = @grade.options_for_exam_grade
   end
 
   # complete grades
@@ -96,7 +100,14 @@ class GradesController < ApplicationController
         students_record = StudentsRecord.find_by(pkg: exam.pkg, student: student_id, status: "active")
         if students_record
           grade = Grade.find_by(students_record: students_record)
-          unless grade
+          if grade
+            existing_exam_grade = ExamGrade.find_by(grade: grade)
+            if existing_exam_grade
+              # grade points to only one exam_grade:
+              existing_exam_grade.grade = nil
+              existing_exam_grade.save
+            end
+          else
             grade = Grade.new(students_record: students_record, instructor: @instructor)
             grade.save
           end
@@ -133,6 +144,11 @@ class GradesController < ApplicationController
         end
       end
     end
+  end
+
+  # exam grade selection
+  def update_exam_grade
+  
   end
 
   # PATCH/PUT /grades/1

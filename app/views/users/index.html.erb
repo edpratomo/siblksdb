@@ -15,7 +15,7 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= image_tag user.gravatar_url(size: 60), class: "gravatar_tip img-rounded" %></td>
+        <td><%= image_tag user.gravatar_url(size: 60), class: "gravatar_tip img-rounded", size: "60x60" %></td>
         <td><%= link_to user.username, user %></td>
         <td><%= user.fullname %></td>
         <td><%= user.group.name %></td>

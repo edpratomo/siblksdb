@@ -10,9 +10,16 @@ class Grade < ActiveRecord::Base
   delegate :pkg, to: :students_record
 
   def ordered_anypkg_grade
-    anypkg_grade = AnyPkgGradeComponent.first
+    anypkg_grade = AnyPkgGradeComponent.first # there's only one
     anypkg_grade.items.each.with_index.map do |e,idx|
       OpenStruct.new(id: idx, value: anypkg_grade[idx.to_s] || '-')
+    end
+  end
+
+  def options_for_exam_grade
+    ExamGrade.where(students_record: students_record).inject({}) do |m,e|
+      m[e.id.to_s] = "#{e.grade_sum || '?'} (#{e.exam.name}) - #{e.created_at.to_date}"
+      m
     end
   end
 
