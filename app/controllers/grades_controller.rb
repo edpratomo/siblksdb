@@ -1,7 +1,8 @@
 class GradesController < ApplicationController
   before_action :set_grade, only: [:edit, :update, :destroy, :options_for_exam_grade]
   before_action :set_exam_grade, only: [:show]
-  before_action :authorize_instructor, only: [:new, :create, :edit, :update, :update_component, :destroy]
+  before_action :authorize_instructor, only: [:new, :create, :edit, :update, :destroy,
+                                              :update_component, :update_exam_grade]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_current_user
 
@@ -148,20 +149,37 @@ class GradesController < ApplicationController
 
   # exam grade selection
   def update_exam_grade
-  
+    grade_id = params[:id].split('_').first
+    exam_grade = ExamGrade.find(params[:value])
+    @grade = Grade.find(grade_id)
+    if @grade.update(exam_grade: exam_grade)
+      render text: exam_grade.grade_sum # show new value
+    else
+      render text: @grade.exam_grade.grade_sum, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /grades/1
   # PATCH/PUT /grades/1.json
   def update
-    respond_to do |format|
-      if @grade.update(grade_params)
-        format.html { redirect_to @grade, notice: 'Grade was successfully updated.' }
-        format.json { render :show, status: :ok, location: @grade }
-      else
-        format.html { render :edit }
-        format.json { render json: @grade.errors, status: :unprocessable_entity }
-      end
+    # proxy method.
+    grade_type = params[:type]
+    unless grade_type
+      render text: "Unknown grade type", status: :unprocessable_entity
+      return
+    end
+
+    case grade_type
+    when "exam"
+      update_component
+    when "anypkg"
+    
+    when "pkg"
+    
+    when "exam_select"
+      update_exam_grade
+    when "theory_select"
+    
     end
   end
 

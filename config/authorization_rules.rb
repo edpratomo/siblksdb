@@ -45,7 +45,8 @@ end
 privileges do
   # default privilege hierarchies to facilitate RESTful Rails apps
   privilege :manage, :includes => [:create, :read, :delete,
-                                   :update, :update_schedule, :update_component]
+                                   :update, :update_schedule, :update_component,
+                                   :update_exam_grade]
   privilege :read, :includes => [:index, :show, :options_for_exam, :options_for_exam_grade, 
                                  :name_suggestions, :index_all]
   privilege :create, :includes => :new

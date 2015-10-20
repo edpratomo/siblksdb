@@ -19,6 +19,7 @@ class Grade < ActiveRecord::Base
   def options_for_exam_grade
     ExamGrade.where(students_record: students_record).inject({}) do |m,e|
       m[e.id.to_s] = "#{e.grade_sum || '?'} (#{e.exam.name}) - #{e.created_at.to_date}"
+      m["selected"] = e.id.to_s if e.grade_id
       m
     end
   end
