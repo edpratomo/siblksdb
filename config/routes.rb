@@ -6,15 +6,12 @@ Rails.application.routes.draw do
   resources :grades, :except => [:edit, :update] do
     member do
       get 'options_for_exam'
-#      get 'options_for_exam_grade'
     end
   end
 
   match 'options_for_exam_grade' => 'grades#options_for_exam_grade', :via => :get
 
-  patch 'grades/update_component'
-
-  patch 'grades/update_exam_grade'
+  patch 'grades/update' # proxy method
 
   get 'all_grades' => 'grades#index_all'
 

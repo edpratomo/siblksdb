@@ -1,8 +1,7 @@
 class GradesController < ApplicationController
   before_action :set_grade, only: [:edit, :update, :destroy, :options_for_exam_grade]
   before_action :set_exam_grade, only: [:show]
-  before_action :authorize_instructor, only: [:new, :create, :edit, :update, :destroy,
-                                              :update_component, :update_exam_grade]
+  before_action :authorize_instructor, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_current_user
 
@@ -121,48 +120,9 @@ class GradesController < ApplicationController
     redirect_back_or_default(new_grade_url)
   end
 
-  def update_component
-    grade_id, component_id = params[:grade_component_id].split('_')
-    component_value = params[:component_value]
-
-    @grade = ExamGrade.find(grade_id)
-    respond_to do |format|
-      current_grade = @grade.exam_grade
-      unless component_value =~ /^\d+(?:\.\d+)?$/
-        format.html {
-          render :text => (current_grade[component_id] || '-'),
-                 :status => :unprocessable_entity
-        }
-      else
-        if (current_grade[component_id] and current_grade[component_id] == component_value) or
-           @grade.update({:exam_grade => current_grade.merge({component_id => component_value})})
-          format.html { render :text => component_value }
-        else
-          format.html {
-            render :text => (current_grade[component_id] || '-'),
-                   :status => :unprocessable_entity
-          }
-        end
-      end
-    end
-  end
-
-  # exam grade selection
-  def update_exam_grade
-    grade_id = params[:id].split('_').first
-    exam_grade = ExamGrade.find(params[:value])
-    @grade = Grade.find(grade_id)
-    if @grade.update(exam_grade: exam_grade)
-      render text: exam_grade.grade_sum # show new value
-    else
-      render text: @grade.exam_grade.grade_sum, status: :unprocessable_entity
-    end
-  end
-
   # PATCH/PUT /grades/1
   # PATCH/PUT /grades/1.json
-  def update
-    # proxy method.
+  def update # proxy method
     grade_type = params[:type]
     unless grade_type
       render text: "Unknown grade type", status: :unprocessable_entity
@@ -171,15 +131,15 @@ class GradesController < ApplicationController
 
     case grade_type
     when "exam"
-      update_component
-    when "anypkg"
-    
-    when "pkg"
-    
-    when "exam_select"
       update_exam_grade
-    when "theory_select"
-    
+    when "anypkg"
+      update_anypkg_grade
+    when "pkg"
+      update_pkg_grade
+    when "exam_ref"
+      update_exam_ref
+    when "theory_ref"
+      update_theory_ref
     end
   end
 
@@ -214,5 +174,50 @@ class GradesController < ApplicationController
 
     def set_current_user
       @current_user = current_user.username
+    end
+
+    # the following methods are invoked via the update method which is called by jeditable:
+    # update_exam_grade
+    # update_theory_grade
+    # update_anypkg_grade
+    # update_pkg_grade
+    # update_exam_ref
+    # update_theory_ref
+
+    def update_exam_grade
+      grade_id, component_id = params[:grade_component_id].split('_')
+      component_value = params[:component_value]
+
+      @grade = ExamGrade.find(grade_id)
+      respond_to do |format|
+        current_grade = @grade.exam_grade
+        unless component_value =~ /^\d+(?:\.\d+)?$/
+          format.html {
+            render :text => (current_grade[component_id] || '-'),
+                   :status => :unprocessable_entity
+          }
+          else
+          if (current_grade[component_id] and current_grade[component_id] == component_value) or
+             @grade.update({:exam_grade => current_grade.merge({component_id => component_value})})
+            format.html { render :text => component_value }
+          else
+            format.html {
+              render :text => (current_grade[component_id] || '-'),
+                     :status => :unprocessable_entity
+            }
+          end
+        end
+      end
+    end
+
+    def update_exam_ref
+      grade_id = params[:id].split('_').first
+      exam_grade = ExamGrade.find(params[:value])
+      @grade = Grade.find(grade_id)
+      if @grade.update(exam_grade: exam_grade)
+        render text: exam_grade.grade_sum # show new value
+      else
+        render text: @grade.exam_grade.grade_sum, status: :unprocessable_entity
+      end
     end
 end

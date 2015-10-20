@@ -55,7 +55,7 @@ $(document).ready(function() {
     }
   });
 
-  $('.edit').editable('<%= grades_update_component_url %>', {
+  $('.edit').editable('<%= grades_update_url %>', {
     id: 'grade_component_id',
     name: 'component_value',
     type: 'number',
@@ -65,16 +65,16 @@ $(document).ready(function() {
       var grade_id = $(this).attr('id').split('_').shift();
       $(this).parents("td").next("td").find("div").click();
     },
-    submitdata: { _method: 'patch' } // required for rails
+    submitdata: { _method: 'patch', // required for rails
+                     type: 'anypkg' }
   });
 
-  // exam_grade
-  $('.select_edit').editable('<%= grades_update_exam_grade_url %>', {
+  $('.select_edit').editable('<%= grades_update_url %>', {
     cssclass: "form-control",
     loadurl: "/options_for_exam_grade.json",
     type   : 'select',
     onblur: 'submit',
-    submitdata: { _method: 'patch', type: 'exam_select' }
+    submitdata: { _method: 'patch', type: 'exam_ref' }
   });
 
 });
