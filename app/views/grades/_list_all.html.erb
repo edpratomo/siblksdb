@@ -17,16 +17,18 @@
     <% grades.each do |gr| %>
       <tr>
         <td><%= gr.students_record.student.name %></td>
-        <% gr.ordered_anypkg_grade.each.with_index do |component_grade,i| %>
-        <% if i == 1 %><%# Nilai Praktek %>
+        <% last_index = gr.ordered_anypkg_grade.size - 1; gr.ordered_anypkg_grade.each.with_index do |component_grade,i| %>
         <td>
+        <% if i == 0 %><%# Nilai Teori %>
+          <div class="custom_edit" id="<%= gr.id %>_theory_grade"><%= gr.theory_grade ? gr.theory_grade.grade_sum : '-' %></div>
+        <% elsif i == 1 %><%# Nilai Praktek %>
           <div class="select_edit" id="<%= gr.id %>_exam_grade"><%= gr.exam_grade.grade_sum %></div>
-        </td>
+        <% elsif i == last_index %>
+          <div class="text_edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         <% else %>
-        <td>
           <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
-        </td>
         <% end %><%# end if %>
+        </td>
         <% end %>
       </tr>
     <% end %>
@@ -67,6 +69,14 @@ $(document).ready(function() {
     },
     submitdata: { _method: 'patch', // required for rails
                      type: 'anypkg' }
+  });
+
+  $('.text_edit').editable('<%= grades_update_url %>', {
+    id: 'grade_component_id',
+    name: 'component_value',
+    indicator : 'Saving...',
+    type   : 'text',
+    submitdata: { _method: 'patch', type: 'anypkg' }
   });
 
   $('.select_edit').editable('<%= grades_update_url %>', {

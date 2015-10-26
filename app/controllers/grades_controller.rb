@@ -1,5 +1,5 @@
 class GradesController < ApplicationController
-  before_action :set_grade, only: [:edit, :update, :destroy, :options_for_exam_grade]
+  before_action :set_grade, only: [:edit, :destroy, :options_for_exam_grade]
   before_action :set_exam_grade, only: [:show]
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
@@ -48,7 +48,7 @@ class GradesController < ApplicationController
         default_filter_params: { sorted_by: 'students.name_asc', with_exam: 0 }
       ) or return
 
-      @exam_grades = ExamGrade.with_instructor(@instructor).joins(:student). #sorted_by("students.name_asc").
+      @exam_grades = ExamGrade.with_instructor(@instructor). #joins(:student). #sorted_by("students.name_asc").
                      filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
 
       # for table heading
@@ -108,10 +108,10 @@ class GradesController < ApplicationController
               existing_exam_grade.save
             end
           else
-            grade = Grade.new(students_record: students_record, instructor: @instructor)
+            grade = Grade.new(students_record: students_record)
             grade.save
           end
-          exam_grade = ExamGrade.new(students_record: students_record, exam: exam, grade: grade)
+          exam_grade = ExamGrade.new(students_record: students_record, exam: exam, grade: grade, instructor: @instructor)
           exam_grade.save
         end
       end
@@ -183,6 +183,32 @@ class GradesController < ApplicationController
     # update_pkg_grade
     # update_exam_ref
     # update_theory_ref
+
+    def update_anypkg_grade
+      grade_id, component_id = params[:grade_component_id].split('_')
+      component_value = params[:component_value]
+
+      @grade = Grade.find(grade_id)
+      respond_to do |format|
+        current_grade = @grade.anypkg_grade
+        #unless component_value =~ /^\d+(?:\.\d+)?$/
+        #  format.html {
+        #    render :text => (current_grade[component_id] || '-'),
+        #           :status => :unprocessable_entity
+        #  }
+        #else
+          if (current_grade[component_id] and current_grade[component_id] == component_value) or
+             @grade.update({:anypkg_grade => current_grade.merge({component_id => component_value})})
+            format.html { render :text => component_value }
+          else
+            format.html {
+              render :text => (current_grade[component_id] || '-'),
+                     :status => :unprocessable_entity
+            }
+          end
+        #end
+      end
+    end
 
     def update_exam_grade
       grade_id, component_id = params[:grade_component_id].split('_')

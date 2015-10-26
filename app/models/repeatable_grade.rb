@@ -2,6 +2,7 @@ class RepeatableGrade < ActiveRecord::Base
   belongs_to :students_record
   belongs_to :grade
   belongs_to :student
+  belongs_to :instructor
 end
 
 class TheoryGrade < RepeatableGrade
@@ -39,6 +40,7 @@ class ExamGrade < RepeatableGrade
   }
 
   scope :with_instructor, ->(instructor) {
-    where(grade: Grade.where(:instructor => instructor))
+    # where(grade: Grade.where(:instructor => instructor))
+    where(:instructor => instructor)
   }
 end

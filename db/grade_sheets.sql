@@ -64,7 +64,7 @@ CREATE TABLE exams(
 
 CREATE TABLE grades (
   id SERIAL PRIMARY KEY,
-  instructor_id INTEGER REFERENCES instructors(id),
+--  instructor_id INTEGER REFERENCES instructors(id),
   students_record_id INTEGER NOT NULL REFERENCES students_records(id),
   student_id INTEGER REFERENCES students(id),
   anypkg_grade hstore NOT NULL DEFAULT '', -- universal components which exist in any pkg
@@ -78,6 +78,7 @@ CREATE TABLE grades (
 
 CREATE TABLE repeatable_grades (
   id SERIAL PRIMARY KEY,
+  instructor_id INTEGER REFERENCES instructors(id),
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT,

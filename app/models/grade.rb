@@ -1,5 +1,5 @@
 class Grade < ActiveRecord::Base
-  belongs_to :instructor
+#  belongs_to :instructor
   belongs_to :students_record
   belongs_to :student
 
@@ -10,8 +10,8 @@ class Grade < ActiveRecord::Base
   delegate :pkg, to: :students_record
 
   def ordered_anypkg_grade
-    anypkg_grade = AnyPkgGradeComponent.first # there's only one
-    anypkg_grade.items.each.with_index.map do |e,idx|
+    anypkg_grade_component = AnyPkgGradeComponent.first # there's only one
+    anypkg_grade_component.items.each.with_index.map do |e,idx|
       OpenStruct.new(id: idx, value: anypkg_grade[idx.to_s] || '-')
     end
   end
@@ -44,8 +44,9 @@ class Grade < ActiveRecord::Base
   #  where(:exam => exam)
   #}
 
+  # low level, because of belongs_to
   scope :with_instructor, ->(instructor) {
-    where(:instructor => instructor)
+    joins("JOIN repeatable_grades rg ON rg.grade_id = grades.id").where("rg.instructor_id": instructor)
   }
 
   scope :with_pkg, ->(pkg) {

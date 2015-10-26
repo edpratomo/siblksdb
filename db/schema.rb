@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   end
 
   create_table "grades", force: :cascade do |t|
-    t.integer  "instructor_id"
     t.integer  "students_record_id",                               null: false
     t.integer  "student_id"
     t.hstore   "anypkg_grade",       default: {},                  null: false
@@ -149,6 +148,7 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   add_index "regencies_cities", ["code"], name: "regencies_cities_code_key", unique: true, using: :btree
 
   create_table "repeatable_grades", force: :cascade do |t|
+    t.integer  "instructor_id"
     t.datetime "created_at",         default: "clock_timestamp()", null: false
     t.datetime "modified_at",        default: "clock_timestamp()", null: false
     t.text     "modified_by"
@@ -262,7 +262,6 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   add_foreign_key "exams", "pkgs", name: "exams_pkg_id_fkey"
   add_foreign_key "grade_components", "courses", name: "grade_components_course_id_fkey"
   add_foreign_key "grade_components", "pkgs", name: "grade_components_pkg_id_fkey"
-  add_foreign_key "grades", "instructors", name: "grades_instructor_id_fkey"
   add_foreign_key "grades", "students", name: "grades_student_id_fkey"
   add_foreign_key "grades", "students_records", name: "grades_students_record_id_fkey"
   add_foreign_key "instructors_schedules", "instructors", name: "instructors_schedules_instructor_id_fkey"
@@ -276,6 +275,7 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   add_foreign_key "regencies_cities", "provinces", column: "province_code", primary_key: "code", name: "regencies_cities_province_code_fkey"
   add_foreign_key "repeatable_grades", "exams", name: "repeatable_grades_exam_id_fkey"
   add_foreign_key "repeatable_grades", "grades", name: "repeatable_grades_grade_id_fkey"
+  add_foreign_key "repeatable_grades", "instructors", name: "repeatable_grades_instructor_id_fkey"
   add_foreign_key "repeatable_grades", "students", name: "repeatable_grades_student_id_fkey"
   add_foreign_key "repeatable_grades", "students_records", name: "repeatable_grades_students_record_id_fkey"
   add_foreign_key "students_pkgs", "pkgs", name: "students_pkgs_pkg_id_fkey"
