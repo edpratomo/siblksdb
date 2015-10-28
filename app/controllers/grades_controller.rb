@@ -125,13 +125,15 @@ class GradesController < ApplicationController
   def update # proxy method
     grade_type = params[:type]
     unless grade_type
-      render text: "Unknown grade type", status: :unprocessable_entity
+      render text: "Grade type not given", status: :unprocessable_entity
       return
     end
 
     case grade_type
     when "exam"
       update_exam_grade
+    when "theory"
+      update_theory_grade
     when "anypkg"
       update_anypkg_grade
     when "pkg"
@@ -140,6 +142,8 @@ class GradesController < ApplicationController
       update_exam_ref
     when "theory_ref"
       update_theory_ref
+    else
+      render text: "Unknown grade type: #{grade_type}", status: :unprocessable_entity
     end
   end
 
@@ -208,6 +212,39 @@ class GradesController < ApplicationController
           end
         #end
       end
+    end
+
+    def update_theory_grade
+      grade_id = params[:id].split('_').first
+      values = params[:value].split(' ')
+      grade = Grade.find(grade_id)
+      @theory_grades = grade.theory_grades
+      [0, 1].each do |idx|
+        unless @theory_grades[idx]
+          if values[idx]
+            @theory_grades[idx] = TheoryGrade.new(students_record: grade.students_record,
+                                                  student: grade.student, grade_sum: values[idx])
+            @theory_grades[idx].save
+          end
+        else
+          if values[idx]
+            @theory_grades[idx].update({grade_sum: values[idx]})
+          else
+            @theory_grades[idx].delete
+          end
+        end
+      end
+      # pick the best value
+      if values[1] and values[1] > values[0]
+        grade.theory_grade = @theory_grades[1]
+        grade.save
+      else
+        grade.theory_grade = @theory_grades[0]
+        grade.save
+      end
+
+      #render text: grade.theory_grade.grade_sum
+      render :show_theory_grade, layout: false
     end
 
     def update_exam_grade

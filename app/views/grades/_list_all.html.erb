@@ -20,7 +20,8 @@
         <% last_index = gr.ordered_anypkg_grade.size - 1; gr.ordered_anypkg_grade.each.with_index do |component_grade,i| %>
         <td>
         <% if i == 0 %><%# Nilai Teori %>
-          <div class="custom_edit" id="<%= gr.id %>_theory_grade"><%= gr.theory_grade ? gr.theory_grade.grade_sum : '-' %></div>
+          <div class="theory_edit" id="<%= gr.id %>_theory_grade"><%= render partial: 'grades/theory_grade', 
+                                                                             locals: { :grades => gr.theory_grades } %></div>
         <% elsif i == 1 %><%# Nilai Praktek %>
           <div class="select_edit" id="<%= gr.id %>_exam_grade"><%= gr.exam_grade.grade_sum %></div>
         <% elsif i == last_index %>
@@ -57,6 +58,46 @@ $(document).ready(function() {
     }
   });
 
+  $.editable.addInputType('multi_number', {
+    element: function(settings, original) {
+      var grade_id = $(original).attr('id').split('_').shift();
+      $(this).append( $('<input type="number" id="' + grade_id + '_theory_0" style="width:50px;" />') );
+      $(this).append( $('<input type="number" id="' + grade_id + '_theory_1" style="width:50px;" />') );
+      $(this).append( $('<br/>') );
+
+      var hidden = $('<input type="hidden" id="' + grade_id + '_retval">');
+      $(this).append(hidden);
+      return(hidden);
+    },
+    submit: function (settings, original) {
+      console.log("submit: " + $(original).attr('id'));
+      var grade_id = $(original).attr('id').split('_').shift();
+      var value = $('#' + grade_id + '_theory_0').val() + ' ' +
+                  $('#' + grade_id + '_theory_1').val();
+      $('#' + grade_id + '_retval', this).val(value);
+    },
+    content: function(string, settings, original) {
+      var grade_id = $(original).attr('id').split('_').shift();
+      console.log("string: " + string);
+      var re = />([^<]+)<\/div/g;
+      var match;
+      var idx = 0;
+      while (match = re.exec(string)) {
+        console.log("match: " + match[1]);
+        $('#' + grade_id + '_theory_' + idx, this).val(match[1]);
+        idx++;
+      }
+    }
+  });
+
+  $('.theory_edit').editable('<%= grades_update_url %>', {
+    type: 'multi_number',
+    indicator: 'Saving...',
+    submit: 'OK',
+    cancel: 'cancel',
+    submitdata: { _method: 'patch', type: 'theory' }
+  });
+
   $('.edit').editable('<%= grades_update_url %>', {
     id: 'grade_component_id',
     name: 'component_value',
@@ -86,7 +127,6 @@ $(document).ready(function() {
     onblur: 'submit',
     submitdata: { _method: 'patch', type: 'exam_ref' }
   });
-
 });
 
 $("#listing_grade tr td div").bind('keydown', function(event) {

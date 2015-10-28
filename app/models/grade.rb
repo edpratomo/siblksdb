@@ -9,6 +9,10 @@ class Grade < ActiveRecord::Base
 
   delegate :pkg, to: :students_record
 
+  def theory_grades
+    TheoryGrade.where(students_record: students_record).order(:created_at)
+  end
+
   def ordered_anypkg_grade
     anypkg_grade_component = AnyPkgGradeComponent.first # there's only one
     anypkg_grade_component.items.each.with_index.map do |e,idx|

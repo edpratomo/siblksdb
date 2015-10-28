@@ -1,0 +1,16 @@
+<% if grades.empty? %>
+-
+<% else %>
+<% if grades[1] and grades[1].grade_sum > grades[0].grade_sum %>
+<div style="display:none"><%= grades[0].grade_sum %></div>
+<% else %>
+<div><%= grades[0].grade_sum %></div>
+<% end %>
+<% if grades[1] %>
+<% if grades[1].grade_sum > grades[0].grade_sum %>
+<div><%= grades[1].grade_sum %></div>
+<% else %>
+<div style="display:none"><%= grades[1].grade_sum %></div>
+<% end %>
+<% end %>
+<% end %>
