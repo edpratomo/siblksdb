@@ -5,8 +5,17 @@
   <div class="row">
     <div class="col-md-4">
       <div class="form-group">
-        <label>Yang sedang mengikuti kursus</label>
+        <label>Peserta kursus</label>
         <%= f.select :with_pkg, @filterrific.select_options[:with_pkg],
+                     { :include_blank => '- Pilih -' },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Hasil ujian</label>
+        <%= f.select :with_student_status, @filterrific.select_options[:with_student_status],
                      { :include_blank => '- Pilih -' },
                      { :class => 'form-control' }
         %>

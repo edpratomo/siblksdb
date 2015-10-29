@@ -13,6 +13,18 @@ class Grade < ActiveRecord::Base
     %w{finished failed}.find {|e| e == students_record.status }
   end
 
+  # update status of students_record to 'finished' or 'failed', and remove associated schedule
+  def set_result new_status, by_user
+    if %w{finished failed}.member?(new_status) and students_record.status == "active"
+      ActiveRecord::Base.transaction_user(by_user) do
+        if pkg
+          student.pkgs.destroy(pkg) # this student has finished a pkg
+        end
+        students_record.update(status: new_status, finished_on: DateTime.now.in_time_zone)
+      end
+    end
+  end
+
   def theory_grades
     TheoryGrade.where(students_record: students_record).order(:created_at)
   end
@@ -38,7 +50,8 @@ class Grade < ActiveRecord::Base
     available_filters: [
       :sorted_by,
       :with_instructor,
-      :with_pkg
+      :with_pkg,
+      :with_student_status
     ]
   )
 
@@ -48,28 +61,16 @@ class Grade < ActiveRecord::Base
     end
   }
 
-  # scope :with_exam, ->(exam) {
-  #  where(:exam => exam)
-  #}
-
   # low level, because of belongs_to
   scope :with_instructor, ->(instructor) {
     joins("JOIN repeatable_grades rg ON rg.grade_id = grades.id").where("rg.instructor_id": instructor)
   }
 
   scope :with_pkg, ->(pkg) {
-    where(:students_record => StudentsRecord.where(pkg: pkg, status: "active"))
+    where(:students_record => StudentsRecord.where(pkg: pkg))
   }
 
-  # update status of students_record to 'finished' or 'failed', and remove associated schedule
-  def set_result new_status, by_user
-    if %w{finished failed}.member?(new_status) and students_record.status == "active"
-      ActiveRecord::Base.transaction_user(by_user) do
-        if pkg
-          student.pkgs.destroy(pkg) # this student has finished a pkg
-        end
-        students_record.update(status: new_status, finished_on: DateTime.now.in_time_zone)
-      end
-    end
-  end
+  scope :with_student_status, ->(status) {
+    where(:students_record => StudentsRecord.where(status: status))
+  }
 end

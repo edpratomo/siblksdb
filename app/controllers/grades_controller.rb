@@ -31,7 +31,8 @@ class GradesController < ApplicationController
         params[:filterrific],
         :select_options => {
           sorted_by: Student.options_for_sorted_by,
-          with_pkg: @instructor.options_for_pkg
+          with_pkg: @instructor.options_for_pkg,
+          with_student_status: [['Belum diketahui', 'active'], [t('finished'), 'finished'], [t('failed'), 'failed']]
         },
         default_filter_params: { sorted_by: 'students.name_asc', with_pkg: 0 }
       ) or return

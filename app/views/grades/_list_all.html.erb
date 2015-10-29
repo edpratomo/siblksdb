@@ -25,7 +25,7 @@
         <% elsif i == 1 %><%# Nilai Praktek %>
           <div class="select_edit" id="<%= gr.id %>_exam_grade"><%= gr.exam_grade.grade_sum %></div>
         <% elsif i == last_index %>
-          <div class="result_edit" id="<%= gr.id %>_result"><%= gr.result || '-' %></div>
+          <div class="result_edit" id="<%= gr.id %>_result"><%= gr.result ? t(gr.result) : '-' %></div>
         <% else %>
           <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         <% end %><%# end if %>
