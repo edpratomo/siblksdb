@@ -1,5 +1,5 @@
 class GradesController < ApplicationController
-  before_action :set_grade, only: [:edit, :destroy, :options_for_exam_grade]
+  before_action :set_grade, only: [:edit, :destroy, :options_for_exam_grade, :options_for_result]
   before_action :set_exam_grade, only: [:show]
   before_action :authorize_instructor, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_instructor #, only: [:new, :create, :edit, :update, :destroy]
@@ -14,6 +14,13 @@ class GradesController < ApplicationController
 
   def options_for_exam_grade
     @options = @grade.options_for_exam_grade
+  end
+
+  def options_for_result
+    @options = {'-':'- Pilih -','finished':'Lulus','failed':'Tidak Lulus'}
+    current_status = @grade.students_record.status
+    current_status = '-' unless @grade.result
+    @options['selected'] = current_status
   end
 
   # complete grades
@@ -142,6 +149,8 @@ class GradesController < ApplicationController
       update_exam_ref
     when "theory_ref"
       update_theory_ref
+    when "result"
+      update_result
     else
       render text: "Unknown grade type: #{grade_type}", status: :unprocessable_entity
     end
@@ -160,7 +169,7 @@ class GradesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_grade
-      @grade = Grade.find(params[:id])
+      @grade = Grade.find(params[:id].split('_').first)
     end
 
     def set_exam_grade
@@ -281,6 +290,16 @@ class GradesController < ApplicationController
         render text: exam_grade.grade_sum # show new value
       else
         render text: @grade.exam_grade.grade_sum, status: :unprocessable_entity
+      end
+    end
+
+    def update_result
+      grade_id = params[:id].split('_').first
+      @grade = Grade.find(grade_id)
+      if @grade.set_result(params[:value], @current_user)
+        render text: t(params[:value])
+      else
+        render text: '-', status: :unprocessable_entity
       end
     end
 end

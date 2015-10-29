@@ -25,7 +25,7 @@
         <% elsif i == 1 %><%# Nilai Praktek %>
           <div class="select_edit" id="<%= gr.id %>_exam_grade"><%= gr.exam_grade.grade_sum %></div>
         <% elsif i == last_index %>
-          <div class="text_edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
+          <div class="result_edit" id="<%= gr.id %>_result"><%= gr.result || '-' %></div>
         <% else %>
           <div class="edit" id="<%= gr.id %>_<%= component_grade.id %>"><%= component_grade.value %></div>
         <% end %><%# end if %>
@@ -112,20 +112,20 @@ $(document).ready(function() {
                      type: 'anypkg' }
   });
 
-  $('.text_edit').editable('<%= grades_update_url %>', {
-    id: 'grade_component_id',
-    name: 'component_value',
-    indicator : 'Saving...',
-    type   : 'text',
-    submitdata: { _method: 'patch', type: 'anypkg' }
-  });
-
   $('.select_edit').editable('<%= grades_update_url %>', {
     cssclass: "form-control",
     loadurl: "/options_for_exam_grade.json",
-    type   : 'select',
+    type: 'select',
     onblur: 'submit',
     submitdata: { _method: 'patch', type: 'exam_ref' }
+  });
+
+  $('.result_edit').editable('<%= grades_update_url %>', {
+    cssclass: "form-control",
+    loadurl: "/options_for_result.json",
+    type: 'select',
+    submit: 'OK',
+    submitdata: { _method: 'patch', type: 'result' }
   });
 });
 

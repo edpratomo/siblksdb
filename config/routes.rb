@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   match 'options_for_exam_grade' => 'grades#options_for_exam_grade', :via => :get
 
+  match 'options_for_result' => 'grades#options_for_result', :via => :get
+
   patch 'grades/update' # proxy method
 
   get 'all_grades' => 'grades#index_all'
