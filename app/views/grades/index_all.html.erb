@@ -27,6 +27,6 @@
 
 <div id="filterrific_results">
   <%= render :partial => 'grades/list_all',
-             :locals => { :grades => @grades }
+             :locals => { :grades => @grades, pkg: @pkg }
  %>
 </div>

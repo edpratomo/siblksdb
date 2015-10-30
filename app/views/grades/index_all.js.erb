@@ -1,6 +1,6 @@
 <% js = escape_javascript(
   render(
     partial: 'grades/list_all', 
-    locals: { grades: @grades })
+    locals: { grades: @grades, pkg: @pkg })
 ) %>
 $("#filterrific_results").html("<%= js %>");

@@ -102,7 +102,7 @@ INSERT INTO grade_components(course_id, type, name, structure) VALUES(1, 'PkgGra
 '[{"component":"Pengolahan Formula"},{"component":"Mengatur Lembar Kerja"},{"component":"Grafik"}]');
 
 INSERT INTO grade_components(course_id, type, name, structure) VALUES(1, 'AnyPkgGradeComponent', 'set komponen generik',
-'[{"group":"Nilai","members":[{"component":"Teori"},{"component":"Praktek"}]},{"component":"Kualitas Pekerjaan"},{"component":"Fisik Mental dan Disiplin (FMD) - Terlambat/Kehadiran"},{"component":"Motivasi Kerja"},{"component":"Inisiatif & Kreativitas"},{"component":"Komunikasi"},{"component":"Rekomendasi"},{"component":"Keterangan"}]');
+'[{"group":"Nilai","members":[{"component":"Teori"},{"component":"Praktek"}]},{"code":"->(course) { PkgGradeComponent.find_by(course: course).items }"},{"component":"Kualitas Pekerjaan"},{"component":"Fisik Mental & Disiplin (FMD) - Terlambat/ Kehadiran"},{"component":"Motivasi Kerja"},{"component":"Inisiatif & Kreativitas"},{"component":"Komunikasi"},{"component":"Rekomendasi"},{"component":"Keterangan"}]');
 
 INSERT INTO exams(pkg_id, name, grade_component_id) VALUES(1, 'Obesitas', 1);
 -- the following shares the same components:

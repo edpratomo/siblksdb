@@ -39,7 +39,9 @@ class GradesController < ApplicationController
 
       @grades = Grade.with_instructor(@instructor).joins(:student).
                 filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
-
+      unless @grades.empty?
+        @pkg = Pkg.find(@filterrific.to_hash.fetch("with_pkg"))
+      end
     end
   end
 

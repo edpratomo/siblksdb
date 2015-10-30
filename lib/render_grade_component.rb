@@ -1,6 +1,6 @@
 module RenderGradeComponent
   def grade_component_as_table_heading inp, opt={}
-    out = do_visit inp
+    out = do_visit(inp, opt[:pkg])
     # enclose result with tr, and add columns as given in opt:
     render_result(out, opt)
   end
@@ -45,13 +45,20 @@ module RenderGradeComponent
     end.join("\n")
   end
 
-  def visit out, structure, depth=0
+  def visit out, structure, pkg, depth=0
     structure.each.with_index do |e,i|
       out[depth] ||= []
       if e.has_key? "members"
         out[depth][0] ||= []
         out[depth][0].push Node.new(text: e['group'], colspan: e['members'].size)
-        visit(out, e['members'], depth + 1)
+        visit(out, e['members'], pkg, depth + 1)
+      elsif e.has_key? "code"
+        code = eval e['code']
+        x = code.call(pkg.course)
+        x.each do |e|
+          out[depth][0] ||= []
+          out[depth][0].push Node.new(text: e['name'])
+        end
       else
         out[depth][0] ||= []
         out[depth][0].push Node.new(text: e['component'])
@@ -63,9 +70,9 @@ module RenderGradeComponent
     end
   end
 
-  def do_visit structure
+  def do_visit structure, pkg
     out = {}
-    visit out, structure
+    visit(out, structure, pkg)
     out.each_with_index do |r,depth|
       next if depth == 0
       delta = out[depth - 1][0].size - out[depth][0].size

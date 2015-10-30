@@ -21,6 +21,10 @@ class GradeComponent < ActiveRecord::Base
         os = OpenStruct.new(name: o["component"])
         o.has_key?("scale") and os.scale = o["scale"]
         m.push os
+      elsif o.has_key? "code"
+        code = eval o["code"]
+        os = OpenStruct.new(lambda: code)
+        m.push os
       elsif o.has_key? "group"
         ret = find_terminals(o["members"]).flatten
         unless ret.empty?

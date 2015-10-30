@@ -29,11 +29,25 @@ class Grade < ActiveRecord::Base
     TheoryGrade.where(students_record: students_record).order(:created_at)
   end
 
-  def ordered_anypkg_grade
+  def ordered_pkg_grade
+    PkgGradeComponent.find_by(course: pkg.course).items.each.with_index.map do |e,idx|
+      OpenStruct.new(id: idx, value: pkg_grade[idx.to_s] || '-')
+    end
+  end
+
+  def ordered_anypkg_grade pkg
     anypkg_grade_component = AnyPkgGradeComponent.first # there's only one
     anypkg_grade_component.items.each.with_index.map do |e,idx|
-      OpenStruct.new(id: idx, value: anypkg_grade[idx.to_s] || '-')
-    end
+      if e.lambda
+        pkg_grades = e.lambda.call(pkg.course)
+        pkg_grades.each.with_index.map do |pkg_grade,pidx|
+          OpenStruct.new(id: "#{pidx}_pkg", value: pkg_grade[pidx.to_s] || '-')
+        end
+      else
+        OpenStruct.new(id: idx, value: anypkg_grade[idx.to_s] || '-')
+      end
+    end.
+    flatten
   end
 
   def options_for_exam_grade

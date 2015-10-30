@@ -12,12 +12,12 @@
 
 <% if grades.size > 0 %>
 <table id="listing_grade" class="table pretty table-hover table-striped ExcelTable2007">
-  <%= raw(grade_component_as_table_heading(AnyPkgGradeComponent.first.structure, {before:"Nama"})) %>
+  <%= raw(grade_component_as_table_heading(AnyPkgGradeComponent.first.structure, {before:"Nama", pkg: pkg})) %>
   <tbody>
     <% grades.each do |gr| %>
       <tr>
         <td><%= gr.students_record.student.name %></td>
-        <% last_index = gr.ordered_anypkg_grade.size - 1; gr.ordered_anypkg_grade.each.with_index do |component_grade,i| %>
+        <% last_index = gr.ordered_anypkg_grade(pkg).size - 1; gr.ordered_anypkg_grade(pkg).each.with_index do |component_grade,i| %>
         <td>
         <% if i == 0 %><%# Nilai Teori %>
           <div class="theory_edit" id="<%= gr.id %>_theory_grade"><%= render partial: 'grades/theory_grade', 
