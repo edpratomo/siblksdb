@@ -201,20 +201,25 @@ class GradesController < ApplicationController
     # update_theory_ref
 
     def update_anypkg_grade
-      grade_id, component_id = params[:grade_component_id].split('_')
-      component_value = params[:component_value]
+      grade_id, component_id, grade_type = params[:id].split('_')
+      grade_type ||= "anypkg"
+      component_value = params[:value]
 
       @grade = Grade.find(grade_id)
       respond_to do |format|
-        current_grade = @grade.anypkg_grade
-        #unless component_value =~ /^\d+(?:\.\d+)?$/
-        #  format.html {
-        #    render :text => (current_grade[component_id] || '-'),
-        #           :status => :unprocessable_entity
-        #  }
-        #else
+        current_grade = if grade_type == "pkg"
+          @grade.pkg_grade
+        else
+          @grade.anypkg_grade
+        end
+        unless component_value =~ /^\d+(?:\.\d+)?$/
+          format.html {
+            render :text => (current_grade[component_id] || '-'),
+                   :status => :unprocessable_entity
+          }
+        else
           if (current_grade[component_id] and current_grade[component_id] == component_value) or
-             @grade.update({:anypkg_grade => current_grade.merge({component_id => component_value})})
+             @grade.update({"#{grade_type}_grade" => current_grade.merge({component_id => component_value})})
             format.html { render :text => component_value }
           else
             format.html {
@@ -222,7 +227,7 @@ class GradesController < ApplicationController
                      :status => :unprocessable_entity
             }
           end
-        #end
+        end
       end
     end
 
