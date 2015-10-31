@@ -30,6 +30,6 @@
        url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 
-.table-scrollable {
+.grades .table-scrollable {
   overflow: auto;
 }
