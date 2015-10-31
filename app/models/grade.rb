@@ -40,7 +40,7 @@ class Grade < ActiveRecord::Base
     anypkg_grade_component.items.each.with_index.map do |e,idx|
       if e.lambda
         pkg_grades = e.lambda.call(pkg.course)
-        pkg_grades.each.with_index.map do |pkg_grade,pidx|
+        pkg_grades.each.with_index.map do |pg,pidx|
           OpenStruct.new(id: "#{pidx}_pkg", value: pkg_grade[pidx.to_s] || '-')
         end
       else
