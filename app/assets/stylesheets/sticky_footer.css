@@ -18,18 +18,19 @@ body {padding-bottom: 0;}
 #wrap {min-height: 100%;}
 
 #main {overflow:auto;
-	padding-bottom: 50px;}  /* must be same height as the footer */
+	padding-bottom: 60px;}  /* must be same height as the footer */
 
 #footer {
   position: relative;
-  margin-top: -50px; /* negative value of footer height */
-  height: 50px;
-  line-height: 50px;
+  margin-top: -60px; /* negative value of footer height */
+  height: 60px;
+  line-height: 60px;
   clear:both;
-  background-color: #656769;
+  /* background-color: #656769; */
+  background-color: #A4A5A7;
   z-index:2100;
-  font: normal 14px;
-  color:  #ffffff;
+  font: normal 10px sans-serif;
+  color:  black;
   text-align: right;
 } 
 
