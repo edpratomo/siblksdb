@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151004133507) do
+ActiveRecord::Schema.define(version: 20151101040816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "pg_trgm"
   enable_extension "uuid-ossp"
+  enable_extension "pg_trgm"
+  enable_extension "hstore"
   enable_extension "pg_redispub"
 
   create_table "changes", force: :cascade do |t|
@@ -242,11 +242,11 @@ ActiveRecord::Schema.define(version: 20151004133507) do
 
   create_table "users", force: :cascade do |t|
     t.integer  "group_id"
-    t.text     "username",                           null: false
-    t.text     "fullname",                           null: false
-    t.text     "password_digest",                    null: false
+    t.text     "username",               null: false
+    t.text     "fullname",               null: false
+    t.text     "password_digest",        null: false
     t.text     "email"
-    t.string   "password_reset_token",   limit: 255
+    t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
   end
 

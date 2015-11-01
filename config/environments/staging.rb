@@ -42,4 +42,5 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default :charset => "utf-8"
+  config.x.sse_base_url = "http://192.168.0.102:9292"
 end
