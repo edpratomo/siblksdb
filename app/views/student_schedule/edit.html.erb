@@ -23,7 +23,7 @@
 
 $(function() {
   // SSE
-  var es = new EventSource('<%= Rails.configuration.x.sse_base_url %>/seat');
+  var es = new EventSource('<%= Rails.configuration.x.sse_base_url %>/seat/<%= ActiveRecord::Base.connection.current_database.split("_").last %>');
   es.onopen = function(e) {
     //alert("SSE connected");
     console.log("SSE connected");
