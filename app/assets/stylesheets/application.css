@@ -33,3 +33,7 @@
 .grades .table-scrollable {
   overflow: auto;
 }
+
+.sidebar {
+  margin-bottom: 60px;
+}
