@@ -8,7 +8,7 @@
             <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
             <li class="<%= active_tab_class(presence_sheet_new_path) %>"><%= link_to "Lembar Absensi Siswa", presence_sheet_new_path %></li>
             <li class="collapse"">
-              <a href="#report_submenu" class="list-group-item" data-toggle="collapse" data-parent="#report_submenu">Laporan <span class="caret"></span></a>
+              <a href="#report_submenu" class="list-group-item" style="background-color:#F4F4F4; border-color:#F4F4F4; color:black;" data-toggle="collapse" data-parent="#report_submenu">Laporan <span class="caret"></span></a>
               <div class="collapse list-group-submenu <%= is_collapsed("report") %>" id="report_submenu">
                 <%= link_to "Laporan Bulanan Siswa", report_new_monthly_generic_path, "data-parent" => "#report_submenu",
                     class: "list-group-item #{active_tab_class(report_new_monthly_generic_path, report_new_monthly_generic_path, report_create_monthly_generic_path)}"
