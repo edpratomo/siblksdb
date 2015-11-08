@@ -122,8 +122,8 @@ ActiveRecord::Schema.define(version: 20151108120048) do
   end
 
   create_table "programs", force: :cascade do |t|
-    t.text    "program",         null: false
-    t.integer "head_instructor"
+    t.text    "program",            null: false
+    t.integer "head_instructor_id"
   end
 
   add_index "programs", ["program"], name: "programs_program_key", unique: true, using: :btree
@@ -271,7 +271,7 @@ ActiveRecord::Schema.define(version: 20151108120048) do
   add_foreign_key "pkgs", "programs", name: "pkgs_program_id_fkey"
   add_foreign_key "prereqs", "pkgs", column: "req_pkg_id", name: "prereqs_req_pkg_id_fkey"
   add_foreign_key "prereqs", "pkgs", name: "prereqs_pkg_id_fkey"
-  add_foreign_key "programs", "instructors", column: "head_instructor", name: "programs_head_instructor_fkey"
+  add_foreign_key "programs", "instructors", column: "head_instructor_id", name: "programs_head_instructor_id_fkey"
   add_foreign_key "programs_instructors", "instructors", name: "programs_instructors_instructor_id_fkey"
   add_foreign_key "programs_instructors", "programs", name: "programs_instructors_program_id_fkey"
   add_foreign_key "regencies_cities", "provinces", column: "province_code", primary_key: "code", name: "regencies_cities_province_code_fkey"
