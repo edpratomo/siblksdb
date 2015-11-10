@@ -28,6 +28,7 @@
 //= require jquery.jeditable
 //= require highcharts
 //= require chartkick
+//= require jquery.confirm
 
 $(function(){
 

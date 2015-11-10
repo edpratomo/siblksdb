@@ -15,11 +15,15 @@ class Grade < ActiveRecord::Base
 
   # update status of students_record to 'finished' or 'failed', and remove associated schedule
   def set_result new_status, by_user
-    if %w{finished failed}.member?(new_status) and students_record.status == "active"
-      ActiveRecord::Base.transaction_user(by_user) do
-        if pkg
-          student.pkgs.destroy(pkg) # this student has finished a pkg
+    if %w{finished failed}.member?(new_status)
+      if students_record.status == "active"
+        ActiveRecord::Base.transaction_user(by_user) do
+          if pkg
+            student.pkgs.destroy(pkg) # this student has finished a pkg
+          end
+          students_record.update(status: new_status, finished_on: DateTime.now.in_time_zone)
         end
+      else
         students_record.update(status: new_status, finished_on: DateTime.now.in_time_zone)
       end
     end

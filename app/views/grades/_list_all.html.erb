@@ -42,6 +42,13 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+  $(document).on('change', '.result_edit select', function () {
+    if ($(this).val() != "-") {
+      console.log("Change Event Triggered On:" + $(this).val());
+      $(this).trigger("submit");
+    }
+  });
+
   $.editable.addInputType('number', {
     element : function(settings, original) {
       var input = $('<input type="number" style="width:50px;" min="0" step="0.1">');
@@ -121,10 +128,23 @@ $(document).ready(function() {
   });
 
   $('.result_edit').editable('<%= grades_update_url %>', {
+    onsubmit: function() {
+      $.confirm({
+        //dialogClass: "modal-dialog modal-lg",
+        title: "Konfirmasi",
+        text: "Mengubah status ke Lulus / Tidak Lulus akan menghapus jadwal kursus siswa ybs. <br/>Yakin melanjutkan?",
+        confirm: function() {
+          return true;
+        },
+        cancel: function() {
+          // nothing to do
+        }
+      });
+    },
     cssclass: "form-control",
     loadurl: "/options_for_result.json",
     type: 'select',
-    submit: 'OK',
+    //submit: 'OK',
     submitdata: { _method: 'patch', type: 'result' }
   });
 });
