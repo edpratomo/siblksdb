@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151004133507) do
+ActiveRecord::Schema.define(version: 20151101040816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
-  enable_extension "pg_trgm"
   enable_extension "uuid-ossp"
+  enable_extension "pg_trgm"
+  enable_extension "hstore"
   enable_extension "pg_redispub"
 
   create_table "changes", force: :cascade do |t|
@@ -42,64 +42,6 @@ ActiveRecord::Schema.define(version: 20151004133507) do
 
   add_index "districts", ["code"], name: "districts_code_key", unique: true, using: :btree
   add_index "districts", ["name"], name: "districts_name", using: :btree
-
-  create_table "exam_components", force: :cascade do |t|
-    t.text    "name",            null: false
-    t.integer "sequence",        null: false
-    t.float   "scale",           null: false
-    t.integer "grade_weight_id"
-  end
-
-  create_table "exams", force: :cascade do |t|
-    t.integer  "pkg_id"
-    t.text     "name",         default: "Generic",           null: false
-    t.text     "annotation"
-    t.datetime "expired_at"
-    t.datetime "created_at",   default: "clock_timestamp()", null: false
-    t.datetime "modified_at",  default: "clock_timestamp()", null: false
-    t.text     "modified_by"
-    t.datetime "published_at"
-    t.text     "published_by"
-  end
-
-  create_table "exams_exam_components", force: :cascade do |t|
-    t.integer "exam_id"
-    t.integer "exam_component_id"
-  end
-
-  add_index "exams_exam_components", ["exam_id", "exam_component_id"], name: "exam_unique", unique: true, using: :btree
-
-  create_table "grade_points", force: :cascade do |t|
-    t.integer  "instructor_id"
-    t.integer  "students_record_id",                               null: false
-    t.integer  "student_id"
-    t.float    "theory"
-    t.integer  "practice_id"
-    t.hstore   "items"
-    t.hstore   "custom_items",       default: {},                  null: false
-    t.datetime "created_at",         default: "clock_timestamp()", null: false
-    t.datetime "modified_at",        default: "clock_timestamp()", null: false
-    t.text     "modified_by"
-  end
-
-  create_table "grade_weights", force: :cascade do |t|
-    t.text  "name",   null: false
-    t.float "weight"
-  end
-
-  create_table "grades", force: :cascade do |t|
-    t.integer  "instructor_id",                                    null: false
-    t.integer  "students_record_id",                               null: false
-    t.integer  "exam_id",                                          null: false
-    t.hstore   "grade",              default: {},                  null: false
-    t.datetime "created_at",         default: "clock_timestamp()", null: false
-    t.datetime "modified_at",        default: "clock_timestamp()", null: false
-    t.text     "modified_by"
-    t.integer  "student_id",                                       null: false
-    t.float    "grade_sum"
-  end
-
-  add_index "grades", ["students_record_id", "exam_id"], name: "record_exam_unique", unique: true, using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.text "name", null: false
@@ -128,14 +70,6 @@ ActiveRecord::Schema.define(version: 20151004133507) do
 
   add_index "instructors_schedules", ["schedule_id", "instructor_id", "day"], name: "instructor_schedule_day_unique", unique: true, using: :btree
 
-  create_table "pkg_grade_items", force: :cascade do |t|
-    t.integer "pkg_id"
-    t.text    "name",     null: false
-    t.integer "sequence", null: false
-  end
-
-  add_index "pkg_grade_items", ["pkg_id", "sequence"], name: "items_sequence_unique", unique: true, using: :btree
-
   create_table "pkgs", force: :cascade do |t|
     t.text    "pkg",        null: false
     t.integer "program_id"
@@ -148,8 +82,7 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   end
 
   create_table "programs", force: :cascade do |t|
-    t.text    "program",            null: false
-    t.integer "head_instructor_id"
+    t.text "program", null: false
   end
 
   add_index "programs", ["program"], name: "programs_program_key", unique: true, using: :btree
@@ -255,11 +188,11 @@ ActiveRecord::Schema.define(version: 20151004133507) do
 
   create_table "users", force: :cascade do |t|
     t.integer  "group_id"
-    t.text     "username",                           null: false
-    t.text     "fullname",                           null: false
-    t.text     "password_digest",                    null: false
+    t.text     "username",               null: false
+    t.text     "fullname",               null: false
+    t.text     "password_digest",        null: false
     t.text     "email"
-    t.string   "password_reset_token",   limit: 255
+    t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
   end
 
@@ -271,25 +204,11 @@ ActiveRecord::Schema.define(version: 20151004133507) do
   add_index "users_instructors", ["user_id", "instructor_id"], name: "user_instructor_unique", unique: true, using: :btree
 
   add_foreign_key "districts", "regencies_cities", column: "regency_city_code", primary_key: "code", name: "districts_regency_city_code_fkey"
-  add_foreign_key "exam_components", "grade_weights", name: "exam_components_grade_weight_id_fkey"
-  add_foreign_key "exams", "pkgs", name: "exams_pkg_id_fkey"
-  add_foreign_key "exams_exam_components", "exam_components", name: "exams_exam_components_exam_component_id_fkey"
-  add_foreign_key "exams_exam_components", "exams", name: "exams_exam_components_exam_id_fkey"
-  add_foreign_key "grade_points", "grades", column: "practice_id", name: "grade_points_practice_id_fkey"
-  add_foreign_key "grade_points", "instructors", name: "grade_points_instructor_id_fkey"
-  add_foreign_key "grade_points", "students", name: "grade_points_student_id_fkey"
-  add_foreign_key "grade_points", "students_records", name: "grade_points_students_record_id_fkey"
-  add_foreign_key "grades", "exams", name: "grades_exam_id_fkey"
-  add_foreign_key "grades", "instructors", name: "grades_instructor_id_fkey"
-  add_foreign_key "grades", "students", name: "grades_student_id_fkey"
-  add_foreign_key "grades", "students_records", name: "grades_students_record_id_fkey"
   add_foreign_key "instructors_schedules", "instructors", name: "instructors_schedules_instructor_id_fkey"
   add_foreign_key "instructors_schedules", "schedules", name: "instructors_schedules_schedule_id_fkey"
-  add_foreign_key "pkg_grade_items", "pkgs", name: "pkg_grade_items_pkg_id_fkey"
   add_foreign_key "pkgs", "programs", name: "pkgs_program_id_fkey"
   add_foreign_key "prereqs", "pkgs", column: "req_pkg_id", name: "prereqs_req_pkg_id_fkey"
   add_foreign_key "prereqs", "pkgs", name: "prereqs_pkg_id_fkey"
-  add_foreign_key "programs", "instructors", column: "head_instructor_id", name: "programs_head_instructor_id_fkey"
   add_foreign_key "programs_instructors", "instructors", name: "programs_instructors_instructor_id_fkey"
   add_foreign_key "programs_instructors", "programs", name: "programs_instructors_program_id_fkey"
   add_foreign_key "regencies_cities", "provinces", column: "province_code", primary_key: "code", name: "regencies_cities_province_code_fkey"
