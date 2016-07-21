@@ -41,11 +41,14 @@ CREATE TABLE components (
   component TEXT NOT NULL DEFAULT '',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   created_by TEXT,
-  course_id INTEGER REFERENCES courses(id)
+  course_id INTEGER NOT NULL REFERENCES courses(id)
 );
+
+CREATE INDEX components_created_at ON components(created_at);
 
 CREATE TABLE grades (
   id SERIAL PRIMARY KEY,
+  instructor_id INTEGER NOT NULL REFERENCES instructors(id),
   students_record_id INTEGER NOT NULL UNIQUE REFERENCES students_records(id),
   student_id INTEGER REFERENCES students(id),
   component_id INTEGER REFERENCES grades(id),
