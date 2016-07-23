@@ -37,7 +37,10 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  # mailer config
+  config.action_mailer.default_url_options = { :host => '192.168.0.102:3000' }
   config.action_mailer.raise_delivery_errors = true
-  config.x.sse_base_url = "http://localhost:9292"
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default :charset => "utf-8"
+  config.x.sse_base_url = "http://192.168.0.102:9292"
 end
