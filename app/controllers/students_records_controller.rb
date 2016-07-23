@@ -41,7 +41,7 @@ class StudentsRecordsController < ApplicationController
     @student = Student.find(params[:students_record][:student_id])
 
     respond_to do |format|
-      if @students_record.valid? and @student.transaction_user(@current_user) {
+      if @students_record.valid? and ActiveRecord::Base.transaction_user(@current_user) {
         @students_record.save!
         pkg = Pkg.find(params[:students_record][:pkg_id])
         @student.pkgs << pkg # this student has just started a pkg
@@ -61,7 +61,7 @@ class StudentsRecordsController < ApplicationController
   def update
     @student = @students_record.student
     respond_to do |format|
-      if @students_record.valid? and @students_record.transaction_user(@current_user) {
+      if @students_record.valid? and ActiveRecord::Base.transaction_user(@current_user) {
         unless params[:students_record][:finished_on].empty?
           pkg = Pkg.find(params[:students_record][:pkg_id])
           if pkg
@@ -88,7 +88,7 @@ class StudentsRecordsController < ApplicationController
   # DELETE /students_records/1.json
   def destroy
     @student = @students_record.student
-    destroyed = @student.transaction_user(@current_user) {
+    destroyed = ActiveRecord::Base.transaction_user(@current_user) {
       if (@current_group == "sysadmin" and @students_record.status != "active") or
          @students_record.destroyable?
         @student.pkgs.destroy(@students_record.pkg)

@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(username: params[:username])
     if user and user.authenticate(params[:password])
-      session[:expire_at] = Time.current + 24.hours
+      session[:expires_at] = Time.current + 12.hours
       session[:user_id] = user.id
       redirect_to root_url
     else

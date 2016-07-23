@@ -6,6 +6,8 @@ class StudentsController < ApplicationController
 
   skip_before_action :authorize, only: [:attending]
 
+  filter_access_to :all, :except => :name_suggestions
+
   helper_method :sort_column, :sort_direction
   
   def name_suggestions
@@ -43,7 +45,7 @@ class StudentsController < ApplicationController
 
   # DELETE
   def remove_pkg
-    @student.transaction_user(@current_user) do
+    ActiveRecord::Base.transaction_user(@current_user) do
       pkg = Pkg.find(params[:pid])
       @student.pkgs.destroy(pkg)
     end
@@ -109,7 +111,7 @@ class StudentsController < ApplicationController
     @student.created_at = DateTime.now.in_time_zone
 
     respond_to do |format|
-      if @student.valid? and @student.transaction_user(@current_user) { @student.save! }
+      if @student.valid? and ActiveRecord::Base.transaction_user(@current_user) { @student.save! }
         if params[:student][:avatar].blank?  
           redirect_to @student
           return  
@@ -132,13 +134,13 @@ class StudentsController < ApplicationController
   def update
     pkg_id = params.fetch(:student)[:pkg_id]
     if pkg_id and not pkg_id.empty?
-      @student.transaction_user(@current_user) do
+      ActiveRecord::Base.transaction_user(@current_user) do
         pkg = Pkg.find(pkg_id)
         @student.pkgs << pkg if pkg
       end
     end
 
-    if @student.transaction_user(@current_user) { @student.update(student_params) }
+    if ActiveRecord::Base.transaction_user(@current_user) { @student.update(student_params) }
       flash[:notice] = "Successfully updated user."
       if params[:student][:avatar].blank?
         if params[:remove_avatar]
