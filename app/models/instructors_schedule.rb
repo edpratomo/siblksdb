@@ -1,6 +1,4 @@
 class InstructorsSchedule < ActiveRecord::Base
-  include TransactionHelper
-  
   # :instructors <= :instructors_schedules => :schedules
   belongs_to :instructor
   belongs_to :schedule

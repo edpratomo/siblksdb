@@ -1,6 +1,4 @@
 class StudentsPkg < ActiveRecord::Base
-  include TransactionHelper
-  
   # :students <= :students_pkgs => :pkgs
   # allows this: Student.first.pkgs
   belongs_to :student
