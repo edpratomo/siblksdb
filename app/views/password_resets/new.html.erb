@@ -1,0 +1,30 @@
+<% if flash[:alert] %>
+<div class="row">
+  <div class="span12">
+  <div class="text-center">
+  <% flash.each do |name, msg| %>
+  <div class="alert alert-danger" style="width:40%;display:inline-block;margin: 0 auto;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Error! </strong><%= msg %>
+  </div>
+  <% end %>
+  </div>
+  </div>
+</div>
+<% end %>
+<% if notice %>
+<div class="row">
+  <div class="span12">
+  <div class="text-center">
+  <div class="alert alert-info" style="width:40%;display:inline-block;margin: 0 auto;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Information! </strong><%= notice %>
+  </div>
+  </div>
+  </div>
+</div>
+<% end %>
+<%= render 'form' %>
+<script type="text/javascript">
+$("#email").focus();
+</script>

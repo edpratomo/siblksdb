@@ -5,35 +5,90 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
-  <style>
-  html {
-    background: url(/images/dark-wall.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-  </style>
 </head>
 <body>
-
     <div class="container">
-      <% if flash[:alert] %>
-        <p id="notice" class="has-error"><%= flash[:alert] %></p>
-      <% end %>
+
+    <div class="span12 text-center">
+    <div style="width:40%;display:inline-block;margin: 0 auto;">
+      <%= flash_messages %>
+    </div>
+    </div>
+
       <%= form_tag({}, {:class => "form-signin", :role => "form"}) do %>
         <h2 class="form-signin-heading"><%= t(:please).capitalize %> <%= t("sign in") %></h2>
-        <input type="text" class="form-control" placeholder="Username" name="username" required="" autofocus="">
+        <input type="text" id="username" class="form-control" placeholder="Username" name="username" required="" autofocus="">
         <input type="password" class="form-control" placeholder="Password" name="password" required="">
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="remember_me" value="remember-me" disabled> <%= t("remember me").capitalize %>
-          </label>
-        </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><%= t("sign in").capitalize %></button>
+        <div style="padding-top:12px; font-size:16px;">
+        <%= link_to "Lupa password?", new_password_reset_path %>
+        </div>
       <% end %>
 
     </div> <!-- /container -->
 
 </body>
 </html>
+<script type="text/javascript">
+$(function() {
+  var current = 0;
+  var body = $('body');
+  var backgrounds = ['/images/background/dark-wall.jpg',
+                     '/images/background/depan-gedung.jpg',
+                     '/images/background/computer-course.jpg',
+                     '/images/background/get-to-know.jpg',
+                     '/images/background/learn-active.jpg',
+                     '/images/background/motorbike-maintenance.jpg'
+                    ];
+
+  preload(backgrounds);
+  $("#username").focus();
+
+  function nextBackground() {
+    body.css({
+      'background-image': 'url(' + backgrounds[current = ++current % backgrounds.length] + ')',
+      'background-repeat': 'no-repeat',
+      'background-attachment': 'fixed',
+      'background-position': 'center',
+      '-webkit-background-size': 'cover',
+      '-moz-background-size': 'cover',
+      '-o-background-size': 'cover',
+      'background-size': 'cover',
+      '-webkit-transition': 'background 1.5s linear',
+      '-moz-transition': 'background 1.5s linear',
+      '-o-transition': 'background 1.5s linear',
+      '-ms-transition': 'background 1.5s linear',
+      'transition': 'background 1.5s linear'
+    });
+    setTimeout(nextBackground, 5000);
+  }
+
+  setTimeout(nextBackground, 5000);
+
+  body.css({
+    'background-image': 'url(' + backgrounds[0] + ')',
+    'background-repeat': 'no-repeat',
+    'background-attachment': 'fixed',
+    'background-position': 'center',
+    '-webkit-background-size': 'cover',
+    '-moz-background-size': 'cover',
+    '-o-background-size': 'cover',
+    'background-size': 'cover',
+    '-webkit-transition': 'background 1.5s linear',
+    '-moz-transition': 'background 1.5s linear',
+    '-o-transition': 'background 1.5s linear',
+    '-ms-transition': 'background 1.5s linear',
+    'transition': 'background 1.5s linear'
+  });
+
+  function preload(images) {
+    $(images).each(function() {
+      var $img = $( '<img src="' + this + '">' );
+      $img.bind('load', function() {
+        $('body').css('background-image', 'url(' + this + ')');
+      });
+      if( $img[0].width ){ $img.trigger( 'load' ); }
+    });
+  }
+});
+</script>
