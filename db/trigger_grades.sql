@@ -31,6 +31,8 @@ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS grades_cache_student ON grades;
 DROP TRIGGER IF EXISTS grades_update_student_cache ON students_records;
+DROP TRIGGER IF EXISTS grades_if_modified ON grades;
+DROP TRIGGER IF EXISTS components_if_modified ON components;
 
 CREATE TRIGGER grades_cache_student
  BEFORE INSERT ON grades
@@ -40,4 +42,15 @@ CREATE TRIGGER grades_cache_student
 CREATE TRIGGER grades_update_student_cache
  AFTER UPDATE OF student_id ON students_records
   FOR EACH ROW EXECUTE PROCEDURE update_student_cache()
+;
+
+-- timestamp triggers
+CREATE TRIGGER grades_if_modified
+ AFTER INSERT OR UPDATE OR DELETE ON grades
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
+;
+
+CREATE TRIGGER components_if_modified
+ AFTER INSERT OR UPDATE OR DELETE ON components
+  FOR EACH ROW EXECUTE PROCEDURE if_modified_func()
 ;

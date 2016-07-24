@@ -6,7 +6,7 @@ authorization do
   
   # permissions on other roles, such as
   role :sysadmin do
-    [:students, :programs, :pkgs, :schedules, :users, :settings, :instructors, :exams, :grades].each do |controller|
+    [:students, :programs, :pkgs, :schedules, :users, :settings, :instructors, :courses, :grades].each do |controller|
       has_permission_on controller, :to => :manage
     end
     has_permission_on :changes, :to => :read
@@ -16,19 +16,19 @@ authorization do
     has_permission_on :instructors, :to => :manage
     has_permission_on :users,       :to => :manage
     has_permission_on :grades,      :to => :read
-    has_permission_on :exams,       :to => :read
+    has_permission_on :courses,     :to => :read
   end
 
   role :instructor do
     has_permission_on :students, :to => :read
     has_permission_on :grades,   :to => :manage
-    has_permission_on :exams,    :to => :manage
+    has_permission_on :courses,  :to => :read
   end
 
   role :staff do
     has_permission_on :students, :to => :manage
     has_permission_on :grades,   :to => :read
-    has_permission_on :exams,    :to => :read
+    has_permission_on :courses,  :to => :read
   end
   # role :admin do
   #   has_permission_on :conferences, :to => :manage
@@ -46,8 +46,7 @@ privileges do
   # default privilege hierarchies to facilitate RESTful Rails apps
   privilege :manage, :includes => [:create, :read, :delete,
                                    :update, :update_schedule]
-  privilege :read, :includes => [:index, :show, :options_for_exam, :options_for_exam_grade, 
-                                 :options_for_result, :name_suggestions, :index_all]
+  privilege :read, :includes => [:index, :show, :options_for_result, :name_suggestions, :index_all]
   privilege :create, :includes => :new
   privilege :update, :includes => :edit
   privilege :update_schedule, :includes => :edit_schedule

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :courses
   resources :password_resets
 
   get 'report/new_monthly_generic'

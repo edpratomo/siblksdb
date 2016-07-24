@@ -38,9 +38,9 @@ UPDATE pkgs SET course_id = 14 WHERE id IN (29, 30, 31);
 -- komponen-komponen nilai
 CREATE TABLE components (
   id SERIAL PRIMARY KEY,
-  component TEXT NOT NULL DEFAULT '',
+  content TEXT NOT NULL DEFAULT '',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
-  created_by TEXT,
+  modified_by TEXT,
   course_id INTEGER NOT NULL REFERENCES courses(id)
 );
 
@@ -54,5 +54,5 @@ CREATE TABLE grades (
   component_id INTEGER REFERENCES grades(id),
   grade TEXT NOT NULL DEFAULT '',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
-  created_by TEXT
+  modified_by TEXT
 );
