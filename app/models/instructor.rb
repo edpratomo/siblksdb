@@ -2,9 +2,10 @@ class Instructor < ActiveRecord::Base
   validates :name, presence: true
   validates :nick, presence: true
   
-  # :instructors <= :programs_instructors => :programs
+  # :instructors <= :programs_instructors => :programs => :pkgs
   has_many :programs_instructors
   has_many :programs, through: :programs_instructors
+  has_many :pkgs, through: :programs
 
   # :instructors <= :instructors_schedules => :schedules
   has_many :instructors_schedules

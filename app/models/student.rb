@@ -77,6 +77,8 @@ class Student < ActiveRecord::Base
       :with_religion,
       :with_registered_at_gt,
       :with_registered_at_lt,
+      :with_current_pkg,
+      :with_instructor,
       :with_multiple_completion_on_same_pkg,
       :who_left_pkg,
       :with_broken_pkg_dates
@@ -101,6 +103,15 @@ class Student < ActiveRecord::Base
 
   scope :with_registered_at_lt, ->(ref_date) {
     where("students.registered_at AT TIME ZONE 'Asia/Jakarta' < ?", ref_date.sub(Regexp.new('^(\d+)/(\d+)/(\d+)$'), '\2/\1/\3'))
+  }
+
+  scope :with_current_pkg, ->(pkg) {
+    joins(:students_pkgs).where("students_pkgs.pkg_id" => pkg)
+  }
+
+  scope :with_instructor, ->(instructor) {
+    joins(:students_pkgs).joins(:students_pkgs_instructors_schedules).
+    joins(:instructors_schedules).where('instructors_schedules.instructor_id' => instructor).uniq
   }
 
   # more scopes
