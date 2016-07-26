@@ -7,8 +7,22 @@ class GradesController < ApplicationController
   # GET /grades
   # GET /grades.json
   def index
-    @grades = Grade.all
+    if @instructor
+      @filterrific = initialize_filterrific(
+        StudentsRecord,
+        params[:filterrific],
+        :select_options => {
+          sorted_by: StudentsRecord.options_for_sorted_by,
+          with_pkg: @instructor.options_for_pkg
+        },
+        default_filter_params: { sorted_by: 'started_on_asc' }
+      ) or return
 
+      @students_records = StudentsRecord.with_instructor(@instructor).
+                          filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
+    else
+    
+    end
   end
 
   # GET /grades/1

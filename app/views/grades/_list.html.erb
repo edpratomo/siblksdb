@@ -1,0 +1,38 @@
+<div class='well well-small'>
+  <div class='pull-right' data-intro='Reset the filter settings to defaults.' data-position='bottom'>
+    <%= link_to "Reset filters", reset_filterrific_url, :class => 'btn btn-default btn-sm' %>
+  </div>
+  <div>
+    <%= page_entries_info students_records, :model => 'students_record' %>
+  </div>
+  <div>
+    <%= render_filterrific_spinner %>
+  </div>
+</div>
+
+<% if students_records.size > 0  %>
+<table class="table pretty table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>Tanggal Mulai Kursus</th>
+      <th>Nilai</th>
+      <th>Entri Data</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% students_records.each do |srec| %>
+      <tr>
+        <td><%= srec.student.name %></div></td>
+        <td><%= srec.started_on %></td>
+        <td><%= srec.grade ? 'Ada' : '--' %></td>
+        <td><%= link_to 'Isi Nilai', new_grade_path %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+
+<%= will_paginate students_records, renderer: BootstrapPagination::Rails %>
+<br>

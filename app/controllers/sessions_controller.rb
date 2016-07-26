@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
     user = User.find_by(username: params[:username])
     if user and user.authenticate(params[:password])
       session[:expires_at] = Time.current + 12.hours
+      # session[:expires_at] = Time.current + 5.minutes
       session[:user_id] = user.id
       redirect_to root_url
     else

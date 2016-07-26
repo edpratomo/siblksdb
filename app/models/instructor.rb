@@ -18,4 +18,8 @@ class Instructor < ActiveRecord::Base
   # link instructor to user
   has_one :users_instructor
   has_one :user, through: :users_instructor
+
+  def options_for_pkg
+    pkgs.map {|e| [ "#{e.pkg} - Level #{e.level}", e.id ] }
+  end
 end

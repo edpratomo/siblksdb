@@ -2,47 +2,33 @@
 
 <h1>Listing Grades</h1>
 
-<div>
-  <ol>
-    <li>Kelompok Dasar
-      <ol>
-        <li>Fisik, Mental, dan Disiplin (FMD)</li>
-        <li>Motivasi Kerja</li>
-        <li>Inisiatif dan Kreativitas</li>
-        <li>Komunikasi</li>
-      </ol>
-    </li>
-    <li>Kelompok Inti
-      <ol>
-        <li>Tes Teori</li>
-        <li>Tes Praktek</li>
-        <li>Pengetikan: Kecepatan (WPM)/ Ketelitian (%)</li>
-        <li>Pengolahan Dokumen</li>
-        <li>Pengolahan Table dan Grafik</li>
-        <li>Kualitas Pekerjaan</li>
-      </ol>
-    </li>
-  </ol>
+<div class="well">
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Peserta kursus</label>
+        <%= f.select :with_pkg, @filterrific.select_options[:with_pkg],
+                     { :include_blank => '- Pilih -' },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Urutkan</label>
+        <%= f.select :sorted_by, @filterrific.select_options[:sorted_by],
+                     { },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+  </div>
+<% end %>
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @grades.each do |grade| %>
-      <tr>
-        <td><%= link_to 'Show', grade %></td>
-        <td><%= link_to 'Edit', edit_grade_path(grade) %></td>
-        <td><%= link_to 'Destroy', grade, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Grade', new_grade_path %>
+<div id="filterrific_results">
+  <%= render :partial => 'grades/list',
+             :locals => { :students_records => @students_records }
+ %>
+</div>

@@ -51,7 +51,7 @@ CREATE TABLE grades (
   instructor_id INTEGER NOT NULL REFERENCES instructors(id),
   students_record_id INTEGER NOT NULL UNIQUE REFERENCES students_records(id),
   student_id INTEGER REFERENCES students(id),
-  component_id INTEGER REFERENCES grades(id),
+  component_id INTEGER REFERENCES components(id),
   grade TEXT NOT NULL DEFAULT '',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT clock_timestamp(),
   modified_by TEXT

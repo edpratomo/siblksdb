@@ -18,12 +18,14 @@ class ApplicationController < ActionController::Base
   def authorize
     unless User.find_by(id: session[:user_id])
       redirect_to login_url
+      return
     end
     if session[:expires_at] and session[:expires_at] < Time.current
       # sign out user
       session[:user_id] = nil
       # caused AbstractController::DoubleRenderError:
-      redirect_to login_url, alert: "Session kadaluarsa. Silakan login kembali"
+      redirect_to(login_url, alert: "Session kadaluarsa. Silakan login kembali")
+      return
     end
   end
 

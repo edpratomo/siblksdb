@@ -3,8 +3,9 @@ class StudentsRecord < ActiveRecord::Base
   belongs_to :student
   belongs_to :pkg
 
+  has_one :grade
+
   validates_presence_of :pkg
-  # validates_uniqueness_of :pkg
 
   validate :finished_on_cant_be_blank
 #  validate :finished_on_must_be_after_started_on
@@ -61,5 +62,42 @@ class StudentsRecord < ActiveRecord::Base
     else
       false
     end
+  end
+
+  filterrific(
+    available_filters: [
+      :sorted_by,
+      :with_instructor,
+      :with_status,
+      :with_pkg
+    ]
+  )
+
+  scope :sorted_by, ->(column_order) {
+    if Regexp.new('^(.+)_(asc|desc)$', Regexp::IGNORECASE).match(column_order)
+      reorder("#{$1} #{$2}")
+    end
+  }
+
+  scope :with_instructor, ->(instructor) {
+    joins("JOIN students_pkgs sp ON students_records.student_id = sp.student_id AND students_records.pkg_id = sp.pkg_id").
+    joins("JOIN students_pkgs_instructors_schedules spis ON sp.id = spis.students_pkg_id").
+    joins("JOIN instructors_schedules isc ON spis.instructors_schedule_id = isc.id").
+    where("isc.instructor_id" => instructor).uniq
+  }
+  
+  scope :with_status, ->(status) {
+    where(status: status)
+  }
+
+  scope :with_pkg, ->(pkg) {
+    where(pkg: pkg)
+  }
+
+  def self.options_for_sorted_by
+    [
+      ['Tanggal mulai (baru -> lama)', 'started_on_desc'],
+      ['Tanggal mulai (lama -> baru)', 'started_on_asc'],
+    ]
   end
 end
