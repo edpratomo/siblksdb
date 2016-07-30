@@ -39,7 +39,7 @@ class Grade < ActiveRecord::Base
 
   scope :sorted_by, ->(column_order) {
     if Regexp.new('^(.+)_(asc|desc)$', Regexp::IGNORECASE).match(column_order)
-      reorder("#{$1} #{$2}")
+      joins(:students_record).reorder("students_records.#{$1} #{$2}")
     end
   }
 
@@ -54,4 +54,22 @@ class Grade < ActiveRecord::Base
   scope :with_student_status, ->(status) {
     where(:students_record => StudentsRecord.where(status: status))
   }
+
+  def self.options_for_sorted_by
+    [
+      ['Tanggal mulai (baru -> lama)', 'started_on_desc'],
+      ['Tanggal mulai (lama -> baru)', 'started_on_asc'],
+    ]
+  end
+
+  def self.options_for_instructor
+    select(:instructor_id).distinct.map {|e| [ Instructor.find(e.instructor_id).nick, e.instructor_id] }.sort_by {|e| e[0] }
+  end
+
+  def self.options_for_pkg
+    joins(:students_record).select('students_records.pkg_id AS pkg_id').distinct.map {|e|
+      pkg = Pkg.find(e.pkg_id)
+      [ "#{pkg.pkg} Level #{pkg.level}", e.pkg_id ]
+    }.sort_by {|e| e[0] }
+  end
 end

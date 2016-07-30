@@ -22,6 +22,19 @@ class GradesController < ApplicationController
       @students_records = StudentsRecord.with_instructor(@instructor).
                           filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
     else # staff login
+      @filterrific = initialize_filterrific(
+        Grade,
+        params[:filterrific],
+        :select_options => {
+          sorted_by: Grade.options_for_sorted_by,
+          with_pkg: Grade.options_for_pkg,
+          with_instructor: Grade.options_for_instructor
+        },
+        default_filter_params: { sorted_by: 'started_on_asc' }
+      ) or return
+
+      @grades = Grade.filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
+
       render :index_staff
     end
   end
