@@ -1,5 +1,6 @@
 class GradesController < ApplicationController
-  before_action :set_grade, only: [:show, :edit, :update, :destroy]
+  #before_action :set_grade, only: [:show, :edit, :update, :destroy]
+  before_action :set_students_record, only: [:new, :show, :edit]
   before_action :set_current_user, only: [:update, :create, :destroy]
   before_action :set_instructor
   filter_resource_access
@@ -20,8 +21,8 @@ class GradesController < ApplicationController
 
       @students_records = StudentsRecord.with_instructor(@instructor).
                           filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
-    else
-    
+    else # staff login
+
     end
   end
 
@@ -32,7 +33,9 @@ class GradesController < ApplicationController
 
   # GET /grades/new
   def new
-    @grade = Grade.new
+    course = @students_record.pkg.course
+    @grade = Grade.new(students_record: @students_record, instructor: @instructor, 
+                       component: Component.find_by(course: course))
   end
 
   # GET /grades/1/edit
@@ -45,7 +48,7 @@ class GradesController < ApplicationController
     @grade = Grade.new(grade_params)
 
     respond_to do |format|
-      if @grade.save
+      if @grade.valid? and ActiveRecord::Base.transaction_user(@current_user) { @grade.save! }
         format.html { redirect_to @grade, notice: 'Grade was successfully created.' }
         format.json { render :show, status: :created, location: @grade }
       else
@@ -85,6 +88,10 @@ class GradesController < ApplicationController
       @grade = Grade.find(params[:id])
     end
 
+    def set_students_record
+      @students_record = StudentsRecord.find(params[:id])
+    end
+
     def set_current_user
       @current_user = current_user.username
     end
@@ -96,5 +103,10 @@ class GradesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_params
       params[:grade]
+      params.require(:grade).permit(:students_record_id, :instructor_id, :component_id).tap do |whitelisted|
+                                        if params[:grade][:value]
+                                          whitelisted[:value] = params[:grade][:value]
+                                        end
+                                      end
     end
 end

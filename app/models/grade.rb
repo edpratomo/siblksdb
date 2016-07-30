@@ -1,7 +1,8 @@
 class Grade < ActiveRecord::Base
-  # belongs_to :instructor
+  belongs_to :instructor
   belongs_to :students_record
   belongs_to :student
+  belongs_to :component
 
   delegate :pkg, to: :students_record
 

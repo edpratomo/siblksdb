@@ -27,7 +27,7 @@
         <td><%= srec.student.name %></div></td>
         <td><%= srec.started_on %></td>
         <td><%= srec.grade ? 'Ada' : '--' %></td>
-        <td><%= link_to 'Isi Nilai', new_grade_path %></td>
+        <td><%= link_to 'Isi Nilai', new_grades_path(srec) %></td>
       </tr>
     <% end %>
   </tbody>

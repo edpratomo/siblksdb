@@ -10,7 +10,10 @@
       </ul>
     </div>
   <% end %>
-
+  <%= f.hidden_field :students_record_id %>
+  <%= f.hidden_field :instructor_id %>
+  <%= f.hidden_field :component_id %>
+<%= raw(ERB.new(grade_component_as_form(@grade.component.content)).result(binding)) %>
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :grades
+  resources :grades, :except => [:new] do
+    collection do
+      get 'new/:id' => 'grades#new', as: "new"
+    end
+  end
+
   resources :courses
   resources :password_resets
 
