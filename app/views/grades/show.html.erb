@@ -1,4 +1,19 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_grade_path(@grade) %> |
+<table class="table pretty table-hover table-striped">
+  <thead>
+    <tr>
+      <th rowspan="2" style="vertical-align: middle;">MATA LATIHAN DAN UJIAN</th>
+      <th colspan="2" style="text-align: center;">NILAI</th>
+    </tr>
+    <tr>
+      <th style="text-align: center;">Angka</th>
+      <th style="text-align: center;">Huruf</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= raw(ERB.new(grade_component_as_table(@grade.component.content)).result(binding)) %>
+  </tbody>
+</table>
+
 <%= link_to 'Back', grades_path %>

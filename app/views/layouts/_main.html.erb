@@ -8,7 +8,7 @@
             <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
             <li class="<%= active_tab_class(presence_sheet_new_path) %>"><%= link_to "Lembar Absensi Siswa", presence_sheet_new_path %></li>
             <% permitted_to? :read, :grades do %>
-              <li class="<%= active_tab_class(grades_path) %>"><%= link_to "Nilai", grades_path %></li>
+              <li class="<%= active_tab_class(grades_path) %>"><%= link_to "Nilai Siswa", grades_path %></li>
             <% end %>
             <li class="collapse"">
               <a href="#report_submenu" class="list-group-item" style="background-color:#F4F4F4; border-color:#F4F4F4; color:black;" data-toggle="collapse" data-parent="#report_submenu">Laporan <span class="caret"></span></a>

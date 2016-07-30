@@ -2,13 +2,14 @@ module RenderGradeComponent
   class TableDecorator
     def decorate0(el, level)
       offset = (level - 1) * 15;
-      %[<tr><td colspan="2"><div style="padding-left: #{offset}px;">#{el}</div></td></tr>]
+      %[<tr><td colspan="3"><div style="padding-left: #{offset}px;">#{el}</div></td></tr>]
     end
 
     def decorate(el, level, cnt)
       offset = (level - 1) * 15;
       %[<tr><td><div style="padding-left: #{offset}px;">#{el}</div></td>] + 
-      %[<td><div class="input-group"><%= text_field_tag "grade[value][#{cnt}]", @grade.value && @grade.value["#{cnt}"], class: "form-control" %></div></td></tr>]
+      %[<td style="text-align: center;"><%= @grade.value && @grade.value["#{cnt}"] %></td>] +
+      %[<td style="text-align: center;"><%= @grade.value && grade_group(@grade.value["#{cnt}"]) %></td></tr>]
     end
   end
 
@@ -71,5 +72,5 @@ if $0 == __FILE__
   ary = YAML.load(File.open(ARGV[0]))
   raise "Not an array" unless ary.is_a? Array
   
-  print grade_component_as_form(File.open(ARGV[0]))
+  print grade_component_as_table(File.open(ARGV[0]))
 end
