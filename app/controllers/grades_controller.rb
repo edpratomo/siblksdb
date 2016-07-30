@@ -1,6 +1,6 @@
 class GradesController < ApplicationController
-  #before_action :set_grade, only: [:show, :edit, :update, :destroy]
-  before_action :set_students_record, only: [:new, :show, :edit]
+  before_action :set_grade, only: [:show, :edit, :update, :destroy]
+  before_action :set_students_record, only: [:new]
   before_action :set_current_user, only: [:update, :create, :destroy]
   before_action :set_instructor
   filter_resource_access
@@ -22,7 +22,7 @@ class GradesController < ApplicationController
       @students_records = StudentsRecord.with_instructor(@instructor).
                           filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
     else # staff login
-
+      render :index_staff
     end
   end
 
@@ -62,7 +62,7 @@ class GradesController < ApplicationController
   # PATCH/PUT /grades/1.json
   def update
     respond_to do |format|
-      if @grade.update(grade_params)
+      if ActiveRecord::Base.transaction_user(@current_user) { @grade.update(grade_params) }
         format.html { redirect_to @grade, notice: 'Grade was successfully updated.' }
         format.json { render :show, status: :ok, location: @grade }
       else

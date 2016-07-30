@@ -17,7 +17,6 @@
       <th>Nama</th>
       <th>Tanggal Mulai Kursus</th>
       <th>Nilai</th>
-      <th>Entri Data</th>
     </tr>
   </thead>
 
@@ -26,8 +25,12 @@
       <tr>
         <td><%= srec.student.name %></div></td>
         <td><%= srec.started_on %></td>
-        <td><%= srec.grade ? 'Ada' : '--' %></td>
-        <td><%= link_to 'Isi Nilai', new_grades_path(srec) %></td>
+        <td>[ <% if srec.grade %>
+              <%= link_to 'Edit', edit_grade_path(srec.grade) %> | <span class="grayout">Baru</span>
+              <% else %>
+              <span class="grayout">Edit</span> | <%= link_to 'Baru', new_grades_path(srec) %>
+              <% end %> ]
+        </td>
       </tr>
     <% end %>
   </tbody>
