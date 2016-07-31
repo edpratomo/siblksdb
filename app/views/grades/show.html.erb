@@ -1,19 +1,29 @@
 <p id="notice"><%= notice %></p>
 
-<table class="table pretty table-hover table-striped">
-  <thead>
-    <tr>
-      <th rowspan="2" style="vertical-align: middle;">MATA LATIHAN DAN UJIAN</th>
-      <th colspan="2" style="text-align: center;">NILAI</th>
-    </tr>
-    <tr>
-      <th style="text-align: center;">Angka</th>
-      <th style="text-align: center;">Huruf</th>
-    </tr>
-  </thead>
-  <tbody>
+<div class="row">
+  <div class="col-md-1"><h4>Nama</h4></div><div class="col-md-6"><h4>: <%= @grade.student.name %></h4></div>
+</div>
+<div class="row">
+  <div class="col-md-1"><h4>Jurusan</h4></div><div class="col-md-6"><h4>: <%= @grade.pkg.pkg %> Level <%= @grade.pkg.level %></h4></div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+  <table class="table pretty table-hover table-striped table-bordered">
+    <thead>
+      <tr>
+        <th rowspan="2" style="vertical-align: middle;">MATA LATIHAN DAN UJIAN</th>
+        <th colspan="2" style="text-align: center;">NILAI</th>
+      </tr>
+      <tr>
+        <th style="text-align: center;">Angka</th>
+        <th style="text-align: center;">Huruf</th>
+      </tr>
+    </thead>
+    <tbody>
 <%= raw(ERB.new(grade_component_as_table(@grade.component.content)).result(binding)) %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+  </div>
+</div>
 
 <%= link_to 'Back', grades_path %>

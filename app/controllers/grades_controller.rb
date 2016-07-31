@@ -5,6 +5,16 @@ class GradesController < ApplicationController
   before_action :set_instructor
   filter_resource_access
 
+  class ComponentNotFound < StandardError
+  end
+
+  rescue_from ComponentNotFound, :with => :component_not_found
+
+  def component_not_found(exception)
+    flash[:notice] = "Belum ada komponen nilai untuk kursus ini."
+    redirect_to grades_path
+  end
+
   # GET /grades
   # GET /grades.json
   def index
@@ -47,8 +57,9 @@ class GradesController < ApplicationController
   # GET /grades/new
   def new
     course = @students_record.pkg.course
-    @grade = Grade.new(students_record: @students_record, instructor: @instructor, 
-                       component: Component.find_by(course: course))
+    component = Component.find_by(course: course)
+    raise ComponentNotFound unless component
+    @grade = Grade.new(students_record: @students_record, instructor: @instructor, component: component)
   end
 
   # GET /grades/1/edit

@@ -16,7 +16,7 @@
     <tr>
       <th>Nama</th>
       <th>Kursus</th>
-      <th>Tanggal Mulai</th>
+      <th>Mulai</th>
       <th>Instruktur</th>
       <th>Nilai</th>
     </tr>
@@ -27,7 +27,7 @@
       <tr>
         <td><%= grade.student.name %></div></td>
         <td><%= grade.pkg.pkg %> Level <%= grade.pkg.level %></td>
-        <td><%= grade.students_record.started_on %></td>
+        <td><%= grade.students_record.started_on.strftime("%d %b %Y") %></td>
         <td><%= grade.instructor.nick %></td>
         <td><%= link_to 'Show', grade_path(grade) %></td>
       </tr>

@@ -15,7 +15,7 @@
   <thead>
     <tr>
       <th>Nama</th>
-      <th>Tanggal Mulai Kursus</th>
+      <th>Mulai Kursus</th>
       <th>Nilai</th>
     </tr>
   </thead>
@@ -24,7 +24,7 @@
     <% students_records.each do |srec| %>
       <tr>
         <td><%= srec.student.name %></div></td>
-        <td><%= srec.started_on %></td>
+        <td><%= srec.started_on.strftime("%d %b %Y") %></td>
         <td>[ <% if srec.grade %>
               <%= link_to 'Edit', edit_grade_path(srec.grade) %> | <span class="grayout">Baru</span>
               <% else %>
