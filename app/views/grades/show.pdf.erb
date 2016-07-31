@@ -1,0 +1,68 @@
+  <table width="100%">
+  <caption style="padding-bottom:10px">
+    <p style="font-size:large">BALAI LATIHAN KERJA (BLK)</p>
+    <p style="font-size:large">SALESIAN DON BOSCO</p>
+    <p style="font-size:medium">DAFTAR NILAI</p>
+  </caption>
+    <tbody>
+      <tr><td width="100" style="font-size:large">Nama</td><td style="font-size:large">: <%= @grade.student.name %></td></tr>
+      <tr><td width="100" style="font-size:large">Jurusan</td><td style="font-size:large">: <%= @grade.pkg.pkg %> Level <%= @grade.pkg.level %></td></tr>
+    </tbody>
+  </table>
+
+<div style="padding-top:20px;">
+  <table class="table pretty table-striped table-bordered printgrade">
+    <thead>
+      <tr>
+        <th rowspan="2" style="vertical-align: middle;">MATA LATIHAN DAN UJIAN</th>
+        <th colspan="2" style="text-align: center;">NILAI</th>
+      </tr>
+      <tr>
+        <th style="text-align: center;">Angka</th>
+        <th style="text-align: center;">Huruf</th>
+      </tr>
+    </thead>
+    <tbody>
+<%= raw(ERB.new(grade_component_as_table(@grade.component.content)).result(binding)) %>
+    </tbody>
+  </table>
+</div>
+
+<div>
+<table class="center-table table-bordered" style="width: 80%; background-color:white;">
+  <caption style="padding-top:20px;padding-bottom:10px">
+    <p style="font-size:medium">KETERANGAN PENGELOMPOKAN NILAI</p>
+  </caption>
+  <thead>
+    <tr>
+      <th style="text-align:center;">HURUF</th>
+      <th style="text-align:center;">NILAI</th>
+      <th style="text-align:center;">KETERANGAN</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align:center;">A</td>
+      <td style="text-align:center;">90 - 100</td>
+      <td style="text-align:center;">Memuaskan</td>
+    </tr>
+    <tr>
+      <td style="text-align:center;">B</td>
+      <td style="text-align:center;">75 - 89</td>
+      <td style="text-align:center;">Baik</td>
+    </tr>
+    <tr>
+      <td style="text-align:center;">C</td>
+      <td style="text-align:center;">60 - 74</td>
+      <td style="text-align:center;">Cukup</td>
+    </tr>
+    <tr>
+      <td style="text-align:center;">D</td>
+      <td style="text-align:center;">50 - 59</td>
+      <td style="text-align:center;">Kurang</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<%= render partial: 'signature' %>

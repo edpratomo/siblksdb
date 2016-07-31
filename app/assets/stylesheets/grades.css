@@ -29,3 +29,14 @@ li ol > li:before {
   opacity: 0.6; /* Real browsers */
   filter: alpha(opacity = 60); /* MSIE */
 }
+
+.center-table
+{
+  margin: 0 auto !important;
+  float: none !important;
+}
+
+.printgrade thead > tr > th,
+.printgrade tbody > tr > td {
+  padding: 2px;
+}

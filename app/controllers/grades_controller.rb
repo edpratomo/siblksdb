@@ -52,6 +52,17 @@ class GradesController < ApplicationController
   # GET /grades/1
   # GET /grades/1.json
   def show
+    respond_to do |format|
+      format.html { render :show }
+      format.pdf {
+        @signature_date = signature_date
+        render pdf: %[Nilai],
+               orientation: 'Portrait',
+               template: 'grades/show.pdf.erb',
+               layout: 'pdf_layout.html.erb'
+      }
+    end
+
   end
 
   # GET /grades/new
@@ -132,5 +143,9 @@ class GradesController < ApplicationController
                                           whitelisted[:value] = params[:grade][:value]
                                         end
                                       end
+    end
+
+    def signature_date
+      DateTime.now.in_time_zone
     end
 end

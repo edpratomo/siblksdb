@@ -18,7 +18,7 @@
       <th>Kursus</th>
       <th>Mulai</th>
       <th>Instruktur</th>
-      <th>Nilai</th>
+      <th colspan="2" style="text-align:center">Nilai</th>
     </tr>
   </thead>
 
@@ -29,7 +29,8 @@
         <td><%= grade.pkg.pkg %> Level <%= grade.pkg.level %></td>
         <td><%= grade.students_record.started_on.strftime("%d %b %Y") %></td>
         <td><%= grade.instructor.nick %></td>
-        <td><%= link_to 'Show', grade_path(grade) %></td>
+        <td style="text-align:right"><%= link_to 'Lihat', grade_path(grade) %></td>
+        <td style="text-align:left"><%= link_to 'PDF', grade_path(grade, :format => :pdf) %></td>
       </tr>
     <% end %>
   </tbody>
