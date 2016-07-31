@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th>Program</th>
+      <th>Head Instructor</head>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -12,6 +13,7 @@
     <% @programs.each do |program| %>
       <tr>
         <td><%= program.program %></td>
+        <td><%= program.head_instructor && program.head_instructor.name || 'N/A' %></td>
         <td><%= link_to 'Edit', edit_program_path(program) %></td>
         <td><%= link_to 'Destroy', program, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

@@ -14,6 +14,11 @@
   <div class="field">
     <%= f.text_field :program %>
   </div>
+  <div class="field">
+    <%= f.select :head_instructor_id, Instructor.order(:name).map {|e| ["#{e.name} (#{e.nick})", e.id]}, 
+                 {control_col: "col-sm-3", include_blank: "- Pilih -", 
+                  selected: @program.head_instructor_id } %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
