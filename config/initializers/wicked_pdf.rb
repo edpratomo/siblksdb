@@ -1,5 +1,5 @@
 module WickedPdfHelper
-  if Rails.env.development?
+  if Rails.env.development? or Rails.env.staging?
     if RbConfig::CONFIG['host_os'] =~ /linux/
       executable = RbConfig::CONFIG['host_cpu'] == 'x86_64' ? 'wkhtmltopdf_linux_x64' : 'wkhtmltopdf_linux_386'
     elsif RbConfig::CONFIG['host_os'] =~ /darwin/
