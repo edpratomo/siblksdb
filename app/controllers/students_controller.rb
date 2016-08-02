@@ -63,7 +63,8 @@ class StudentsController < ApplicationController
       params[:filterrific],
       :select_options => {
         sorted_by: Student.options_for_sorted_by,
-        with_religion: Student.options_for_religion
+        with_religion: Student.options_for_religion,
+        with_employment: Student.options_for_employment
       }
     ) or return
     # @students = @filterrific.find.page(params[:page])
@@ -182,7 +183,7 @@ class StudentsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :email, 
+      params.require(:student).permit(:name, :sex, :birthplace, :birthdate, :phone, :email, :employment,
                                       :street_address, :district, :regency_city, :religion, :registered_at,
                                       :avatar, :crop_x, :crop_y, :crop_w, :crop_h).tap do |whitelisted|
                                         if params[:student][:biodata]

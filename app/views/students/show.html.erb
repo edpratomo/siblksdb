@@ -11,6 +11,7 @@
   <div class="data">
     <h1><%= @student.name %> <span class="ionicons ion-<%= @student.sex %>" style="padding-left:20px"></span></h1>
     <h3>Kelahiran <%= @student.birthdate %>, di <%= @student.birthplace %></h3>
+    <h3>(<%= @student.employment %>)</h3>
     <h3>
       <i class="glyphicon glyphicon-phone"></i> <%= @student.phone %> 
       <i class="glyphicon glyphicon-envelope" style="padding-left:30px;"></i> <%= @student.email %>

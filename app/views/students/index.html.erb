@@ -37,6 +37,16 @@
         %>
       </div>
     </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Sudah bekerja?</label>
+        <%= f.select :with_employment, @filterrific.select_options[:with_employment],
+                     {  :include_blank => '- Pilih -' }, 
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+
   </div>
   <div class="row">
     <div class="col-md-2">

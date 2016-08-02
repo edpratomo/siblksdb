@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151108120048) do
+ActiveRecord::Schema.define(version: 20160802021553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,9 +35,9 @@ ActiveRecord::Schema.define(version: 20151108120048) do
   add_index "changes", ["table_name"], name: "changes_table_name", using: :btree
 
   create_table "components", force: :cascade do |t|
-    t.text     "component",  default: "",                  null: false
-    t.datetime "created_at", default: "clock_timestamp()", null: false
-    t.text     "created_by"
+    t.text     "content",     default: "",                  null: false
+    t.datetime "created_at",  default: "clock_timestamp()", null: false
+    t.text     "modified_by"
     t.integer  "course_id"
   end
 
@@ -57,10 +57,11 @@ ActiveRecord::Schema.define(version: 20151108120048) do
   create_table "grades", force: :cascade do |t|
     t.integer  "students_record_id",                               null: false
     t.integer  "student_id"
-    t.integer  "component_id"
-    t.text     "grade",              default: "",                  null: false
     t.datetime "created_at",         default: "clock_timestamp()", null: false
-    t.text     "created_by"
+    t.text     "modified_by"
+    t.integer  "instructor_id",                                    null: false
+    t.integer  "component_id"
+    t.hstore   "value",              default: {},                  null: false
   end
 
   add_index "grades", ["students_record_id"], name: "grades_students_record_id_key", unique: true, using: :btree
@@ -171,6 +172,7 @@ ActiveRecord::Schema.define(version: 20151108120048) do
     t.text     "regency_city"
     t.text     "province"
     t.datetime "registered_at",                   default: "clock_timestamp()", null: false
+    t.text     "employment",                      default: "belum bekerja",     null: false
   end
 
   add_index "students", ["name"], name: "students_name", using: :btree
@@ -229,7 +231,8 @@ ActiveRecord::Schema.define(version: 20151108120048) do
 
   add_foreign_key "components", "courses", name: "components_course_id_fkey"
   add_foreign_key "districts", "regencies_cities", column: "regency_city_code", primary_key: "code", name: "districts_regency_city_code_fkey"
-  add_foreign_key "grades", "grades", column: "component_id", name: "grades_component_id_fkey"
+  add_foreign_key "grades", "components", name: "grades_component_id_fkey"
+  add_foreign_key "grades", "instructors", name: "grades_instructor_id_fkey"
   add_foreign_key "grades", "students", name: "grades_student_id_fkey"
   add_foreign_key "grades", "students_records", name: "grades_students_record_id_fkey"
   add_foreign_key "instructors_schedules", "instructors", name: "instructors_schedules_instructor_id_fkey"

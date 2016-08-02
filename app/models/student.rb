@@ -81,7 +81,8 @@ class Student < ActiveRecord::Base
       :with_instructor,
       :with_multiple_completion_on_same_pkg,
       :who_left_pkg,
-      :with_broken_pkg_dates
+      :with_broken_pkg_dates,
+      :with_employment
     ]
   )
 
@@ -167,6 +168,10 @@ class Student < ActiveRecord::Base
     )
   }
 
+  scope :with_employment, ->(emp_status) {
+    where(employment: emp_status)
+  }
+
   def self.options_for_sorted_by
     [
       ['Nama (a-z)', 'name_asc'],
@@ -177,6 +182,10 @@ class Student < ActiveRecord::Base
 
   def self.options_for_religion
     select(:religion).distinct.map {|e| [ e[:religion].gsub(' ', '_'), e[:religion] ] }.sort_by {|e| e[0] }
+  end
+
+  def self.options_for_employment
+    select(:employment).distinct.map {|e| [e.employment, e.employment] }.sort_by {|e| e[0] }
   end
 
   def decorated_created_at

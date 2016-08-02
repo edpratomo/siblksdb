@@ -1,11 +1,19 @@
     <div class="form-group">
       <%= f.label :registered_at, "Tanggal Pendaftaran", class: "control-label col-sm-3" %>
-      <div class="col-sm-7 form-inline">
+      <div class="col-sm-2">
           <div class='input-group date'>
             <input type='text' id="student_registered_at" name="student[registered_at]" class="form-control" data-date-format="DD/MM/YYYY" placeholder="dd/mm/yyyy" value="<%= @student.registered_at.to_date %>"/>
             <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
             </span>
           </div>
+      </div>
+      <%= f.label :employment, "Sudah Bekerja?", class: "control-label col-sm-2" %>
+      <div class="col-sm-3">
+        <%= f.select :employment, 
+                     ['belum bekerja', 'karyawan non-shift', 'karyawan shift'], 
+                     {  :include_blank => '- Pilih -' }, 
+                     { class: "form-control" }
+        %>
       </div>
     </div>
