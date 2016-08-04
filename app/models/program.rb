@@ -1,5 +1,6 @@
 class Program < ActiveRecord::Base
-  has_many :pkgs
+  has_many :courses
+  has_many :pkgs, through: :courses
 
   # :instructors <= :programs_instructors => :programs
   has_many :programs_instructors

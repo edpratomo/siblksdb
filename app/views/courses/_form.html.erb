@@ -11,6 +11,14 @@
     </div>
   <% end %>
   <div class="form-group">
+    <%= f.label "Program", class: "control-label col-sm-2" %>
+    <div class="col-sm-4">
+    <%= f.select :program_id, Program.order(:program).map {|e| [e.program, e.id]}, 
+                 {include_blank: "- Pilih -", selected: @course.program_id },
+                 { class: "form-control" } %>
+    </div>
+  </div>
+  <div class="form-group">
     <%= f.label "Name", class: "control-label col-sm-2" %>
     <div class="col-sm-4">
       <%= f.text_field :name, class: "form-control" %>

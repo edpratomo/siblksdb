@@ -1,11 +1,13 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy]
   before_action :set_current_user, only: [:update, :create, :destroy]
+  before_action :set_max_level, only: [:show, :edit, :update]
   filter_resource_access
 
   # GET /courses
   # GET /courses.json
   def index
+    @max_levels = Pkg.group(:course_id).maximum(:level)
     @courses = Course.all.reorder(:id)
   end
 
@@ -85,6 +87,10 @@ class CoursesController < ApplicationController
 
     def set_current_user
       @current_user = current_user.username
+    end
+
+    def set_max_level
+      @max_level = Pkg.where(course: @course).maximum(:level)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

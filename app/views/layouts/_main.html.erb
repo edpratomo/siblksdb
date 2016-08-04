@@ -27,7 +27,7 @@
               <li class="<%= active_tab_class(programs_path) %>"><%= link_to "Program", programs_path %></li>
             <% end %>
             <% permitted_to? :read, :pkgs do %>
-              <li class="<%= active_tab_class(pkgs_path) %>"><%= link_to "Kursus", pkgs_path %></li>
+              <li class="<%= active_tab_class(courses_path) %>"><%= link_to "Kursus", courses_path %></li>
             <% end %>
             <% permitted_to? :read, :schedules do %>
               <li class="<%= active_tab_class(schedules_path) %>"><%= link_to "Slot Jadwal", schedules_path %></li>

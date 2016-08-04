@@ -2,6 +2,14 @@
 
 <h2>Kursus: <%= @course.name %></h2>
 <div class="row">
+  <div class="col-sm-2">Program</div>
+  <div class="col-sm-6 pull-left"><%= @course.program.program %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2">Level Tertinggi</div>
+  <div class="col-sm-6 pull-left"><%= @max_level %></div>
+</div>
+<div class="row">
   <div class="col-sm-2">Instruktur Kepala</div>
   <div class="col-sm-6 pull-left"><%= @course.head_instructor && @course.head_instructor.name %></div>
 </div>

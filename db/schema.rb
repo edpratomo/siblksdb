@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160803163901) do
+ActiveRecord::Schema.define(version: 20160804105835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20160803163901) do
     t.text    "name",                            null: false
     t.text    "idn_prefix",         default: "", null: false
     t.integer "head_instructor_id"
+    t.integer "program_id"
   end
 
   create_table "districts", force: :cascade do |t|
@@ -96,9 +97,8 @@ ActiveRecord::Schema.define(version: 20160803163901) do
   add_index "instructors_schedules", ["schedule_id", "instructor_id", "day"], name: "instructor_schedule_day_unique", unique: true, using: :btree
 
   create_table "pkgs", force: :cascade do |t|
-    t.text    "pkg",        null: false
-    t.integer "program_id"
-    t.integer "level",      null: false
+    t.text    "pkg",       null: false
+    t.integer "level",     null: false
     t.integer "course_id"
   end
 
@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(version: 20160803163901) do
 
   add_foreign_key "components", "courses", name: "components_course_id_fkey"
   add_foreign_key "courses", "instructors", column: "head_instructor_id", name: "courses_head_instructor_id_fkey"
+  add_foreign_key "courses", "programs", name: "courses_program_id_fkey"
   add_foreign_key "districts", "regencies_cities", column: "regency_city_code", primary_key: "code", name: "districts_regency_city_code_fkey"
   add_foreign_key "grades", "components", name: "grades_component_id_fkey"
   add_foreign_key "grades", "instructors", name: "grades_instructor_id_fkey"
@@ -240,7 +241,6 @@ ActiveRecord::Schema.define(version: 20160803163901) do
   add_foreign_key "instructors_schedules", "instructors", name: "instructors_schedules_instructor_id_fkey"
   add_foreign_key "instructors_schedules", "schedules", name: "instructors_schedules_schedule_id_fkey"
   add_foreign_key "pkgs", "courses", name: "pkgs_course_id_fkey"
-  add_foreign_key "pkgs", "programs", name: "pkgs_program_id_fkey"
   add_foreign_key "prereqs", "pkgs", column: "req_pkg_id", name: "prereqs_req_pkg_id_fkey"
   add_foreign_key "prereqs", "pkgs", name: "prereqs_pkg_id_fkey"
   add_foreign_key "programs_instructors", "instructors", name: "programs_instructors_instructor_id_fkey"
