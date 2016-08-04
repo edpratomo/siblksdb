@@ -12,10 +12,10 @@
   <% end %>
 
   <div class="field">
-    <%= f.text_field :pkg, label: "Kursus" %>
+    <%= f.text_field :pkg, label: "Paket" %>
   </div>
   <div class="field">
-    <%= f.select :program_id, Program.all.to_a.map {|e| [e.program, e.id]}, control_col: "col-sm-3" %>
+    <%= f.select :course_id, Course.all.to_a.map {|e| [e.name, e.id]}, control_col: "col-sm-3", label: "Kursus" %>
   </div>
   <div class="field">
     <%= f.number_field :level, label: "Level", min: 1, control_col: "col-xs-1" %>

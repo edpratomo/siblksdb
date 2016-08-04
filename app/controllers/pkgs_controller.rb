@@ -6,7 +6,7 @@ class PkgsController < ApplicationController
   # GET /pkgs
   # GET /pkgs.json
   def index
-    @pkgs = Pkg.order(:program_id, :pkg, :level)
+    @pkgs = Pkg.order(:pkg, :level)
   end
 
   # GET /pkgs/1
@@ -71,6 +71,6 @@ class PkgsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pkg_params
-      params.require(:pkg).permit(:pkg, :program_id, :level)
+      params.require(:pkg).permit(:pkg, :course_id, :level)
     end
 end
