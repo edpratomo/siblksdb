@@ -72,6 +72,6 @@ class ProgramsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def program_params
-      params.require(:program).permit(:program, :head_instructor_id)
+      params.require(:program).permit(:program)
     end
 end

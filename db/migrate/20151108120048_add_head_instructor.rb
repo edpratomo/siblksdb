@@ -7,7 +7,7 @@ SQL
 
   def down
     execute <<-SQL
-ALTER TABLE programs DROP COLUMN head_instructor;
+ALTER TABLE programs DROP COLUMN head_instructor_id;
 SQL
   end
 end
