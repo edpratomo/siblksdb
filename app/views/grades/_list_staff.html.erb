@@ -30,7 +30,7 @@
         <td><%= grade.students_record.started_on.strftime("%d %b %Y") %></td>
         <td><%= grade.instructor.nick %></td>
         <td style="text-align:right"><%= link_to 'Lihat', grade_path(grade) %></td>
-        <td style="text-align:left"><%= link_to 'PDF', grade_path(grade, :format => :pdf) %></td>
+        <td style="text-align:left"><%= link_to 'PDF', grade_path(grade, :format => :pdf), :target => "_blank" %></td>
       </tr>
     <% end %>
   </tbody>
