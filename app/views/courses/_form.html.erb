@@ -27,8 +27,8 @@
     <%= f.label "Instruktur Kepala", class: "control-label col-sm-2" %>
     <div class="col-sm-4">
     <%= f.select :head_instructor_id, Instructor.order(:name).map {|e| ["#{e.name} (#{e.nick})", e.id]}, 
-                 {control_col: "col-sm-3", include_blank: "- Pilih -", 
-                  selected: @course.head_instructor_id } %>
+                 {include_blank: "- Pilih -", selected: @course.head_instructor_id },
+                 { class: "form-control" } %>
     </div>
   </div>
 
@@ -38,6 +38,15 @@
       <%= file_field_tag :component, class: "form-control", accept: "application/json" %>
     </div>
   </div>
+
+<% if @course.components.size > 0 %>
+  <div class="form-group">
+    <%= f.label "Komponen nilai", class: "control-label sr-only col-sm-2" %>
+    <div class="col-sm-6">
+      <pre><%= @course.components.reorder(:created_at).last.content %></pre>
+    </div>
+  </div>
+<% end %>
 
   <div class="actions">
     <%= f.submit %>

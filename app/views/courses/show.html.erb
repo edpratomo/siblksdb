@@ -1,4 +1,26 @@
 <p id="notice"><%= notice %></p>
 
+<h2>Kursus: <%= @course.name %></h2>
+<div class="row">
+  <div class="col-sm-2">Instruktur Kepala</div>
+  <div class="col-sm-6 pull-left"><%= @course.head_instructor && @course.head_instructor.name %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2">Prefix Nomor Induk</div>
+  <div class="col-sm-6 pull-left"><%= @course.idn_prefix %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2">Komponen Nilai</div>
+  <div class="col-sm-6">
+<%  if @course.components.size > 0 %>
+<pre>
+<%= @course.components.reorder(:created_at).last.content %>
+</pre>
+<% else %>
+(belum ada)
+<% end %>
+  </div>
+</div>
+
 <%= link_to 'Edit', edit_course_path(@course) %> |
 <%= link_to 'Back', courses_path %>
