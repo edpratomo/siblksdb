@@ -19,6 +19,7 @@ class CoursesController < ApplicationController
   # GET /courses/new
   def new
     @course = Course.new
+    @max_level = 1
   end
 
   # GET /courses/1/edit
@@ -31,7 +32,10 @@ class CoursesController < ApplicationController
     @course = Course.new(course_params)
 
     respond_to do |format|
-      if @course.save
+      if ActiveRecord::Base.transaction_user(@current_user) {
+        @course.save
+        @course.add_pkg(params[:max_level].to_i)
+      }
         format.html { redirect_to @course, notice: 'Course was successfully created.' }
         format.json { render :show, status: :created, location: @course }
       else
@@ -58,6 +62,7 @@ class CoursesController < ApplicationController
           @component = Component.new(:content => yaml_content, :course => @course)
           @component.save!
         end
+        @course.add_pkg(params[:max_level].to_i)
         @course.update(course_params)
       }
         format.html { redirect_to @course, notice: 'Course was successfully updated.' }
@@ -91,6 +96,7 @@ class CoursesController < ApplicationController
 
     def set_max_level
       @max_level = Pkg.where(course: @course).maximum(:level)
+      @max_level || 1
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

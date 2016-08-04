@@ -19,11 +19,18 @@
     </div>
   </div>
   <div class="form-group">
-    <%= f.label "Name", class: "control-label col-sm-2" %>
+    <%= f.label "Nama", class: "control-label col-sm-2" %>
     <div class="col-sm-4">
       <%= f.text_field :name, class: "form-control" %>
     </div>
   </div>
+  <div class="form-group">
+    <%= f.label "Level tertinggi", class: "control-label col-sm-2" %>
+    <div class="col-sm-4">
+      <%= number_field_tag "max_level", @max_level, min: @max_level, class: "form-control" %>
+    </div>
+  </div>
+
   <div class="form-group">
     <%= f.label "Prefix Nomor Induk", class: "control-label col-sm-2" %>
     <div class="col-sm-2">

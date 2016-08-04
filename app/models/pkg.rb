@@ -1,5 +1,5 @@
 class Pkg < ActiveRecord::Base
-  validates_presence_of :pkg
+  #validates_presence_of :pkg
 
   # belongs_to :program
   delegate :program, to: :course
@@ -8,4 +8,9 @@ class Pkg < ActiveRecord::Base
   # :students <= :students_pkgs => :pkgs
   has_many :students_pkgs
   has_many :students, through: :students_pkgs
+
+  # replace the old pkg column
+  def pkg
+    course.name
+  end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160804105835) do
+ActiveRecord::Schema.define(version: 20160804160406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,7 +97,7 @@ ActiveRecord::Schema.define(version: 20160804105835) do
   add_index "instructors_schedules", ["schedule_id", "instructor_id", "day"], name: "instructor_schedule_day_unique", unique: true, using: :btree
 
   create_table "pkgs", force: :cascade do |t|
-    t.text    "pkg",       null: false
+    t.text    "pkg_old"
     t.integer "level",     null: false
     t.integer "course_id"
   end
