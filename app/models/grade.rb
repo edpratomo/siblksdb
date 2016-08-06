@@ -6,6 +6,8 @@ class Grade < ActiveRecord::Base
 
   delegate :pkg, to: :students_record
 
+  before_save :update_avg, if: :score_changed?
+
   def result
     %w{finished failed}.find {|e| e == students_record.status }
   end
@@ -71,5 +73,20 @@ class Grade < ActiveRecord::Base
       pkg = Pkg.find(e.pkg_id)
       [ "#{pkg.pkg} Level #{pkg.level}", e.pkg_id ]
     }.sort_by {|e| e[0] }
+  end
+
+  def update_avg_public
+    update_avg
+  end
+
+  private
+  def update_avg
+    sigindexes = ApplicationController.helpers.get_significant_indexes(component.content)
+    if sigindexes["P"] and not sigindexes["P"].empty?
+      self.avg_practice = sigindexes["P"].map {|e| score[e].to_f}.reduce(0, :+) / sigindexes["P"].size.to_f
+    end
+    if sigindexes["T"] and not sigindexes["T"].empty?
+      self.avg_theory = sigindexes["T"].map {|e| score[e].to_f}.reduce(0, :+) / sigindexes["T"].size.to_f
+    end
   end
 end

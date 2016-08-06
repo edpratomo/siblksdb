@@ -139,8 +139,8 @@ class GradesController < ApplicationController
     def grade_params
       params[:grade]
       params.require(:grade).permit(:students_record_id, :instructor_id, :component_id).tap do |whitelisted|
-                                        if params[:grade][:value]
-                                          whitelisted[:value] = params[:grade][:value]
+                                        if params[:grade][:score]
+                                          whitelisted[:score] = params[:grade][:score]
                                         end
                                       end
     end

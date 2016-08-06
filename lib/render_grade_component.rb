@@ -8,8 +8,8 @@ module RenderGradeComponent
     def decorate(el, level, cnt)
       offset = (level - 1) * 15;
       %[<tr><td><div style="padding-left: #{offset}px;">#{el}</div></td>] + 
-      %[<td style="text-align: center;"><%= @grade.value && @grade.value["#{cnt}"] %></td>] +
-      %[<td style="text-align: center;"><%= @grade.value && grade_group(@grade.value["#{cnt}"]) %></td></tr>]
+      %[<td style="text-align: center;"><%= @grade.score && @grade.score["#{cnt}"] %></td>] +
+      %[<td style="text-align: center;"><%= @grade.score && grade_group(@grade.score["#{cnt}"]) %></td></tr>]
     end
   end
 
@@ -21,9 +21,23 @@ module RenderGradeComponent
 
     def decorate(el, level, cnt)
       offset = (level - 1) * 15;
-      %[<div class="form-group"><div style="padding-left: #{offset}px;"<%= f.label "grade[value][#{cnt}]", "#{el}", class: "control-label col-md-6" %></div>] +
-      %[<div class="input-group col-md-1"><%= text_field_tag "grade[value][#{cnt}]", @grade.value && @grade.value["#{cnt}"], class: "form-control" %>] +
+      %[<div class="form-group"><div style="padding-left: #{offset}px;"<%= f.label "grade[score][#{cnt}]", "#{el}", class: "control-label col-md-6" %></div>] +
+      %[<div class="input-group col-md-1"><%= text_field_tag "grade[score][#{cnt}]", @grade.score && @grade.score["#{cnt}"], class: "form-control" %>] +
       %[</div></div>]
+    end
+  end
+
+  class SignificantIndexesDecorator
+    def decorate0(el, level)
+      ""
+    end
+
+    def decorate(el, level, cnt)
+      if el =~ /\*\*(P|T)\*\*/
+        "#{cnt}_#{$1}"
+      else
+        ""
+      end
     end
   end
 
@@ -62,10 +76,22 @@ module RenderGradeComponent
     decorator = FormDecorator.new
     walk_component(decorator, YAML.load(yaml))
   end
+
+  def get_significant_indexes(yaml)
+    decorator = SignificantIndexesDecorator.new
+    x = walk_component(decorator, YAML.load(yaml))
+    x.split("\n").reject {|e| e.empty?}.inject({}) do |m,o|
+      key, val = o.split("_")
+      m[val] ||= []
+      m[val].push key
+      m
+    end
+  end
 end
 
 if $0 == __FILE__
   require 'yaml'
+  require 'pp'
   include RenderGradeComponent
 
   raise "Please specify yaml" unless ARGV[0]
@@ -73,4 +99,5 @@ if $0 == __FILE__
   raise "Not an array" unless ary.is_a? Array
   
   print grade_component_as_table(File.open(ARGV[0]))
+  pp get_significant_indexes(File.open(ARGV[0]))
 end
