@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h2>Listing Grades</h2>
+<h2>Entri Nilai Siswa</h2>
 
 <div class="well">
 <%= form_for_filterrific @filterrific do |f| %>
@@ -9,6 +9,15 @@
       <div class="form-group">
         <label>Peserta kursus</label>
         <%= f.select :with_pkg, @filterrific.select_options[:with_pkg],
+                     { :include_blank => '- Pilih -' },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>Status kursus</label>
+        <%= f.select :with_status, @filterrific.select_options[:with_status],
                      { :include_blank => '- Pilih -' },
                      { :class => 'form-control' }
         %>

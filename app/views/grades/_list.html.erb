@@ -16,7 +16,8 @@
     <tr>
       <th>Nama</th>
       <th>Mulai Kursus</th>
-      <th>Nilai</th>
+      <th style="text-align:center">Nilai</th>
+      <th>Status</th>
     </tr>
   </thead>
 
@@ -25,12 +26,13 @@
       <tr>
         <td><%= srec.student.name %></div></td>
         <td><%= srec.started_on.strftime("%d %b %Y") %></td>
-        <td>[ <% if srec.grade %>
+        <td style="text-align:center">[ <% if srec.grade %>
               <%= link_to 'Edit', edit_grade_path(srec.grade) %> | <span class="grayout">Baru</span>
               <% else %>
               <span class="grayout">Edit</span> | <%= link_to 'Baru', new_grades_path(srec) %>
               <% end %> ]
         </td>
+        <td><%= t(srec.status) %></td>
       </tr>
     <% end %>
   </tbody>

@@ -24,7 +24,8 @@ class GradesController < ApplicationController
         params[:filterrific],
         :select_options => {
           sorted_by: StudentsRecord.options_for_sorted_by,
-          with_pkg: @instructor.options_for_pkg
+          with_pkg: @instructor.options_for_pkg,
+          with_status: Grade.options_for_student_status
         },
         default_filter_params: { sorted_by: 'started_on_asc' }
       ) or return
