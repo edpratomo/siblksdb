@@ -13,4 +13,8 @@ class Pkg < ActiveRecord::Base
   def pkg
     course.name
   end
+
+  def self.final_level_by_course
+    group(:course_id).maximum(:level)
+  end
 end

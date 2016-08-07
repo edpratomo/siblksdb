@@ -7,7 +7,7 @@ class CoursesController < ApplicationController
   # GET /courses
   # GET /courses.json
   def index
-    @max_levels = Pkg.group(:course_id).maximum(:level)
+    @max_levels = Pkg.final_level_by_course #group(:course_id).maximum(:level)
     @courses = Course.all.reorder(:id)
   end
 

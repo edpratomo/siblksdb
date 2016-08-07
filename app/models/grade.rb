@@ -57,6 +57,15 @@ class Grade < ActiveRecord::Base
     where(:students_record => StudentsRecord.where(status: status))
   }
 
+  scope :with_final_level, ->() {
+    final_levels = Pkg.final_level_by_course
+     pkgs = final_levels.inject([]) do |m,o|
+       m.push Pkg.find_by(course_id: o[0], level: o[1])
+       m
+     end
+     joins("JOIN students_records sr ON sr.id = students_record_id").where("sr.pkg_id" => pkgs)
+  }
+
   def self.options_for_sorted_by
     [
       ['Tanggal mulai (baru -> lama)', 'started_on_desc'],
