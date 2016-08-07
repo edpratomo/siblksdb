@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h2>Listing Grades</h2>
+<h2>Nilai Siswa</h2>
 
 <div class="well">
 <%= form_for_filterrific @filterrific do |f| %>
@@ -14,11 +14,31 @@
         %>
       </div>
     </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>Status kursus</label>
+        <%= f.select :with_student_status, @filterrific.select_options[:with_student_status],
+                     { :include_blank => '- Pilih -' },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
     <div class="col-md-4">
       <div class="form-group">
         <label>Urutkan</label>
         <%= f.select :sorted_by, @filterrific.select_options[:sorted_by],
                      { },
+                     { :class => 'form-control' }
+        %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>Instruktur</label>
+        <%= f.select :with_instructor, @filterrific.select_options[:with_instructor],
+                     { :include_blank => '- Pilih -' },
                      { :class => 'form-control' }
         %>
       </div>

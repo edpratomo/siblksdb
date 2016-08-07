@@ -38,7 +38,8 @@ class GradesController < ApplicationController
         :select_options => {
           sorted_by: Grade.options_for_sorted_by,
           with_pkg: Grade.options_for_pkg,
-          with_instructor: Grade.options_for_instructor
+          with_instructor: Grade.options_for_instructor,
+          with_student_status: Grade.options_for_student_status
         },
         default_filter_params: { sorted_by: 'started_on_asc' }
       ) or return
@@ -53,7 +54,13 @@ class GradesController < ApplicationController
   # GET /grades/1.json
   def show
     respond_to do |format|
-      format.html { render :show }
+      format.html {
+        if @instructor
+          render :show
+        else
+          render :show_staff
+        end
+      }
       format.pdf {
         @signature_date = signature_date
         render pdf: %[Nilai],

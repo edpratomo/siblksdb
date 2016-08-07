@@ -84,8 +84,20 @@ class Grade < ActiveRecord::Base
     }.sort_by {|e| e[0] }
   end
 
+  def self.options_for_student_status
+    [
+      ['Lulus', 'finished'],
+      ['Aktif', 'active'],
+      ['Tidak lulus', 'failed']
+    ]
+  end
+
   def update_avg_public
     update_avg
+  end
+
+  def passed?
+    avg_practice >= 60 and avg_theory >= 60
   end
 
   private

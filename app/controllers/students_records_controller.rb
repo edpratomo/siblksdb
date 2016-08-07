@@ -62,15 +62,24 @@ class StudentsRecordsController < ApplicationController
     @student = @students_record.student
     respond_to do |format|
       if @students_record.valid? and ActiveRecord::Base.transaction_user(@current_user) {
-        unless params[:students_record][:finished_on].empty?
-          pkg = Pkg.find(params[:students_record][:pkg_id])
-          if pkg
-            @student.pkgs.destroy(pkg) # this student has finished a pkg
+        if @students_record.grade and @students_record.grade.passed?
+          if params[:students_record][:status] == "finished" and @students_record.status != "finished"
+            params[:students_record][:finished_on] ||= DateTime.now.in_time_zone.to_date
+          else # no changes
+            params[:students_record].delete(:finished_on)
+            params[:students_record].delete(:status)
           end
-          # this is now controlled by check_box:
-          # params[:students_record][:status] ||= 'finished'
         else
-          params[:students_record][:status] = 'active'
+          unless params[:students_record][:finished_on].empty?
+            pkg = Pkg.find(params[:students_record][:pkg_id])
+            if pkg
+              @student.pkgs.destroy(pkg) # this student has finished a pkg
+            end
+            # this is now controlled by check_box:
+            # params[:students_record][:status] ||= 'finished'
+          else
+            params[:students_record][:status] = 'active'
+          end
         end
         @students_record.update(students_record_params)
       }
@@ -119,7 +128,8 @@ class StudentsRecordsController < ApplicationController
     end
 
     def set_grouped_pkg_options
-      all_pkgs = Pkg.order(pkg: :desc).order(:level)
+      #all_pkgs = Pkg.order(pkg: :desc).order(:level)
+      all_pkgs = Pkg.joins(:course).order("courses.name DESC").order(:level)
       @grouped_options = all_pkgs.inject({}) do |m,o|
         m[o.program.program] ||= []
         m[o.program.program] << [ "#{o.pkg} Level #{o.level}", o.id ]

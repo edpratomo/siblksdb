@@ -14,11 +14,18 @@
 <table class="table pretty table-hover table-striped">
   <thead>
     <tr>
-      <th>Nama</th>
-      <th>Kursus</th>
-      <th>Mulai</th>
-      <th>Instruktur</th>
+      <th rowspan="2">Nama</th>
+      <th rowspan="2">Kursus</th>
+      <th rowspan="2">Mulai</th>
+      <th rowspan="2">Instruktur</th>
       <th colspan="2" style="text-align:center">Nilai</th>
+      <th rowspan="2">Status</th>
+      <th rowspan="2"></th>
+      <th rowspan="2"></th>
+    </tr>
+    <tr>
+      <th style="text-align:center">Rata-rata Teori</th>
+      <th style="text-align:center">Rata-rata Praktek</th>
     </tr>
   </thead>
 
@@ -29,8 +36,15 @@
         <td><%= grade.pkg.pkg %> Level <%= grade.pkg.level %></td>
         <td><%= grade.students_record.started_on.strftime("%d %b %Y") %></td>
         <td><%= grade.instructor.nick %></td>
-        <td style="text-align:right"><%= link_to 'Lihat', grade_path(grade) %></td>
-        <td style="text-align:left"><%= link_to 'PDF', grade_path(grade, :format => :pdf), :target => "_blank" %></td>
+        <td style="text-align:center"><%= grade.avg_theory %></td>
+        <td style="text-align:center"><%= grade.avg_practice %></td>
+        <td><%= t(grade.students_record.status) %></td>
+        <td style="text-align:center"><%= link_to 'Lihat', grade_path(grade) %></td>
+        <td>
+          <% if grade.passed? %>
+          <span style="font-size:large; color:green" class="ion-checkmark-circled" />
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
