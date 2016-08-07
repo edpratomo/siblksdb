@@ -75,7 +75,8 @@ class GradesController < ApplicationController
   # GET /grades/new
   def new
     course = @students_record.pkg.course
-    component = Component.find_by(course: course)
+    #component = Component.find_by(course: course)
+    component = Component.where(course: course).order(:created_at).last
     raise ComponentNotFound unless component
     @grade = Grade.new(students_record: @students_record, instructor: @instructor, component: component)
   end
