@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160812175044) do
+ActiveRecord::Schema.define(version: 20160812221134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20160812175044) do
     t.datetime "created_at",  default: "clock_timestamp()", null: false
     t.text     "modified_by"
     t.integer  "course_id"
+    t.datetime "modified_at", default: "clock_timestamp()", null: false
   end
 
   create_table "courses", force: :cascade do |t|
@@ -67,6 +68,7 @@ ActiveRecord::Schema.define(version: 20160812175044) do
     t.hstore   "score",              default: {},                  null: false
     t.float    "avg_practice",       default: 0.0,                 null: false
     t.float    "avg_theory",         default: 0.0,                 null: false
+    t.datetime "modified_at",        default: "clock_timestamp()", null: false
   end
 
   add_index "grades", ["students_record_id"], name: "grades_students_record_id_key", unique: true, using: :btree
