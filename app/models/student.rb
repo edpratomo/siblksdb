@@ -10,7 +10,8 @@ class Student < ActiveRecord::Base
   # :students <= :students_pkgs => :pkgs
   has_many :students_pkgs
   has_many :pkgs,           through: :students_pkgs
-  has_many :programs,       through: :pkgs
+  has_many :courses,        through: :pkgs
+  has_many :programs,       through: :courses
 
   # :students_pkgs <= :students_pkgs_instructors_schedules => :instructors_schedules
   has_many :students_pkgs_instructors_schedules, through: :students_pkgs
