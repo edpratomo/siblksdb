@@ -13,9 +13,13 @@ class ReportController < ApplicationController
     dt = DateTime.new(year, month).in_time_zone
     @month_year_for_title = month_year_for_title @status, dt
 
-    pkg_summary = StudentsRecord.joins(:student, :pkg => :program).
+    #pkg_summary = StudentsRecord.joins(:student, :pkg => :program).
+    #  send(:where, *args_for_where_clause(@status, dt)).
+    #  group(:program, 'pkgs.pkg', :sex).count
+
+    pkg_summary = StudentsRecord.joins(:student, pkg: [{course: :program}]).
       send(:where, *args_for_where_clause(@status, dt)).
-      group(:program, 'pkgs.pkg', :sex).count
+    group(:program, 'courses.name', :sex).count
 
     @students_group_by_pkg_sex = pkg_summary.inject({}) do |m,o|
       m["#{o[0][0]} - #{o[0][1]}"] ||= {"female" => 0, "male" => 0}
