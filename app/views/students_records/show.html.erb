@@ -1,4 +1,9 @@
-<p id="notice"><%= notice %></p>
+<% if flash[:alert] %>
+  <p id="alert"><%= flash[:alert] %></p>
+<% end %>
+<% if flash[:success] %>
+  <p id="notice"><%= flash[:success] %></p>
+<% end %>
 <%= render partial: 'shared/student_navbar' %>
 
 <h3><%= @student.name %></h3>

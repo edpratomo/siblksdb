@@ -46,7 +46,10 @@ class StudentsRecordsController < ApplicationController
         pkg = Pkg.find(params[:students_record][:pkg_id])
         @student.pkgs << pkg # this student has just started a pkg
       }
-        format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully created.' }
+        format.html {
+          flash[:success] = 'Students record was successfully created.'
+          redirect_to students_record_url(@student)
+        }
         format.json { render :show, status: :created, location: @students_record }
       else
         set_grouped_pkg_options
@@ -65,9 +68,21 @@ class StudentsRecordsController < ApplicationController
         if @students_record.grade and @students_record.grade.passed?
           if params[:students_record][:status] == "finished" and @students_record.status != "finished"
             params[:students_record][:finished_on] ||= DateTime.now.in_time_zone.to_date
-          else # no changes
-            params[:students_record].delete(:finished_on)
-            params[:students_record].delete(:status)
+            @students_record.update(students_record_params)
+            if request.format.html?
+              flash[:success] = 'Students record was successfully updated.'
+            end
+          elsif params[:students_record][:status] == "abandoned" and @students_record.status != "abandoned"
+            if request.format.html?
+              flash[:alert] = "Error: this student has taken the exam for this subject."
+            end
+            # params[:students_record].delete(:finished_on)
+            # params[:students_record].delete(:status)
+          else
+            @students_record.update(students_record_params)
+            if request.format.html?
+              flash[:success] = 'Students record was successfully updated.'
+            end
           end
         else
           unless params[:students_record][:finished_on].empty?
@@ -80,10 +95,15 @@ class StudentsRecordsController < ApplicationController
           else
             params[:students_record][:status] = 'active'
           end
+          @students_record.update(students_record_params)
+          if request.format.html?
+            flash[:success] = 'Students record was successfully updated.'
+          end
         end
-        @students_record.update(students_record_params)
       }
-        format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully updated.' }
+        format.html {
+          redirect_to students_record_url(@student)
+        }
         format.json { render :show, status: :ok, location: @students_record }
       else
         set_grouped_pkg_options
@@ -107,10 +127,16 @@ class StudentsRecordsController < ApplicationController
     logger.info("redirect to #{students_record_url(@student)}")
     respond_to do |format|
       if destroyed
-        format.html { redirect_to students_record_url(@student), notice: 'Students record was successfully destroyed.' }
+        format.html {
+          flash[:success] = 'Students record was successfully destroyed.'
+          redirect_to students_record_url(@student)
+        }
         format.json { head :no_content }
       else
-        format.html { redirect_to students_record_url(@student), notice: 'Students record was NOT destroyed.' }
+        format.html {
+          flash[:alert] = 'Students record was NOT destroyed.'
+          redirect_to students_record_url(@student)
+        }
         format.json { head :no_content }
       end
     end
