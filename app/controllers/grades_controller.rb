@@ -56,10 +56,14 @@ class GradesController < ApplicationController
   def show
     respond_to do |format|
       format.html {
-        if @instructor
-          render :show
+        if params[:brief]
+          render template: 'grades/brief.html.erb', layout: false
         else
-          render :show_staff
+          if @instructor
+            render :show
+          else
+            render :show_staff
+          end
         end
       }
       format.pdf {

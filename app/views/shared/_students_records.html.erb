@@ -14,7 +14,7 @@
   <tbody>
     <% records.each do |record| %>
       <tr>
-        <td style="max-width:150px;"><%= record.pkg.program.program %> - <%= record.pkg.pkg %> Lev.<%= record.pkg.level %></td>
+        <td style="max-width:150px;" id="<%= record.grade ? record.grade.id : '' %>" class="open_grade_dialog"><div class="grade_dialog_tip"><%= record.pkg.program.program %> - <%= record.pkg.pkg %> Lev.<%= record.pkg.level %></td>
         <td style="max-width:40px;text-align:center;"><%= record.started_on.strftime("%d %b %Y") %></td>
         <td style="max-width:40px;text-align:center;"><%= record.finished_on && record.finished_on.strftime("%d %b %Y") %></td>
         <td style="max-width:30px;"><%= t(record.status) %></td>
