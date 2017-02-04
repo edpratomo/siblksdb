@@ -65,17 +65,21 @@ class StudentsRecordsController < ApplicationController
     @student = @students_record.student
     respond_to do |format|
       if @students_record.valid? and ActiveRecord::Base.transaction_user(@current_user) {
-        if @students_record.grade and @students_record.grade.passed?
+        if @students_record.grade
           if params[:students_record][:status] == "finished" and @students_record.status != "finished"
-            params[:students_record][:finished_on] ||= DateTime.now.in_time_zone.to_date
-            @students_record.update(students_record_params)
-            if request.format.html?
-              flash[:success] = 'Students record was successfully updated.'
+            if @students_record.grade.passed?
+              params[:students_record][:finished_on] ||= DateTime.now.in_time_zone.to_date
+              pkg = Pkg.find(params[:students_record][:pkg_id])
+              if pkg
+                @student.pkgs.destroy(pkg) # this student has finished a pkg
+              end
+              @students_record.update(students_record_params)
+              flash[:success] = 'Students record was successfully updated. Schedule was deleted.'
+            else
+              flash[:alert] = %[Error: this student's grade does not qualify.]
             end
           elsif params[:students_record][:status] == "abandoned" and @students_record.status != "abandoned"
-            if request.format.html?
-              flash[:alert] = "Error: this student has taken the exam for this subject."
-            end
+            flash[:alert] = "Error: this student has taken the exam for this subject."
             # params[:students_record].delete(:finished_on)
             # params[:students_record].delete(:status)
           else
