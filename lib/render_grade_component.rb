@@ -7,7 +7,7 @@ module RenderGradeComponent
 
     def decorate(el, level, cnt)
       offset = (level - 1) * 15;
-      %[<tr><td><div style="padding-left: #{offset}px;">#{el}</div></td>] + 
+      %[<tr><td><div style="padding-left: #{offset}px;">#{el.sub(/\*\*[PT]\*\*/, '')}</div></td>] + 
       %[<td style="text-align: center;"><%= @grade.score && @grade.score["#{cnt}"] %></td>] +
       %[<td style="text-align: center;"><%= @grade.score && grade_group(@grade.score["#{cnt}"]) %></td></tr>]
     end
