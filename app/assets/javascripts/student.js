@@ -23,6 +23,6 @@ function show_grade_dialog() {
   });
 }
 
-$(function() {
+$(document).on('ready page:load', function() {
   $("body").on("click", ".open_grade_dialog", show_grade_dialog);
 });
