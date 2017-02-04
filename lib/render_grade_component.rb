@@ -21,7 +21,7 @@ module RenderGradeComponent
 
     def decorate(el, level, cnt)
       offset = (level - 1) * 15;
-      %[<div class="form-group"><div style="padding-left: #{offset}px;"<%= f.label "grade[score][#{cnt}]", "#{el.strip_markup}", class: "control-label col-md-6" %></div>] +
+      %[<div class="form-group"><div style="padding-left: #{offset}px;"<%= f.label "grade[score][#{cnt}]", "#{el.humanize_markup}", class: "control-label col-md-6" %></div>] +
       %[<div class="input-group col-md-1"><%= text_field_tag "grade[score][#{cnt}]", @grade.score && @grade.score["#{cnt}"], class: "form-control" %>] +
       %[</div></div>]
     end
@@ -92,6 +92,16 @@ end
 class String
   def strip_markup
     self.sub(/\*\*[PT]\*\*/, '')
+  end
+
+  def humanize_markup
+    self.sub(/\*\*([PT])\*\*/) {|m|
+      if $1 == 'P'
+        ' (praktek)'
+      else
+        ' (teori)'
+      end
+    }
   end
 end
 

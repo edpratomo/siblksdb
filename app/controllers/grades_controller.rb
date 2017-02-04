@@ -30,7 +30,7 @@ class GradesController < ApplicationController
         default_filter_params: { sorted_by: 'started_on_asc' }
       ) or return
 
-      @students_records = if @filterrific.to_hash[:with_status] != "active"
+      @students_records = if @filterrific.to_hash["with_status"] != "active"
         StudentsRecord.with_grade_instructor(@instructor).
                        filterrific_find(@filterrific).paginate(page: params[:page], per_page: 10)
       else
