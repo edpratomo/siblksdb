@@ -89,6 +89,24 @@ class StudentsRecordsController < ApplicationController
             end
           end
         else
+          if params[:students_record][:status] == "finished" and @students_record.status != "finished"
+            students_pkg = StudentsPkg.find_by(student: @students_record.student, pkg: @students_record.pkg)
+            instructor_ids = students_pkg.instructors_schedules.map {|e| e.instructor_id}.uniq
+            if instructor_ids.size > 1
+              flash[:alert] = "Error: Lebih dari satu instruktur."
+              next
+            else
+              course = @students_record.pkg.course
+              component = Component.where(course: course).order(:created_at).last
+              # create empty grade
+              grade = Grade.new(students_record: @students_record, 
+                                instructor_id: instructor_ids.first,
+                                component: component)
+              grade.save!
+              @students_record.grade = grade
+              @students_record.save!
+            end
+          end
           unless params[:students_record][:finished_on].empty?
             pkg = Pkg.find(params[:students_record][:pkg_id])
             if pkg

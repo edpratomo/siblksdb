@@ -68,6 +68,7 @@ class StudentsRecord < ActiveRecord::Base
     available_filters: [
       :sorted_by,
       :with_instructor,
+      :with_grade_instructor,
       :with_status,
       :with_pkg
     ]
@@ -86,6 +87,10 @@ class StudentsRecord < ActiveRecord::Base
     where("isc.instructor_id" => instructor).uniq
   }
   
+  scope :with_grade_instructor, ->(instructor) {
+    joins(:grade).where("grades.instructor_id" => instructor)
+  }
+
   scope :with_status, ->(status) {
     where(status: status)
   }
