@@ -13,4 +13,8 @@ class Course < ActiveRecord::Base
       pkg.save!
     end
   end
+
+  def del_pkg new_max
+    Pkg.where(course: self).where('level > ?', new_max).destroy_all
+  end
 end

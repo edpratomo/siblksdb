@@ -62,7 +62,9 @@ class CoursesController < ApplicationController
           @component = Component.new(:content => yaml_content, :course => @course)
           @component.save!
         end
-        @course.add_pkg(params[:max_level].to_i)
+        if @course.add_pkg(params[:max_level].to_i) < 0
+          @course.del_pkg(params[:max_level].to_i)
+        end
         @course.update(course_params)
       }
         format.html { redirect_to @course, notice: 'Course was successfully updated.' }
