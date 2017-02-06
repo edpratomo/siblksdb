@@ -4,6 +4,8 @@ class Grade < ActiveRecord::Base
   belongs_to :student
   belongs_to :component
 
+  has_many :grades_cert
+
   delegate :pkg, to: :students_record
 
   before_save :update_avg, if: :score_changed?
