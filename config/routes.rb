@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :certs
   resources :grades, :except => [:new] do
     collection do
       get 'new/:id' => 'grades#new', as: "new"
