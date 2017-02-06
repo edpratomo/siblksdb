@@ -75,6 +75,26 @@ class StudentsRecordsController < ApplicationController
               end
               @students_record.update(students_record_params)
               flash[:success] = 'Students record was successfully updated. Schedule was deleted.'
+
+              course = @students_record.pkg.course
+              unless Cert.find_by(student: @student, course: course)
+                # check for course completion
+                course_max_level = Pkg.where(course: course).maximum(:level)
+                if @students_record.pkg.level == course_max_level
+                  records_for_this_course = StudentsRecord.where(student: @student, status: "finished").select {|sr|
+                    sr.grade and sr.grade.component.course == course
+                  }
+                  finished_levels = records_for_this_course.map {|sr| sr.pkg.level}.sort
+                  if (1..course_max_level).all? {|level| finished_levels.member?(level) }
+                    # completed all levels, create new Cert
+                    cert = Cert.new(student: @student, course: course)
+                    cert.grades << records_for_this_course.map {|sr| sr.grade }
+                    cert.save!
+                  else
+                    logger.debug("cert not created. finished_levels: #{finished_levels.join(', ')}")
+                  end
+                end
+              end
             else
               flash[:alert] = %[Error: this student's grade does not qualify.]
             end

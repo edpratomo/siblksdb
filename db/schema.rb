@@ -11,14 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160812221134) do
+ActiveRecord::Schema.define(version: 20170206115300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
-  enable_extension "pg_trgm"
   enable_extension "hstore"
-  enable_extension "pg_redispub"
+  enable_extension "pg_trgm"
+  enable_extension "uuid-ossp"
+
+  create_table "certs", force: :cascade do |t|
+    t.integer  "student_id",                               null: false
+    t.integer  "course_id",                                null: false
+    t.datetime "created_at", default: "clock_timestamp()", null: false
+  end
+
+  add_index "certs", ["student_id", "course_id"], name: "student_course_unique", unique: true, using: :btree
 
   create_table "changes", force: :cascade do |t|
     t.text     "table_name",                                  null: false
@@ -38,9 +45,11 @@ ActiveRecord::Schema.define(version: 20160812221134) do
     t.text     "content",     default: "",                  null: false
     t.datetime "created_at",  default: "clock_timestamp()", null: false
     t.text     "modified_by"
-    t.integer  "course_id"
+    t.integer  "course_id",                                 null: false
     t.datetime "modified_at", default: "clock_timestamp()", null: false
   end
+
+  add_index "components", ["created_at"], name: "components_created_at", using: :btree
 
   create_table "courses", force: :cascade do |t|
     t.text    "name",                            null: false
@@ -59,19 +68,26 @@ ActiveRecord::Schema.define(version: 20160812221134) do
   add_index "districts", ["name"], name: "districts_name", using: :btree
 
   create_table "grades", force: :cascade do |t|
+    t.integer  "instructor_id",                                    null: false
     t.integer  "students_record_id",                               null: false
     t.integer  "student_id"
-    t.datetime "created_at",         default: "clock_timestamp()", null: false
-    t.text     "modified_by"
-    t.integer  "instructor_id",                                    null: false
     t.integer  "component_id"
     t.hstore   "score",              default: {},                  null: false
+    t.datetime "created_at",         default: "clock_timestamp()", null: false
+    t.text     "modified_by"
     t.float    "avg_practice",       default: 0.0,                 null: false
     t.float    "avg_theory",         default: 0.0,                 null: false
     t.datetime "modified_at",        default: "clock_timestamp()", null: false
   end
 
   add_index "grades", ["students_record_id"], name: "grades_students_record_id_key", unique: true, using: :btree
+
+  create_table "grades_certs", force: :cascade do |t|
+    t.integer "grade_id", null: false
+    t.integer "cert_id",  null: false
+  end
+
+  add_index "grades_certs", ["grade_id", "cert_id"], name: "grade_cert_unique", unique: true, using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.text "name", null: false
@@ -234,6 +250,8 @@ ActiveRecord::Schema.define(version: 20160812221134) do
 
   add_index "users_instructors", ["user_id", "instructor_id"], name: "user_instructor_unique", unique: true, using: :btree
 
+  add_foreign_key "certs", "courses", name: "certs_course_id_fkey"
+  add_foreign_key "certs", "students", name: "certs_student_id_fkey"
   add_foreign_key "components", "courses", name: "components_course_id_fkey"
   add_foreign_key "courses", "instructors", column: "head_instructor_id", name: "courses_head_instructor_id_fkey"
   add_foreign_key "courses", "programs", name: "courses_program_id_fkey"
@@ -242,6 +260,8 @@ ActiveRecord::Schema.define(version: 20160812221134) do
   add_foreign_key "grades", "instructors", name: "grades_instructor_id_fkey"
   add_foreign_key "grades", "students", name: "grades_student_id_fkey"
   add_foreign_key "grades", "students_records", name: "grades_students_record_id_fkey"
+  add_foreign_key "grades_certs", "certs", name: "grades_certs_cert_id_fkey"
+  add_foreign_key "grades_certs", "grades", name: "grades_certs_grade_id_fkey"
   add_foreign_key "instructors_schedules", "instructors", name: "instructors_schedules_instructor_id_fkey"
   add_foreign_key "instructors_schedules", "schedules", name: "instructors_schedules_schedule_id_fkey"
   add_foreign_key "pkgs", "courses", name: "pkgs_course_id_fkey"
