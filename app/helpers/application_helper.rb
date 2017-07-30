@@ -28,6 +28,13 @@ module ApplicationHelper
     end
   end
 
+  def current_user_role
+    if session[:user_id]
+      user = User.find_by(id: session[:user_id])
+      user.role.name if user
+    end
+  end
+
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = (column == sort_column) ? "current #{sort_direction}" : nil

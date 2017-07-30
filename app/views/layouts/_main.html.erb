@@ -4,7 +4,9 @@
         <div class="col-md-2 sidebar" id="MainMenu">
           <ul class="nav nav-sidebar">
             <li class="<%= active_tab_class(root_path) %>"><%= link_to "Beranda", root_path %></li>
-            <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
+            <% permitted_to? :manage, :students do %>
+              <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
+            <% end %>
             <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
             <li class="<%= active_tab_class(presence_sheet_new_path) %>"><%= link_to "Lembar Absensi Siswa", presence_sheet_new_path %></li>
             <% permitted_to? :read, :grades do %>

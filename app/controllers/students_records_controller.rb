@@ -5,6 +5,8 @@ class StudentsRecordsController < ApplicationController
   before_action :set_grouped_pkg_options, only: [:new, :update]
   before_action :set_current_user
   before_action :set_current_group
+
+  filter_access_to :all
   
   # GET /students_records
   # GET /students_records.json
