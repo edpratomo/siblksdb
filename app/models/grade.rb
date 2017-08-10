@@ -4,7 +4,7 @@ class Grade < ActiveRecord::Base
   belongs_to :student
   belongs_to :component
 
-  has_many :grades_cert
+  has_many :grades_certs
 
   delegate :pkg, to: :students_record
 

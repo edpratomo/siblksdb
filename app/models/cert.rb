@@ -1,7 +1,7 @@
 class Cert < ActiveRecord::Base
-  has_many :grades_cert
-  has_many :grades, through: :grades_cert
+  has_many :grades_certs
+  has_many :grades, through: :grades_certs
 
-  has_one :student
-  has_one :course
+  belongs_to :student
+  belongs_to :course
 end

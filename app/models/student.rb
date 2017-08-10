@@ -17,6 +17,8 @@ class Student < ActiveRecord::Base
   has_many :students_pkgs_instructors_schedules, through: :students_pkgs
   has_many :instructors_schedules,               through: :students_pkgs_instructors_schedules
 
+  has_many :certs
+
   # avatar file attachment
   has_attached_file :avatar, 
                     :styles => { :large => "500x500>", :medium => "300x300>", :thumb => "100x100>" }, 
