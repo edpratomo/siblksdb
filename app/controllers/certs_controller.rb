@@ -1,11 +1,16 @@
 class CertsController < ApplicationController
   before_action :set_cert, only: [:show, :edit, :update, :destroy]
+  before_action :set_student, only: [:index_by_student]
   before_action :set_grade, only: [:show]
 
   # GET /certs
   # GET /certs.json
   def index
     @certs = Cert.all
+  end
+
+  def index_by_student
+    @certs = @student.certs
   end
 
   # GET /certs/1
@@ -24,7 +29,6 @@ class CertsController < ApplicationController
         end
       }
       format.pdf {
-        @signature_date = signature_date
         render pdf: %[Sertifikat],
                orientation: 'Portrait',
                template: 'certs/show.pdf.erb',
@@ -88,6 +92,10 @@ class CertsController < ApplicationController
       @cert = Cert.find(params[:id])
     end
 
+    def set_student
+      @student = Student.find(params[:student_id])
+    end
+
     def set_grade
       @grade = OpenStruct.new
       component_id = @cert.grades.first.component.id
@@ -96,7 +104,7 @@ class CertsController < ApplicationController
       if @cert.grades.all? {|grade| grade.component.id == component_id }
         @cert.grades.each do |grade|
           (0..last_idx).to_a.map {|e| e.to_s}.each do |idx|
-            logger.debug("idx #{idx} #{grade.score} - #{grade.score[idx]}")
+            # logger.debug("idx #{idx} #{grade.score} - #{grade.score[idx]}")
             if grade.score[idx].scan('/').empty?
               sum_of_scores[idx] += grade.score[idx].to_i
             else
@@ -125,7 +133,7 @@ class CertsController < ApplicationController
       params[:cert]
     end
 
-    def signature_date
-      DateTime.now.in_time_zone
-    end
+#    def signature_date
+#      DateTime.now.in_time_zone
+#    end
 end

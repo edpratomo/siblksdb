@@ -1,0 +1,18 @@
+<% if flash[:alert] %>
+  <p id="alert"><%= flash[:alert] %></p>
+<% end %>
+<% if flash[:success] %>
+  <p id="notice"><%= flash[:success] %></p>
+<% end %>
+<%= render partial: 'shared/student_navbar' %>
+
+<h3><%= @student.name %></h3>
+
+<% if @certs.empty? %>
+<div class="alert alert-danger" role="alert">Belum memiliki sertifikat.</div>
+<% else %>
+
+  <%= render :partial => 'shared/certs',
+             :locals => { :certs => @certs } %>
+<% end %>
+<%= link_to 'Back', url_for(:back) %>

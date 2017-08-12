@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :certs
+  resources :certs do
+    collection do
+      get 'student/:student_id' => 'certs#index_by_student', as: "student"
+    end
+  end
+
   resources :grades, :except => [:new] do
     collection do
       get 'new/:id' => 'grades#new', as: "new"
