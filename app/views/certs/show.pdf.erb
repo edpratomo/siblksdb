@@ -6,7 +6,7 @@
   </caption>
     <tbody>
       <tr><td width="100" style="font-size:large">Nama</td><td style="font-size:large">: <%= @cert.student.name %></td></tr>
-      <tt><td width="100" style="font-size:large">NIS</td><td style="font-size:large">: <%= @cert.course.idn_prefix %>_________</td></tr>
+      <tt><td width="100" style="font-size:large">NIS</td><td style="font-size:large">: <%= @cert.course.idn_prefix %><%= @cert.student.created_at.strftime("%Y") %><%= @cert.student.id %></td></tr>
       <tr><td width="100" style="font-size:large">Keahlian</td><td style="font-size:large">: <%= @cert.course.program.program %> (<%= @cert.course.name %>)</td></tr>
     </tbody>
   </table>
