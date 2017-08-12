@@ -10,6 +10,12 @@ class CertsController < ApplicationController
   end
 
   def index_by_student
+    # find completed records eligible for cert, and generate it if any
+    @student.eligible_for_certs {|course, grades|
+      cert = Cert.new(student: @student, course: course)
+      cert.grades << grades
+      cert.save!
+    }
     @certs = @student.certs
   end
 

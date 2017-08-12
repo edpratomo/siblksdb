@@ -11,7 +11,6 @@
 <% if @certs.empty? %>
 <div class="alert alert-danger" role="alert">Belum memiliki sertifikat.</div>
 <% else %>
-
   <%= render :partial => 'shared/certs',
              :locals => { :certs => @certs } %>
 <% end %>

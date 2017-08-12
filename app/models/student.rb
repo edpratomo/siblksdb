@@ -34,6 +34,41 @@ class Student < ActiveRecord::Base
 
   after_update :reprocess_avatar, :if => :cropping?  
 
+  def eligible_for_certs this_course=nil, &blk
+    exclusions = certs.map {|cert| cert.course.id}
+    max_levels = Pkg.final_level_by_course
+    records_without_cert = students_records.joins(:grade).
+                             where(status: "finished").
+                             where.not('grades.score': "").
+                             reject {|sr| exclusions.member?(sr.pkg.course.id)}.
+                             select {|sr| this_course ? sr.pkg.course.id == this_course.id : true }
+    
+    eligibles = records_without_cert.inject({}) do |m,sr|
+      course = sr.pkg.course
+      unless m.has_key?(course.id)
+        course_max_level = max_levels[course.id]
+        records_for_this_course = records_without_cert.select {|sr1|
+          sr1.pkg.course == course
+        }
+
+        finished_levels = records_for_this_course.map {|sr1| sr1.pkg.level}.sort
+        is_eligible = (1..course_max_level).all? {|level| finished_levels.member?(level) }
+        if is_eligible
+          m[course.id] = records_for_this_course
+        end
+      end
+      m
+    end
+
+    if blk
+      eligibles.each do |course_id, grades|
+        blk.call(Course.find(course_id), grades)
+      end
+    else
+      return eligibles
+    end
+  end
+
   def cropping?
     !crop_x.blank? && !crop_y.blank? && !crop_w.blank? && !crop_h.blank?
   end

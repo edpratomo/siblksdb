@@ -12,6 +12,39 @@ class StudentsRecord < ActiveRecord::Base
 #  validate :started_on_for_level_above_1
   validate :started_on_cant_be_before_registration
 
+  def generate_certificates
+    exclusions = certs.map {|cert| cert.course.id}
+    max_levels = Pkg.final_level_by_course
+    records_without_cert = students_records.joins(:grade).
+                             where(status: "finished").
+                             where.not('grades.score': "").
+                             reject {|sr| exclusions.member?(sr.pkg.course.id)}
+
+    records_without_cert.inject do |m,sr|
+      course = sr.pkg.course
+      unless m.member?(course.id)
+        course_max_level = max_levels[course.id]
+        records_for_this_course = records_without_cert.select {|sr1|
+          sr1.pkg.course == course
+        }
+
+        finished_levels = records_for_this_course.map {|sr1| sr1.pkg.level}.sort
+        is_eligible = (1..course_max_level).all? {|level| finished_levels.member?(level) }
+        if is_eligible
+          m.push(course.id)
+        end
+      end
+      m
+    end
+
+
+
+    cert = Cert.new(student: student, course: course)
+    cert.grades << records_for_this_course.map {|sr1| sr1.grade }
+    cert.save!
+
+  end
+
   def finished_on_cant_be_blank
     if self.finished_on.blank? and self.finished_on_changed?
       errors.add(:finished_on, "tidak dapat dihapus setelah diset")
