@@ -54,7 +54,7 @@ class Student < ActiveRecord::Base
         finished_levels = records_for_this_course.map {|sr1| sr1.pkg.level}.sort
         is_eligible = (1..course_max_level).all? {|level| finished_levels.member?(level) }
         if is_eligible
-          m[course.id] = records_for_this_course
+          m[course.id] = records_for_this_course.map {|sr1| sr1.grade }
         end
       end
       m

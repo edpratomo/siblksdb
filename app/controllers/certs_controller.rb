@@ -10,12 +10,6 @@ class CertsController < ApplicationController
   end
 
   def index_by_student
-    # find completed records eligible for cert, and generate it if any
-    @student.eligible_for_certs {|course, grades|
-      cert = Cert.new(student: @student, course: course)
-      cert.grades << grades
-      cert.save!
-    }
     @certs = @student.certs
   end
 
@@ -125,9 +119,9 @@ class CertsController < ApplicationController
         num_of_grade = @cert.grades.size
         @grade.score = (0..last_idx).to_a.map {|e| e.to_s}.inject({}) do |m,idx|
           if sum_of_scores[idx].is_a? Array
-            m[idx] = "#{sum_of_scores[idx][0] / num_of_grade}/#{sum_of_scores[idx][1] / num_of_grade}"
+            m[idx] = "#{(sum_of_scores[idx][0].to_f / num_of_grade).round}/#{(sum_of_scores[idx][1].to_f / num_of_grade).round}"
           else
-            m[idx] = (sum_of_scores[idx] / num_of_grade).round.to_s
+            m[idx] = (sum_of_scores[idx].to_f / num_of_grade).round.to_s
           end
           m
         end

@@ -3,6 +3,7 @@ class GradesController < ApplicationController
   before_action :set_students_record, only: [:new]
   before_action :set_current_user, only: [:update, :create, :destroy]
   before_action :set_instructor
+  after_action :generate_cert, only: [:update, :create]
   filter_resource_access
 
   class ComponentNotFound < StandardError
@@ -151,6 +152,16 @@ class GradesController < ApplicationController
 
     def set_instructor
       @instructor = current_user.instructor
+    end
+
+    def generate_cert
+      # find completed records eligible for cert, and generate it if any
+      student = @grade.student
+      student.eligible_for_certs {|course, grades|
+        cert = Cert.new(student: student, course: course)
+        cert.grades << grades
+        cert.save!
+      }
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
