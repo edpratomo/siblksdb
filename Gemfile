@@ -4,6 +4,7 @@ ruby '2.2.1'
 
 group :development, :test do
   gem 'railroady'
+  gem 'rspec-rails', '~> 3.1'
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
