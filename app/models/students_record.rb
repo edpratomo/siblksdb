@@ -12,6 +12,14 @@ class StudentsRecord < ActiveRecord::Base
 #  validate :started_on_for_level_above_1
   validate :started_on_cant_be_before_registration
 
+  after_update :delete_students_schedule, :if => proc { |obj| obj.status_changed? }
+
+  def delete_students_schedule
+    if status == "failed"
+      student.pkgs.destroy(pkg)
+    end
+  end
+
   def generate_certificates
     exclusions = certs.map {|cert| cert.course.id}
     max_levels = Pkg.final_level_by_course

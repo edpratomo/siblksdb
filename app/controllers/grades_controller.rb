@@ -156,8 +156,8 @@ class GradesController < ApplicationController
 
     def generate_cert
       # find completed records eligible for cert, and generate it if any
-      this_grade = Grade.find(@grade.id)
-      student = this_grade.student
+      @grade.reload
+      student = @grade.student
       student.eligible_for_certs {|course, grades|
         cert = Cert.new(student: student, course: course)
         cert.grades << grades
