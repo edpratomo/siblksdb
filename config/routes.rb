@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :components do
+    collection do
+      get 'course/:course_id' => 'components#index_by_course', as: "course"
+    end
+  end
+
   resources :certs do
     collection do
       get 'student/:student_id' => 'certs#index_by_student', as: "student"
