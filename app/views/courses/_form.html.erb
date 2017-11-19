@@ -58,7 +58,7 @@
   <div class="form-group">
     <%= f.label "Komponen nilai", class: "control-label sr-only col-sm-2" %>
     <div class="col-sm-6">
-      <pre><%= @course.components.reorder(:created_at).last.content %></pre>
+    <%= render :partial => 'courses/components' %>
     </div>
   </div>
 <% end %>
