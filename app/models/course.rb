@@ -6,6 +6,15 @@ class Course < ActiveRecord::Base
   belongs_to :program
   belongs_to :head_instructor, class_name: "Instructor", foreign_key: :head_instructor_id
 
+  before_destroy :delete_pkgs
+
+  def delete_pkgs
+    delete_these = pkgs.select {|e| StudentsRecord.where(pkg: e).size == 0}
+    delete_these.each do |pkg|
+      pkgs.destroy(pkg)
+    end
+  end
+
   def add_pkg new_max
     current_max = Pkg.where(course: self).maximum(:level) || 0
     num = new_max - current_max
