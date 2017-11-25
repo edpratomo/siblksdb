@@ -8,7 +8,7 @@
              "paging": false,
              "info": false,
              "searching": false,
-             "ordering": false,
+             "ordering": true,
              select:"single",
              "columns": [
                  {
@@ -22,10 +22,23 @@
                      width:"15px"
                  },
                  { "data": "id" },
-                 { "data": "created_at" },
-                 { "data": "modified_by" }
+                 { "data": "created_at", "orderable": false },
+                 { "data": "modified_by", "orderable": false },
+                 {
+                   "data": null,
+                   "orderable": false,
+                   "defaultContent": "",
+                   "render": function ( data, type, row )  {
+                     var x = data["is_default"];
+                     if (x == false) {
+                       return 'NO <button>Make Default</button>';
+                     } else {
+                       return 'YES';
+                     }
+                   }
+                 }
              ],
-             "order": [[1, 'asc']]
+             "order": [[1, 'desc']]
          });
 
          // Add event listener for opening and closing details
@@ -55,6 +68,24 @@
                  e.preventDefault();
              }
          });
+
+         $('#components tbody').on( 'click', 'button', function () {
+           var data = table.row( $(this).parents('tr') ).data();
+           //alert( data["id"] + " and " + data["is_default"] );
+
+           $.ajax({
+             type: "PATCH",
+             url: '/components/make_default/' + data["id"],
+             contentType: 'application/json',
+             data: JSON.stringify({ _method:'patch' })
+           }).done(function( msg )
+           {
+             table.ajax.reload();
+           }).fail(function( msg )
+           {
+             alert("ran into error: " + JSON.stringify(msg) );
+           });
+         });
      });
 
     function format(d){
@@ -66,5 +97,3 @@
              '</tr>' +
          '</table>';  
     }
-
-    

@@ -54,15 +54,6 @@
     </div>
   </div>
 
-<% if @course.components.size > 0 %>
-  <div class="form-group">
-    <%= f.label "Komponen nilai", class: "control-label sr-only col-sm-2" %>
-    <div class="col-sm-6">
-    <%= render :partial => 'courses/components' %>
-    </div>
-  </div>
-<% end %>
-
   <div class="actions">
     <%= f.submit %>
   </div>

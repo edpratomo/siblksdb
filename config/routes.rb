@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :components do
     collection do
       get 'course/:course_id' => 'components#index_by_course', as: "course"
+      patch 'make_default/:id' => 'components#make_default' #, as: "component"
     end
   end
 

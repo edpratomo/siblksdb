@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
       # sign out user
       session[:user_id] = nil
       # caused AbstractController::DoubleRenderError:
-      redirect_to(login_url, alert: "Session kadaluarsa. Silakan login kembali")
+      redirect_to(login_url, alert: "Session sudah berakhir. Silakan login kembali")
       return
     end
   end
