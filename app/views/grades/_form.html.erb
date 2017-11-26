@@ -13,7 +13,7 @@
   <% end %>
   <%= f.hidden_field :students_record_id %>
   <%= f.hidden_field :instructor_id %>
-  <%= f.hidden_field :component_id %>
+  <%#= f.hidden_field :component_id %>
   <div class="row form-horizontal">
     <div class="col-sm-10">
       <div class="form-group">
@@ -35,6 +35,27 @@
 
 <script type="text/javascript">
   $("#grade_component").change(function() {
-    alert("WARNING");
+    // alert("WARNING " + this.value);
+    $.get('/components/' + this.value, '', process_data).error(error_response);
+    /*
+       load component in html from /components/<selected id>
+       load score in json from /grades/<id>/component/<selected id>
+       populate score in form
+    */
   });
+
+  function process_data(data) {
+    $('#component_content').html(data);
+    $.get('/grades/<%= @grade.id %>/component/' + $('#grade_component').find(":selected").val(), '', update_score);
+  }
+
+  function update_score(data) {
+    $.each(data, function(idx, score) {
+      $('#grade_score_' + idx).val(score);
+    });
+  }
+
+  function error_response() {
+    alert("ERROR");
+  }
 </script>
