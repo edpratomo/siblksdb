@@ -15,6 +15,10 @@ class Course < ActiveRecord::Base
     end
   end
 
+  def is_destroyable?
+    pkgs.all? {|e| StudentsRecord.where(pkg: e).size == 0}
+  end
+
   def add_pkg new_max
     current_max = Pkg.where(course: self).maximum(:level) || 0
     num = new_max - current_max
