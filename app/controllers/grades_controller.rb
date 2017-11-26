@@ -2,6 +2,7 @@ class GradesController < ApplicationController
   before_action :set_grade, only: [:show, :edit, :update, :destroy]
   before_action :set_students_record, only: [:new]
   before_action :set_current_user, only: [:update, :create, :destroy]
+  before_action :set_component, only: [:show_by_component]
   before_action :set_instructor
   after_action :generate_cert, only: [:update, :create]
   filter_resource_access
@@ -80,7 +81,14 @@ class GradesController < ApplicationController
                layout: 'pdf_layout.html.erb'
       }
     end
+  end
 
+  def show_by_component
+    if @component.id == @grade.component.id
+      render json: @grade.score
+    else
+      render json: {}
+    end
   end
 
   # GET /grades/new
@@ -89,11 +97,18 @@ class GradesController < ApplicationController
     component = Component.find_by(course: course, is_default: true)
     #component = Component.where(course: course).order(:created_at).last
     raise ComponentNotFound unless component
+    @component_options = Component.where(course: course).order(:id).to_a.map {|e|
+      ["ID: #{'%02d' % e.id} / #{e.created_at.strftime("%e %b %Y, %H:%M")} #{e.is_default ? '(DEFAULT)' : ''}", e.id]
+    }
     @grade = Grade.new(students_record: @students_record, instructor: @instructor, component: component)
   end
 
   # GET /grades/1/edit
   def edit
+    course = @grade.component.course
+    @component_options = Component.where(course: course).order(:id).to_a.map {|e|
+      ["ID: #{'%02d' % e.id} / #{e.created_at.strftime("%e %b %Y, %H:%M")} #{e.is_default ? '(DEFAULT)' : ''}", e.id]
+    }
   end
 
   # POST /grades
@@ -152,6 +167,10 @@ class GradesController < ApplicationController
 
     def set_instructor
       @instructor = current_user.instructor
+    end
+
+    def set_component
+      @component = Component.find(params[:component_id])
     end
 
     def generate_cert

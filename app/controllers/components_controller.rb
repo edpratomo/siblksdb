@@ -1,5 +1,5 @@
 class ComponentsController < ApplicationController
-  before_action :set_component, only: [:make_default]
+  before_action :set_component, only: [:make_default, :show]
   before_action :set_course, only: [:index_by_course]
 
   def index
@@ -29,6 +29,7 @@ class ComponentsController < ApplicationController
   end
 
   def show
+    render :layout => false
   end
 
   private

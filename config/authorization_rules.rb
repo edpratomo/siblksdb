@@ -51,7 +51,8 @@ privileges do
   privilege :manage, :includes => [:create, :read, :delete,
                                    :update, :update_schedule]
   privilege :read, :includes => [:index, :show, :options_for_result, :name_suggestions,
-                                 :district_suggestions, :regency_suggestions, :index_all]
+                                 :district_suggestions, :regency_suggestions, :index_all,
+                                 :show_by_component]
   privilege :create, :includes => :new
   privilege :update, :includes => :edit
   privilege :update_schedule, :includes => :edit_schedule

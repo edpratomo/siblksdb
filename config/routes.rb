@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :components do
     collection do
       get 'course/:course_id' => 'components#index_by_course', as: "course"
-      patch 'make_default/:id' => 'components#make_default' #, as: "component"
+      patch 'make_default/:id' => 'components#make_default'
     end
   end
 
@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :grades, :except => [:new] do
     collection do
       get 'new/:id' => 'grades#new', as: "new"
+      get ':id/component/:component_id' => 'grades#show_by_component', as: "component"
     end
   end
 

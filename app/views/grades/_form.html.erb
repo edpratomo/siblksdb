@@ -1,3 +1,4 @@
+<div class="well">
 <%= form_for(@grade) do |f| %>
   <% if @grade.errors.any? %>
     <div id="error_explanation">
@@ -13,8 +14,27 @@
   <%= f.hidden_field :students_record_id %>
   <%= f.hidden_field :instructor_id %>
   <%= f.hidden_field :component_id %>
+  <div class="row form-horizontal">
+    <div class="col-sm-10">
+      <div class="form-group">
+        <label class="control-label col-sm-2">Komponen Nilai</label>
+        <div class="input-group col-sm-5">
+          <%= f.select :component, @component_options, {}, { :class => 'form-control' } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" id="component_content">
 <%= raw(ERB.new(grade_component_as_form(@grade.component.content)).result(binding)) %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+</div>
+
+<script type="text/javascript">
+  $("#grade_component").change(function() {
+    alert("WARNING");
+  });
+</script>

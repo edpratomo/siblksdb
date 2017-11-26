@@ -16,13 +16,13 @@ module RenderGradeComponent
   class FormDecorator
     def decorate0(el, level)
       offset = (level - 1) * 15;
-      %[<div class="form-group"><div style="padding-left: #{offset}px;"><%= f.label "", "#{el.strip_markup}", class: "control-label" %></div></div>]
+      %[<div class="form-group"><div style="padding-left: #{offset}px;"><%= label_tag "", "#{el.strip_markup}", class: "control-label" %></div></div>]
     end
 
     def decorate(el, level, cnt)
       offset = (level - 1) * 15;
-      %[<div class="form-group"><div style="padding-left: #{offset}px;"<%= f.label "grade[score][#{cnt}]", "#{el.humanize_markup}", class: "control-label col-md-6" %></div>] +
-      %[<div class="input-group col-md-1"><%= text_field_tag "grade[score][#{cnt}]", @grade.score && @grade.score["#{cnt}"], class: "form-control" %>] +
+      %[<div class="form-group"><div style="padding-left: #{offset}px;"<%= label_tag "grade[score][#{cnt}]", "#{el.humanize_markup}", class: "control-label col-md-6" %></div>] +
+      %[<div class="input-group col-md-1"><%= text_field_tag "grade[score][#{cnt}]", @grade && @grade.score && @grade.score["#{cnt}"], class: "form-control" %>] +
       %[</div></div>]
     end
   end
