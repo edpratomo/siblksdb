@@ -31,9 +31,20 @@
                    "render": function ( data, type, row )  {
                      var x = data["is_default"];
                      if (x == false) {
-                       return 'NO <button>Make Default</button>';
+                       return 'NO <button class="make_default">Make Default</button>';
                      } else {
                        return 'YES';
+                     }
+                   }
+                 },
+                 {
+                   "data": null,
+                   "orderable": false,
+                   "defaultContent": "",
+                   "render": function (data, type, row) {
+                     var x= data["is_destroyable"]
+                     if (x == true) {
+                       return '<button class="destroy_button">Destroy</button>';
                      }
                    }
                  }
@@ -69,7 +80,7 @@
              }
          });
 
-         $('#components tbody').on( 'click', 'button', function () {
+         $('#components tbody').on( 'click', '.make_default', function () {
            var data = table.row( $(this).parents('tr') ).data();
            //alert( data["id"] + " and " + data["is_default"] );
 
@@ -78,6 +89,23 @@
              url: '/components/make_default/' + data["id"],
              contentType: 'application/json',
              data: JSON.stringify({ _method:'patch' })
+           }).done(function( msg )
+           {
+             table.ajax.reload();
+           }).fail(function( msg )
+           {
+             alert("ran into error: " + JSON.stringify(msg) );
+           });
+         });
+
+         $('#components tbody').on('click', '.destroy_button', function() {
+           var data = table.row( $(this).parents('tr') ).data();
+           alert( "id: " + data["id"]);
+           $.ajax({
+             type: "DELETE",
+             url: '/components/' + data["id"],
+             contentType: 'application/json',
+             //data: JSON.stringify({ _method:'destroy' })
            }).done(function( msg )
            {
              table.ajax.reload();

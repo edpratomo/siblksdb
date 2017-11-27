@@ -1,12 +1,17 @@
 class ComponentsController < ApplicationController
-  before_action :set_component, only: [:make_default, :show]
+  before_action :set_component, only: [:make_default, :show, :destroy]
   before_action :set_course, only: [:index_by_course]
 
   def index
   end
 
   def index_by_course
-    @components = @course.components
+    @components = @course.components.to_a.inject([]) do |m,o|
+      temp = o.as_json
+      temp["is_destroyable"] = o.is_destroyable?
+      m << temp
+      m
+    end
     render json: @components
   end
 
@@ -23,6 +28,8 @@ class ComponentsController < ApplicationController
   end
 
   def destroy
+    @component.destroy
+    render json: @component
   end
 
   def edit
