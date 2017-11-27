@@ -19,7 +19,7 @@
       <div class="form-group">
         <label class="control-label col-sm-2">Komponen Nilai</label>
         <div class="input-group col-sm-5">
-          <%= f.select :component, @component_options, {}, { :class => 'form-control' } %>
+          <%= f.select :component_id, @component_options, {}, { :class => 'form-control' } %>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
 </div>
 
 <script type="text/javascript">
-  $("#grade_component").change(function() {
+  $("#grade_component_id").change(function() {
     // alert("WARNING " + this.value);
     $.get('/components/' + this.value, '', process_data).error(error_response);
     /*
@@ -46,7 +46,7 @@
 
   function process_data(data) {
     $('#component_content').html(data);
-    $.get('/grades/<%= @grade.id %>/component/' + $('#grade_component').find(":selected").val(), '', update_score);
+    $.get('/grades/<%= @grade.id %>/component/' + $('#grade_component_id').find(":selected").val(), '', update_score);
   }
 
   function update_score(data) {
