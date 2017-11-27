@@ -100,12 +100,11 @@
 
          $('#components tbody').on('click', '.destroy_button', function() {
            var data = table.row( $(this).parents('tr') ).data();
-           alert( "id: " + data["id"]);
+           //alert( "id: " + data["id"]);
            $.ajax({
              type: "DELETE",
              url: '/components/' + data["id"],
              contentType: 'application/json',
-             //data: JSON.stringify({ _method:'destroy' })
            }).done(function( msg )
            {
              table.ajax.reload();
