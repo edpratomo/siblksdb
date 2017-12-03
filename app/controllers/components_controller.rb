@@ -8,6 +8,7 @@ class ComponentsController < ApplicationController
   def index_by_course
     @components = @course.components.to_a.inject([]) do |m,o|
       temp = o.as_json
+      temp["created_at"] = temp["created_at"].strftime("%e %b %Y, %H:%M")
       temp["is_destroyable"] = o.is_destroyable?
       m << temp
       m

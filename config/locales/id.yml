@@ -9,6 +9,7 @@ id:
   "under training": "Sedang Dilatih"
   "in month": "dalam bulan"
   remember me: tetap mengingat saya
+  Settings: Pengaturan
   activerecord:
     attributes:
       student:

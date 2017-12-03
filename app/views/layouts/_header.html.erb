@@ -14,7 +14,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <% permitted_to? :edit, :settings do %>
-            <li><%= link_to "Settings", settings_edit_path %></li>
+            <li><%= link_to t("Settings"), settings_edit_path %></li>
             <% end %>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user_fullname || 'Unknown User' %> <span class="caret"></span></a>
