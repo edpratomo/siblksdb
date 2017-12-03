@@ -26,7 +26,7 @@ module CustomDeliveryMethod
       path = settings[:location]
       to = smtp_to.map { |_to| self.class.shellquote(_to) }.join(' ')
 
-      popen %Q[#{path} #{arguments} -s "#{subject}" #{to}] do |io|
+      IO.popen(%Q[#{path} #{arguments} -s "#{subject}" #{to}], 'w+', :err => :out) do |io|
         io.puts ::Mail::Utilities.binary_unsafe_to_lf(encoded_message)
         io.flush
       end
