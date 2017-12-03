@@ -11,27 +11,24 @@ module CustomDeliveryMethod
     attr_accessor :settings
 
     def initialize(values)
-      self.settings = self.class::DEFAULTS.merge(values)
+      delivery_settings = ActionMailer::Base.send("sendmail_settings")
+      self.settings = self.class::DEFAULTS.merge(delivery_settings)
     end
 
     def deliver!(mail)
-      smtp_from, smtp_to, message = Mail::CheckDeliveryParams.check(mail)
+      message = Mail::CheckDeliveryParams.check_message(mail)
       subject = mail.subject
-
-      #puts "MAIL FROM: #{mail.from}"
-      #puts "RCPT TO: #{mail.to}"
-      #puts "DATA: #{mail.to_s}"
-
       arguments = settings[:arguments]
       path = settings[:location]
-      to = smtp_to.map { |_to| self.class.shellquote(_to) }.join(' ')
+      to = mail.to.map { |_to| self.class.shellquote(_to) }.join(' ')
 
       IO.popen(%Q[#{path} #{arguments} -s "#{subject}" #{to}], 'w+', :err => :out) do |io|
-        io.puts ::Mail::Utilities.binary_unsafe_to_lf(encoded_message)
+        io.puts ::Mail::Utilities.binary_unsafe_to_lf(message)
         io.flush
       end
     end
 
+    # stolen from Mail::Sendmail
     def self.shellquote(address)
       # Process as a single byte sequence because not all shell
       # implementations are multibyte aware.
