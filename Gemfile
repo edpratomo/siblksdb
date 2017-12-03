@@ -8,7 +8,7 @@ group :development, :test do
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.4'
+gem 'rails', '~> 4.2.5.2'
 gem 'responders', '~> 2.0'
 # Use postgresql as the database for Active Record
 gem 'pg'
@@ -22,7 +22,7 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer',  platforms: :ruby
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 3.1.3'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -65,7 +65,7 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem "rails-settings-cached", "0.4.1"
 gem 'rails-settings-ui', '~> 0.3.0'
-gem 'paperclip', '~> 4.2'
+gem 'paperclip', '~> 4.2.2'
 gem 'nokogiri'
 
 gem 'momentjs-rails', '>= 2.8.1'
