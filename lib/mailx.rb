@@ -16,14 +16,14 @@ module CustomDeliveryMethod
     end
 
     def deliver!(mail)
-      message = Mail::CheckDeliveryParams.check_message(mail)
+      # message = Mail::CheckDeliveryParams.check_message(mail)
       subject = mail.subject
       arguments = settings[:arguments]
       path = settings[:location]
       to = mail.to.map { |_to| self.class.shellquote(_to) }.join(' ')
 
       IO.popen(%Q[#{path} #{arguments} -s "#{subject}" #{to}], 'w+', :err => :out) do |io|
-        io.puts ::Mail::Utilities.binary_unsafe_to_lf(message)
+        io.puts mail.body
         io.flush
       end
     end
