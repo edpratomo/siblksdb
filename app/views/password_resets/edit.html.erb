@@ -1,14 +1,17 @@
-  <% if @user.errors.any? %>
-    <div class="error_messages">
-      <h2>Form is invalid</h2>
-      <ul>
-        <% for message in @user.errors.full_messages %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+<% if @user.errors.any? %>
+<div class="row">
+  <div class="span12">
+  <div class="text-center">
+  <% for message in @user.errors.full_messages %>
+  <div class="alert alert-danger" style="width:40%;display:inline-block;margin: 0 auto;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Error! </strong><%= message %>
+  </div>
   <% end %>
-
+  </div>
+  </div>
+</div>
+<% end %>
 <%= render 'form_edit' %>
 <script type="text/javascript">
 $("#user_password").focus();
