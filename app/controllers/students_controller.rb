@@ -1,12 +1,13 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy, :attending, :remove_pkg]
+  before_action :set_student, only: [:show, :show_for_instructor, :edit, :update, :destroy, :attending, :remove_pkg]
   before_action :set_current_user, except: [:attending]
   before_action :set_current_group, except: [:attending]
   before_action :set_current_page, only: [:index] # set default page for paging
+  before_action :set_instructor, only: [:show_for_instructor]
 
-  skip_before_action :authorize, only: [:attending]
+#  skip_before_action :authorize, only: [:attending]
 
-  filter_access_to :all, :except => :name_suggestions
+  filter_access_to :all
 
   helper_method :sort_column, :sort_direction
   
@@ -88,11 +89,21 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
+    if current_user.role.name == "instructor"
+      redirect_to show_for_instructor_students_url(@student)
+      return
+    end
     @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)
     if params[:brief]
       render template: 'students/brief.html.erb',
              layout: false
+      return
     end
+  end
+
+  def show_for_instructor
+    @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)
+  
   end
 
   # GET /students/new
@@ -179,6 +190,10 @@ class StudentsController < ApplicationController
 
     def set_current_group
       @current_group = current_user.group.name
+    end
+
+    def set_instructor
+      @instructor = current_user.instructor
     end
     
     # Never trust parameters from the scary internet, only allow the white list through.

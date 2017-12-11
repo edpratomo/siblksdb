@@ -1,0 +1,16 @@
+<h3><%= @student.name %></h3>
+
+<div style="padding-top: 20px; max-width: 862px;">
+<% if @records.empty? %>
+<div class="alert alert-danger" role="alert">Belum memiliki catatan kursus.</div>
+<% else %>
+  <%= render :partial => 'shared/students_records',
+             :locals => { :student => @student,
+                          :records => @records,
+                          :brief => true,
+                          :current_group => @current_group } %>
+
+<% end %>
+</div>
+
+<%= link_to 'Back', url_for(:back) %>

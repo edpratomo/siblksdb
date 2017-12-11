@@ -99,7 +99,7 @@ Rails.application.routes.draw do
       get 'district_suggestions'
       get 'regency_suggestions'
       get 'search'
-
+      get 'show_for_instructor/:id' => 'students#show_for_instructor', as: 'show_for_instructor'
       get ':id/attending' => 'students#attending', as: "attending"
     end
   end

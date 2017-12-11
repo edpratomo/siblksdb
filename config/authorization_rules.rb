@@ -23,7 +23,7 @@ authorization do
   end
 
   role :instructor do
-    has_permission_on :students, :to => :read
+    has_permission_on :students, :to => [:show, :show_for_instructor, :autocomplete]
     has_permission_on :grades,   :to => :manage
     has_permission_on :courses,  :to => :read
   end
@@ -47,14 +47,15 @@ authorization do
 end
 
 privileges do
-  # default privilege hierarchies to facilitate RESTful Rails apps
-  privilege :manage, :includes => [:create, :read, :delete,
-                                   :update, :update_schedule]
-  privilege :read, :includes => [:index, :show, :options_for_result, :name_suggestions,
-                                 :district_suggestions, :regency_suggestions, :index_all,
-                                 :show_by_component]
+  privilege :manage, :includes => [:create, :read, :delete, :update]
+
+  privilege :read, :includes => [:index, :show, :autocomplete]
+  privilege :autocomplete, :students, :includes => [:name_suggestions, :district_suggestions,
+                                                    :regency_suggestions]
+  privilege :read, :grades, :includes => [:show_by_component]
+
   privilege :create, :includes => :new
-  privilege :update, :includes => :edit
-  privilege :update_schedule, :includes => :edit_schedule
   privilege :delete, :includes => :destroy
+  privilege :update, :includes => :edit
+  privilege :update, :instructors, :includes => [:edit_schedule, :update_schedule]
 end

@@ -7,7 +7,9 @@
             <% permitted_to? :manage, :students do %>
               <li class="<%= active_tab_class(new_student_path) %>"><%= link_to "Pendaftaran Siswa Baru", new_student_path %></li>
             <% end %>
-            <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
+            <% permitted_to? :read, :students do %>
+              <li class="<%= active_tab_class(students_path) %>"><%= link_to "Lihat Daftar Siswa", students_path %></li>
+            <% end %>
             <li class="<%= active_tab_class(presence_sheet_new_path) %>"><%= link_to "Lembar Absensi Siswa", presence_sheet_new_path %></li>
             <% permitted_to? :read, :grades do %>
               <li class="<%= active_tab_class(grades_path) %>"><%= link_to "Nilai Siswa", grades_path %></li>
