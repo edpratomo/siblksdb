@@ -26,5 +26,5 @@
   </div>
 </div>
 
-<%= link_to 'Edit', edit_grade_path(@grade) %> |
-<%= link_to 'Back', grades_path %>
+<%= link_to_if @grade.instructor == @instructor, 'Edit', edit_grade_path(@grade) %> |
+<%= link_to 'Back', url_for(:back) %>

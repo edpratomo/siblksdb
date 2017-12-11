@@ -7,7 +7,7 @@
   <%= render :partial => 'shared/students_records',
              :locals => { :student => @student,
                           :records => @records,
-                          :brief => true,
+                          :for_instructor => true,
                           :current_group => @current_group } %>
 
 <% end %>

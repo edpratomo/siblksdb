@@ -24,7 +24,7 @@
   <tbody>
     <% students_records.each do |srec| %>
       <tr>
-        <td><%= srec.student.name %></div></td>
+        <td><%= link_to srec.student.name, show_for_instructor_students_path(srec.student) %></div></td>
         <td><%= srec.started_on.strftime("%d %b %Y") %></td>
         <td style="text-align:center">[ <% if srec.grade %>
               <%= link_to 'Edit', edit_grade_path(srec.grade) %> | <span class="grayout">Baru</span>
