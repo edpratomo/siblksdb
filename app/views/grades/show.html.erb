@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <div class="row">
-  <div class="col-md-1"><h4>Nama</h4></div><div class="col-md-6"><h4>: <%= @grade.student.name %></h4></div>
+  <div class="col-md-1"><h4>Nama</h4></div><div class="col-md-6"><h4>: <%= link_to(@grade.student.name, student_path(@grade.student)) %></h4></div>
 </div>
 <div class="row">
   <div class="col-md-1"><h4>Kursus</h4></div><div class="col-md-6"><h4>: <%= @grade.pkg.pkg %> Level <%= @grade.pkg.level %></h4></div>
@@ -26,5 +26,4 @@
   </div>
 </div>
 
-<%= link_to_if @grade.instructor == @instructor, 'Edit', edit_grade_path(@grade) %> |
-<%= link_to 'Back', url_for(:back) %>
+<%= link_to_if @grade.instructor == @instructor, 'Edit', edit_grade_path(@grade) %>
