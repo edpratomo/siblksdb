@@ -12,7 +12,7 @@
       <tr>
         <td style="max-width:80px;"><%= cert.course.program.program %> - <%= cert.course.name %></td>
         <td style="max-width:40px;text-align:center;"><%= cert.created_at.strftime("%d %b %Y") %></td>
-        <td style="max-width:30px;"><%= link_to 'PDF', cert_path(cert, format: :pdf) %></td>
+        <td style="max-width:30px;"><%= link_to 'PDF', cert_path(cert, format: :pdf), target: "_blank" %></td>
       </tr>
     <% end %>
   </tbody>

@@ -12,3 +12,10 @@
 
 <% end %>
 </div>
+
+<% unless @certs.empty? %>
+<div style="padding-top: 20px; max-width: 862px;">
+  <%= render :partial => 'shared/certs',
+             :locals => { :certs => @certs } %>
+</div>
+<% end %>

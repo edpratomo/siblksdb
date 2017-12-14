@@ -103,7 +103,7 @@ class StudentsController < ApplicationController
 
   def show_for_instructor
     @records = StudentsRecord.where(student: @student).order(:status, started_on: :desc)
-  
+    @certs = @student.certs
   end
 
   # GET /students/new
