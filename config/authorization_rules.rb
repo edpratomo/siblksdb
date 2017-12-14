@@ -24,7 +24,9 @@ authorization do
 
   role :instructor do
     has_permission_on :students, :to => [:show, :show_for_instructor, :autocomplete]
-    has_permission_on :grades,   :to => :manage
+    has_permission_on :grades,   :to => :manage do
+      if_attribute :instructor => is {user.instructor}
+    end
     has_permission_on :courses,  :to => :read
   end
 

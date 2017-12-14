@@ -24,7 +24,9 @@
         <td style="max-width:30px;"><%= t(record.status) %></td>
 <% unless local_assigns.has_key? :brief %>
   <% if local_assigns.has_key? :for_instructor %>
-        <td style="max-width:20px;text-align:center;"><%= link_to_if record.grade, 'Edit', (record.grade ? edit_grade_path(record.grade) : '') %></td>
+        <td style="max-width:20px;text-align:center;"><% if record.grade %>
+<%= link_to_if record.grade.instructor == for_instructor, 'Edit', edit_grade_path(record.grade) %>
+<% end %></td>
   <% else %>
         <td style="max-width:20px;text-align:center;"><%= link_to 'Edit', edit_students_record_path(record) %></td>
         <td style="max-width:30px;text-align:center;"><%= link_to 'Jadwal', edit_student_schedule_index_path(student, record.pkg) unless record.finished_on %></td>

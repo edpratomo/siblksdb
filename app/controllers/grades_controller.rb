@@ -5,7 +5,8 @@ class GradesController < ApplicationController
   before_action :set_component, only: [:show_by_component]
   before_action :set_instructor
   after_action :generate_cert, only: [:update, :create]
-  filter_resource_access
+#  filter_resource_access
+  filter_access_to :update, :attribute_check => true
 
   class ComponentNotFound < StandardError
   end

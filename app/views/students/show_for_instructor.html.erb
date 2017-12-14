@@ -11,7 +11,7 @@
   <%= render :partial => 'shared/students_records',
              :locals => { :student => @student,
                           :records => @records,
-                          :for_instructor => true,
+                          :for_instructor => @instructor,
                           :current_group => @current_group } %>
 
 <% end %>
