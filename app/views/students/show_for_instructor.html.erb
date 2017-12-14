@@ -1,4 +1,8 @@
-<h3><%= @student.name %></h3>
+<h3><%= @student.name %> <span class="ionicons ion-<%= @student.sex %>" style="padding-left:20px"></span></h3>
+
+<div class="data" style="padding-top: 10px;">
+  <h4>Tempat / Tanggal Lahir: <%= @student.birthplace %>, <%= @student.birthdate %></h4>
+</div>
 
 <div style="padding-top: 20px; max-width: 862px;">
 <% if @records.empty? %>
