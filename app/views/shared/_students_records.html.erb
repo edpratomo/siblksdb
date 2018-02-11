@@ -26,6 +26,7 @@
   <% if local_assigns.has_key? :for_instructor %>
         <td style="max-width:20px;text-align:center;"><% if record.grade %>
 <%= link_to_if record.grade.instructor == for_instructor, 'Edit', edit_grade_path(record.grade) %>
+<% if record.grade.instructor != for_instructor %>( <%= record.grade.instructor.nick %> )<% end %>
 <% end %></td>
   <% else %>
         <td style="max-width:20px;text-align:center;"><%= link_to 'Edit', edit_students_record_path(record) %></td>
