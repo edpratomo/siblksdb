@@ -7,53 +7,57 @@ class StudentsRecord < ActiveRecord::Base
 
   validates_presence_of :pkg
 
-  validate :finished_on_cant_be_blank
+  validate :finished_on_cant_be_removed
 #  validate :finished_on_must_be_after_started_on
 #  validate :started_on_for_level_above_1
   validate :started_on_cant_be_before_registration
+  validate :cant_abandon_course_if_already_has_grade
 
-  after_update :delete_students_schedule, :if => proc { |obj| obj.status_changed? }
+  before_update :set_default_finished_on, :if => :need_to_set_finished_on?
+
+  after_update :create_initial_empty_grade, :if => :need_to_initialize_grade?
+  after_update :generate_cert_if_eligible, :if => :finished_a_course?
+
+  # this has to be the last in after_update callback chain:
+  after_update :delete_students_schedule, :if => :schedule_can_be_deleted?
+
+  def set_default_finished_on
+    self.finished_on = DateTime.now.in_time_zone.to_date
+  end
 
   def delete_students_schedule
-    if status == "failed"
-      student.pkgs.destroy(pkg)
+    student.pkgs.destroy(pkg)
+    true
+  end
+
+  def create_initial_empty_grade
+    students_pkg = StudentsPkg.find_by(pkg: pkg, student: student)
+    instructor_ids = students_pkg.instructors_schedules.map {|e| e.instructor_id}.uniq
+    if instructor_ids.size > 1
+      #flash[:alert] = "Error: Lebih dari satu instruktur."
+      return true
+    else
+      course = pkg.course
+      component = Component.where(course: course).order(:created_at).last
+      # create empty grade
+      new_grade = Grade.new(students_record: self,
+                            instructor_id: instructor_ids.first,
+                            component: component)
+      new_grade.save!
+      self.grade = new_grade
     end
   end
 
-  def generate_certificates
-    exclusions = certs.map {|cert| cert.course.id}
-    max_levels = Pkg.final_level_by_course
-    records_without_cert = students_records.joins(:grade).
-                             where(status: "finished").
-                             where.not('grades.score': "").
-                             reject {|sr| exclusions.member?(sr.pkg.course.id)}
-
-    records_without_cert.inject do |m,sr|
-      course = sr.pkg.course
-      unless m.member?(course.id)
-        course_max_level = max_levels[course.id]
-        records_for_this_course = records_without_cert.select {|sr1|
-          sr1.pkg.course == course
-        }
-
-        finished_levels = records_for_this_course.map {|sr1| sr1.pkg.level}.sort
-        is_eligible = (1..course_max_level).all? {|level| finished_levels.member?(level) }
-        if is_eligible
-          m.push(course.id)
-        end
-      end
-      m
-    end
-
-
-
-    cert = Cert.new(student: student, course: course)
-    cert.grades << records_for_this_course.map {|sr1| sr1.grade }
-    cert.save!
-
+  def generate_certificate_if_eligible
+    this_course = pkg.course
+    student.eligible_for_certs(this_course) {|course, grades|
+      cert = Cert.new(student: student, course: course)
+      cert.grades << grades
+      cert.save!
+    }
   end
 
-  def finished_on_cant_be_blank
+  def finished_on_cant_be_removed
     if self.finished_on.blank? and self.finished_on_changed?
       errors.add(:finished_on, "tidak dapat dihapus setelah diset")
       return false
@@ -92,6 +96,13 @@ class StudentsRecord < ActiveRecord::Base
     if self.started_on < self.student.registered_at
       errors.add(:started_on, "tidak dapat diisi tanggal sebelum tanggal pendaftaran")
       return false
+    end
+  end
+
+  def cant_abandon_course_if_already_has_grade
+    if grade and status_changed? and status == "abandoned"
+            flash[:alert] = "Error: this student has taken the exam for this subject."
+
     end
   end
 
@@ -145,5 +156,25 @@ class StudentsRecord < ActiveRecord::Base
       ['Tanggal mulai (baru -> lama)', 'started_on_desc'],
       ['Tanggal mulai (lama -> baru)', 'started_on_asc'],
     ]
+  end
+
+  private
+  def schedule_can_be_deleted?
+    status_changed? and status_was == "active"
+  end
+
+  def need_to_set_finished_on?
+    # finished_on only displayed when setting status to values other than "active"
+    status_changed? and status != "active" and finished_on.nil?
+  end
+
+  def need_to_initialize_grade?
+    unless grade
+      status_changed? and status_was == "active" and (status == "failed" or status == "finished")
+    end
+  end
+
+  def finished_a_course?
+    status_changed? and status_was == "active" and grade and grade.passed?
   end
 end
