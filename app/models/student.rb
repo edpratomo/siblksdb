@@ -94,6 +94,22 @@ class Student < ActiveRecord::Base
     end
   end
 
+  def self.get_active_stats_for_course course, last_x_months=6
+    now = DateTime.now.in_time_zone
+    (0..(last_x_months - 1)).to_a.reverse.inject({}) do |m,o|
+      dt = now - o.month
+      month, year = dt.month, dt.year
+
+      active_students = StudentsRecord.joins(:student).joins(:pkg).
+        where("pkgs.course_id = ? AND started_on < ? AND (status = 'active' OR finished_on > ?)",
+        course, dt.end_of_month, dt.end_of_month).
+        group(:sex).count
+
+      %w(male female).each {|e| m[[e, dt.strftime('%b %Y')]] = active_students[e] || 0 }
+      m
+    end
+  end
+
   # custom validation for :registered_at
   def registered_at_before_created_at_and_started_on
     if self.registered_at > self.created_at.to_date
