@@ -6,7 +6,7 @@
 <h3>Grafik Jumlah Siswa Aktif 6 Bulan Terakhir</h3>
  <table align="center" border="0">
 <% @stats.each_with_index do |stats,idx| %>
-  <% if idx.even? %><tr><% end %>
+  <% if idx.even? %><tr><% end -%>
   <td align="center" valign="top" style="width: 400px; padding: 30px;">
     <h4><%= stats[0] %></h4>
 <%= column_chart stats[1], library: {
@@ -19,7 +19,7 @@
     }
 %>
   </td>
-  <% if idx.odd? %></tr><% end %>
+  <% if idx.odd? or idx == (@stats.size - 1) %></tr><% end %>
 <% end %>
  </table>
 </div>
