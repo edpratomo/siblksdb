@@ -4,7 +4,22 @@
 
 <div class="container-fluid" style="padding-top:20px;">
 <h3>Grafik Jumlah Siswa Aktif 6 Bulan Terakhir</h3>
-<p style="padding-top:10px;">
-<%= column_chart Student.get_active_stats(6) %>
-</p>
+ <table align="center" border="0">
+<% @stats.each_with_index do |stats,idx| %>
+  <% if idx.even? %><tr><% end %>
+  <td align="center" valign="top" style="width: 400px; padding: 30px;">
+    <h4><%= stats[0] %></h4>
+<%= column_chart stats[1], library: {
+      plotOptions: {
+        series: { pointWidth: 15 }
+      },
+      chart: {
+        backgroundColor: "#eee",
+      }
+    }
+%>
+  </td>
+  <% if idx.odd? %></tr><% end %>
+<% end %>
+ </table>
 </div>
