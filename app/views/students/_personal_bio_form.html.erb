@@ -33,11 +33,11 @@
 
     <div class="form-group has-feedback">
       <%= f.label :religion, "Agama", class: "control-label col-sm-3" %>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
       <% if current_page?(action: 'new') %>
         <%# harcode religion input %>
         <%= f.select :religion, 
-                     ['Islam', 'Katolik', 'Kristen', 'Hindu', 'Budha', 'Kong Hu Cu'], 
+                     ['Islam', 'Katolik', 'Kristen', 'Hindu', 'Budha', 'Kong Hu Cu', 'Percaya terhadap Tuhan YME'], 
                      {  :include_blank => '- Pilih -' }, 
                      { class: "form-control" }
         %>
