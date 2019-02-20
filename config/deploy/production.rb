@@ -8,6 +8,7 @@
 role :web, %w{apps@siblksdb.duckdns.org}
 role :db,  %w{apps@siblksdb.duckdns.org}
 
+set :puma_bind, 'tcp://0.0.0.0:3000'
 
 # Extended Server Syntax
 # ======================
