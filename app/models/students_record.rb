@@ -48,7 +48,7 @@ class StudentsRecord < ActiveRecord::Base
     end
   end
 
-  def generate_certificate_if_eligible
+  def generate_cert_if_eligible
     this_course = pkg.course
     student.eligible_for_certs(this_course) {|course, grades|
       cert = Cert.new(student: student, course: course)

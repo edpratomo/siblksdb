@@ -10,7 +10,9 @@
     </div>
 
     <div class="form-group">
-      <%= f.label :sex, "Jenis kelamin", class: "control-label col-sm-3 sr-only" %>
+      <div class="col-sm-3">
+      <%= f.label :sex, "Jenis kelamin", class: "control-label sr-only" %>
+      </div>
       <div class="col-sm-7 form-inline">
         <div class="radio form-control">
           <label><%= f.radio_button :sex, "female" %>Perempuan</label>
@@ -31,11 +33,11 @@
 
     <div class="form-group has-feedback">
       <%= f.label :religion, "Agama", class: "control-label col-sm-3" %>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
       <% if current_page?(action: 'new') %>
         <%# harcode religion input %>
         <%= f.select :religion, 
-                     ['Islam', 'Katolik', 'Kristen', 'Hindu', 'Budha', 'Kong Hu Cu'], 
+                     ['Islam', 'Katolik', 'Kristen', 'Hindu', 'Budha', 'Kong Hu Cu', 'Percaya terhadap Tuhan YME'], 
                      {  :include_blank => '- Pilih -' }, 
                      { class: "form-control" }
         %>
@@ -92,14 +94,18 @@ $(function () {
       </div>
     </div>
     <div class="form-group has-feedback">
-      <%= f.label :district, "Kecamatan", class: "control-label sr-only col-sm-3" %>
+      <div class="col-sm-3">
+        <%= f.label :district, "Kecamatan", class: "control-label sr-only" %>
+      </div>
       <div class="col-sm-3">
         <%= f.text_field :district, class: "form-control", placeholder: "Kecamatan" %>
         <i class="glyphicon glyphicon-remove form-control-feedback" id="remove_district"></i>
       </div>
     </div>
     <div class="form-group has-feedback">
-      <%= f.label :regency_city, "Kota/kabupaten", class: "control-label sr-only col-sm-3" %>
+      <div class="col-sm-3">
+        <%= f.label :regency_city, "Kota/kabupaten", class: "control-label sr-only" %>
+      </div>
       <div class="col-sm-3">
         <%= f.text_field :regency_city, class: "form-control", placeholder: "Kota / kabupaten" %>
         <i class="glyphicon glyphicon-remove form-control-feedback" id="remove_regency_city"></i>
@@ -122,7 +128,9 @@ $(function () {
     </div>
 
     <div class="form-group">
-      <%= f.label "student[biodata][Tanda Pengenal Berlaku]", "Tanda Pengenal Berlaku", class: "control-label sr-only col-sm-3" %>
+      <div class="col-sm-3">
+      <%= f.label "student[biodata][Tanda Pengenal Berlaku]", "Tanda Pengenal Berlaku", class: "control-label sr-only" %>
+      </div>
       <div class="col-sm-7 form-inline">
         <label for="student[biodata][Tanda Pengenal Berlaku">Berlaku sampai: </label>
         <div class='input-group date'>

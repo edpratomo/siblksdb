@@ -29,7 +29,7 @@ class PresenceSheetController < ApplicationController
     @student_vs_day = if @instructor and @sched
       students_pkgs_by_day = @instructor.instructors_schedules.where(schedule: @sched).inject({}) do |m,o|
         m[o.day] = o.students_pkgs.inject({}) do |m1,o1|
-          m1[o1.student.name] = "#{o1.pkg.pkg} / Lev. #{o1.pkg.level}"
+          m1[o1.student.uniq_name] = "#{o1.pkg.pkg} / Lev. #{o1.pkg.level}"
           m1
         end
         m
@@ -39,9 +39,10 @@ class PresenceSheetController < ApplicationController
       students.map do |student|
         student_schedule = ordered_days.map do |day|
           students_pkgs_by_day[day] ||= {}
-          students_pkgs_by_day[day][student.name] 
+          students_pkgs_by_day[day][student.uniq_name]
         end  
-        [student.name, *student_schedule]
+        # Rails.logger.debug("student_name #{student.name} (#{student.uniq_name})")
+        [student.uniq_name, *student_schedule]
       end.reject {|e| e[1..6].all? {|e| not e }} # exclude students with empty schedules
     else 
       []

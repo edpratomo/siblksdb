@@ -7,6 +7,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.1'
 end
 
+gem 'puma', '~> 3.11'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.5.2'
 gem 'responders', '~> 2.0'
@@ -42,6 +44,7 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :development do
+  gem 'capistrano3-puma', github: "seuros/capistrano-puma", require: false
   gem 'capistrano', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
