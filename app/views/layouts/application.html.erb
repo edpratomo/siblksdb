@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= content_for :render_async %>
   <title>sistem informasi BLK Salesian Don Bosco</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= yield(:head) %> 
+  <%= yield(:head) %>
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= controller_name %> <%= action_name %>">
@@ -29,7 +30,7 @@ $('#search_student').typeahead({
   hint: true,
   highlight: true,
   minLength: 3
-}, 
+},
 {
   name: 'student-names',
   displayKey: 'name',

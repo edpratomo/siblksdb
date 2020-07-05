@@ -1,0 +1,21 @@
+.box{
+  display:inline-block;
+  width:24%;
+  height:100px;
+  padding: 10px;
+}
+@media screen and(max-width:1024px){
+  .box{
+    width:32%;
+  }
+}
+@media screen and(max-width:900px){
+  .box{
+    width:49%;
+  }
+}
+@media screen and(max-width:640px){
+  .box{
+    width:100%;
+  }
+}
