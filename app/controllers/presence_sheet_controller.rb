@@ -1,11 +1,18 @@
 class PresenceSheetController < ApplicationController
   def new
+    Rails.logger.debug("instructor saved in session: #{session[:instructor]}")
+    Rails.logger.debug("schedule saved in session: #{session[:schedule]}")
+    @selected_schedule = session[:schedule]
+    @selected_instructor = session[:instructor]
   end
 
   def show
   end
 
   def create
+    session[:schedule] = params[:schedule]
+    session[:instructor] = params[:instructor]
+
     start_day = if params[:time_range] == "next_week"
       DateTime.now.in_time_zone.to_date.beginning_of_week.advance(:days => 7)
     else

@@ -5,7 +5,7 @@
   <div class="form-group">
     <%= label_tag :schedule, "Slot Jadwal", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
-      <%= select_tag :schedule, options_for_select(Schedule.order(:id).to_a.map {|e| [e.label, e.id]}), 
+      <%= select_tag :schedule, options_for_select(Schedule.order(:id).to_a.map {|e| [e.label, e.id]}, @selected_schedule),
                      class: "form-control" %>
     </div>
   </div>
@@ -13,7 +13,7 @@
   <div class="form-group">
     <%= label_tag :instructor, "Instruktur", class: "control-label col-sm-2" %>
     <div class="col-sm-3">
-      <%= select_tag :instructor, options_for_select(Instructor.order(:id).to_a.map {|e| ["#{e.name} (#{e.nick})", e.id]}), 
+      <%= select_tag :instructor, options_for_select(Instructor.order(:id).to_a.map {|e| ["#{e.name} (#{e.nick})", e.id]}, @selected_instructor),
                      class: "form-control" %>
     </div>
   </div>
