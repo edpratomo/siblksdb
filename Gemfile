@@ -7,7 +7,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.1'
 end
 
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 3.12'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.5.2'
