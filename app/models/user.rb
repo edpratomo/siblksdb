@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true
   has_secure_password
 
+  before_destroy :unlink_instructor
+
   def role_symbols
     [role.title.to_sym]
   end
@@ -33,5 +35,12 @@ class User < ActiveRecord::Base
     self.password_reset_sent_at = Time.zone.now
     save!
     UserMailer.password_reset(self).deliver_now
+  end
+
+  protected
+  def unlink_instructor
+    if instructor
+      users_instructor.destroy
+    end
   end
 end
