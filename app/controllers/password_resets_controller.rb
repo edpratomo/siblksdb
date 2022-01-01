@@ -10,7 +10,7 @@ class PasswordResetsController < ApplicationController
       redirect_to new_password_reset_path, alert: "Tidak ditemukan user dengan alamat email #{params[:email]}"
     else
       user.send_password_reset
-      redirect_to new_password_reset_path, :notice => "Email sent with password reset instructions."
+      redirect_to new_password_reset_path, :notice => "Email sent with password reset instructions. Check your spam folder."
     end
   end
 
