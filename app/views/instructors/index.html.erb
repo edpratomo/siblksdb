@@ -1,5 +1,12 @@
 <h2>Listing instructors</h2>
 
+<% if flash[:alert] %>
+  <p id="alert"><%= flash[:alert] %></p>
+<% end %>
+<% if flash[:notice] %>
+  <p id="notice"><%= flash[:notice] %></p>
+<% end %>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -13,13 +20,28 @@
   <tbody>
     <% @instructors.each do |instructor| %>
       <tr>
-        <td><%= instructor.name %></td>
-        <td><%= instructor.nick %></td>
+        <td><%= link_to instructor.name, instructor %></td>
+        <td><%= link_to instructor.nick, instructor %></td>
         <td style="text-align:center;"><%= instructor.capacity %></td>
-        <td><%= link_to 'Show', instructor %></td>
-        <td><%= link_to 'Edit', edit_instructor_path(instructor) %></td>
-        <td><%= link_to 'Jadwal', edit_schedule_instructor_path(instructor) %></td>
-        <td><%= link_to 'Destroy', instructor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to edit_instructor_path(instructor), :class => "btn btn-info btn-xs" do %>
+            <i class="glyphicon glyphicon-pencil"> Edit</i>
+            <% end %>
+        </td>
+        <td><%= link_to edit_schedule_instructor_path(instructor), :class => "btn btn-info btn-xs" do %>
+            <i class="glyphicon glyphicon-calendar"> Jadwal</i>
+            <% end %>
+        </td>
+      <% if instructor.is_destroyable? %>
+        <td><%= link_to instructor, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs" do %>
+            <i class="glyphicon glyphicon-remove"> Delete</i>
+            <% end %>
+        </td>
+      <% else %>
+        <td><%= link_to instructor, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs disabled" do %>
+            <i class="glyphicon glyphicon-remove"> Delete</i>
+            <% end %>
+        </td>
+      <% end %>
       </tr>
     <% end %>
   </tbody>
