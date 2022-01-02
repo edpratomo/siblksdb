@@ -108,7 +108,7 @@ class InstructorsController < ApplicationController
   def destroy
     ActiveRecord::Base.transaction_user(@current_user) { @instructor.destroy }
     respond_to do |format|
-      format.html { redirect_to instructors_url, notice: 'Instructor was successfully destroyed.' }
+      format.html { redirect_to instructors_url, notice: 'Instructor was successfully deleted.' }
       format.json { head :no_content }
     end
   end
