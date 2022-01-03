@@ -16,6 +16,7 @@ class Instructor < ActiveRecord::Base
   has_many :students,                            through: :students_pkgs
 
   has_many :grades
+  has_many :courses, foreign_key: :head_instructor_id
 
   # link instructor to user
   has_one :users_instructor
@@ -28,6 +29,10 @@ class Instructor < ActiveRecord::Base
   end
 
   def is_destroyable?
-    user.nil? and grades.first.nil? and students.first.nil?
+    # must not be linked to user
+    # must not have grade
+    # must not have student
+    # must not have course (as head instructor)
+    user.nil? and grades.first.nil? and students.first.nil? and courses.first.nil?
   end
 end
