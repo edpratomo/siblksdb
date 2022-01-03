@@ -20,10 +20,24 @@
         <td><%= link_to course.name, course %></td>
         <td><%= course.program.program %></td>
         <td style="text-align:center"><%= @max_levels[course.id] %></td>
-        <td><%= course.head_instructor && course.head_instructor.name || 'N/A' %></td>
+        <td><%= link_to_if course.head_instructor, course.head_instructor && course.head_instructor.name || 'N/A', course.head_instructor %></td>
         <td><%= course.components.size %></td>
-        <td><%= link_to 'Edit', edit_course_path(course) %></td>
-        <td><%= link_to_if course.is_destroyable?, 'Destroy', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to edit_course_path(course), :class => "btn btn-info btn-xs" do %>
+            <i class="glyphicon glyphicon-pencil"> Edit</i>
+            <% end %>
+        </td>
+      <% if course.is_destroyable? %>
+        <td><%= link_to course, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs" do %>
+            <i class="glyphicon glyphicon-remove"> Delete</i>
+            <% end %>
+        </td>
+      <% else %>
+        <td><%= link_to course, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs disabled" do %>
+            <i class="glyphicon glyphicon-remove"> Delete</i>
+            <% end %>
+        </td>
+      <% end %>
+
       </tr>
     <% end %>
   </tbody>
