@@ -6,6 +6,7 @@ class Course < ActiveRecord::Base
   belongs_to :program
   belongs_to :head_instructor, class_name: "Instructor", foreign_key: :head_instructor_id
 
+  before_destroy :is_destroyable?
   before_destroy :delete_pkgs
 
   def delete_pkgs
