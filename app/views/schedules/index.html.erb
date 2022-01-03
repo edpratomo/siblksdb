@@ -1,5 +1,12 @@
 <h2>Slot Jadwal</h2>
 
+<% if flash[:alert] %>
+  <p id="alert"><%= flash[:alert] %></p>
+<% end %>
+<% if flash[:notice] %>
+  <p id="notice"><%= flash[:notice] %></p>
+<% end %>
+
 <table class="table table-striped">
   <thead>
     <tr>

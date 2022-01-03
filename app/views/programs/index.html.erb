@@ -1,5 +1,12 @@
 <h2>Daftar Program</h2>
 
+<% if flash[:alert] %>
+  <p id="alert"><%= flash[:alert] %></p>
+<% end %>
+<% if flash[:notice] %>
+  <p id="notice"><%= flash[:notice] %></p>
+<% end %>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -12,8 +19,21 @@
     <% @programs.each do |program| %>
       <tr>
         <td><%= program.program %></td>
-        <td><%= link_to 'Edit', edit_program_path(program) %></td>
-        <td><%= link_to 'Destroy', program, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to edit_program_path(program), :class => "btn btn-info btn-xs" do %>
+            <i class="glyphicon glyphicon-pencil"> Edit</i>
+            <% end %>
+        </td>
+      <% if program.is_destroyable? %>
+        <td><%= link_to program, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs" do %>
+            <i class="glyphicon glyphicon-remove"> Delete</i>
+            <% end %>
+        </td>
+      <% else %>
+        <td><%= link_to program, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs disabled" do %>
+            <i class="glyphicon glyphicon-remove"> Delete</i>
+            <% end %>
+        </td>
+      <% end %>
       </tr>
     <% end %>
   </tbody>
@@ -21,4 +41,6 @@
 
 <br>
 
-<%= link_to 'New Program', new_program_path %>
+<%= link_to new_program_path, :class => "btn btn-info" do %>
+  <i class="glyphicon glyphicon-plus"> Program Baru</i>
+<% end %>
