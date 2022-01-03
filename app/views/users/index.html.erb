@@ -42,5 +42,6 @@
 </table>
 
 <br>
-
-<%= button_to 'New User', new_user_path, method: :get %>
+<%= link_to new_user_path, :class => "btn btn-info" do %>
+  <i class="glyphicon glyphicon-plus"> Akun Baru</i>
+<% end %>

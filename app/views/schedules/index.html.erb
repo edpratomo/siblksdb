@@ -21,17 +21,17 @@
       <tr>
         <td><%= schedule.label %></td>
         <td><%= schedule.time_slot %></td>
-        <td><%= link_to edit_schedule_path(schedule), :class => "btn btn-info btn-xs" do %>
+        <td style="text-align:right;"><%= link_to edit_schedule_path(schedule), :class => "btn btn-info btn-xs" do %>
             <i class="glyphicon glyphicon-pencil"> Edit</i>
             <% end %>
         </td>
       <% if schedule.is_destroyable? %>
-        <td><%= link_to schedule, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs" do %>
+        <td style="text-align:right;"><%= link_to schedule, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs" do %>
             <i class="glyphicon glyphicon-remove"> Delete</i>
             <% end %>
         </td>
       <% else %>
-        <td><%= link_to schedule, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs disabled" do %>
+        <td style="text-align:right;"><%= link_to schedule, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs disabled" do %>
             <i class="glyphicon glyphicon-remove"> Delete</i>
             <% end %>
         </td>

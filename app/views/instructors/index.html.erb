@@ -48,5 +48,6 @@
 </table>
 
 <br>
-
-<%= button_to 'New Instructor', new_instructor_path, method: :get %>
+<%= link_to new_instructor_path, :class => "btn btn-info" do %>
+  <i class="glyphicon glyphicon-plus"> Instruktur Baru</i>
+<% end %>
