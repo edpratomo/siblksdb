@@ -30,7 +30,7 @@ set :puma_bind, 'tcp://0.0.0.0:3000'
   set :ssh_options, {
     keys: %w(/home/edwin/.ssh/id_rsa_blk),
     forward_agent: false,
-    auth_methods: %w(publickey).
+    auth_methods: %w(publickey),
     port: 2022
   }
 #
