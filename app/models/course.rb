@@ -35,7 +35,7 @@ class Course < ActiveRecord::Base
   end
 
   def disable_pkg_higher_level_than new_max
-    pkgs.where(enabled: true).where('level > ?', new_max).update!(enabled: false)
+    pkgs.where(enabled: true).where('level > ?', new_max).update_all(enabled: false)
   end
 
   def del_pkg new_max

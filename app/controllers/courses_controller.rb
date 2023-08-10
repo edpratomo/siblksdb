@@ -97,7 +97,7 @@ class CoursesController < ApplicationController
     end
 
     def set_max_level
-      @max_level = Pkg.where(course: @course).maximum(:level)
+      @max_level = @course.pkgs.where(enabled: true).maximum(:level)
       @max_level || 1
     end
 
