@@ -146,7 +146,7 @@ class StudentsRecordsController < ApplicationController
 
     def set_grouped_pkg_options
       #all_pkgs = Pkg.order(pkg: :desc).order(:level)
-      all_pkgs = Pkg.joins(:course).order("courses.name DESC").order(:level)
+      all_pkgs = Pkg.where(enabled: true).joins(:course).order("courses.name DESC").order(:level)
       @grouped_options = all_pkgs.inject({}) do |m,o|
         m[o.program.program] ||= []
         m[o.program.program] << [ "#{o.pkg} Level #{o.level}", o.id ]
