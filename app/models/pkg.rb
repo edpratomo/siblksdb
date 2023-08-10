@@ -15,6 +15,6 @@ class Pkg < ActiveRecord::Base
   end
 
   def self.final_level_by_course
-    group(:course_id).maximum(:level)
+    where(enabled: true).group(:course_id).maximum(:level)
   end
 end
