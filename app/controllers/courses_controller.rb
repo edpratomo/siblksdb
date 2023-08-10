@@ -63,7 +63,7 @@ class CoursesController < ApplicationController
           @component.save!
         end
         if @course.add_pkg(params[:max_level].to_i) < 0
-          @course.del_pkg(params[:max_level].to_i)
+          @course.disable_pkg_higher_level_than(params[:max_level].to_i)
         end
         @course.update(course_params)
       }

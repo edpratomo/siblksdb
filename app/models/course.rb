@@ -21,12 +21,21 @@ class Course < ActiveRecord::Base
   end
 
   def add_pkg new_max
-    current_max = Pkg.where(course: self).maximum(:level) || 0
+    current_max = pkgs.where(enabled: true).maximum(:level) || 0
     num = new_max - current_max
     num.times do |e|
-      pkg = Pkg.new(course: self, level: current_max + e + 1)
-      pkg.save!
+      pkg = pkgs.find_by(level: current_max + e + 1)
+      if pkg
+        pkg.update!(enabled: true)
+      else
+        pkg = Pkg.new(course: self, level: current_max + e + 1)
+        pkg.save!
+      end
     end
+  end
+
+  def disable_pkg_higher_level_than new_max
+    pkgs.where(enabled: true).where('level > ?', new_max).update!(enabled: false)
   end
 
   def del_pkg new_max
