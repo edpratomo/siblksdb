@@ -6,6 +6,10 @@ class CreateUniforms < ActiveRecord::Migration
     end
 
     add_reference :courses, :uniform, foreign_key: true
+
+    execute <<-SQL
+GRANT SELECT ON TABLE uniforms TO siblksdb_ro;
+SQL
   end
 
   def down
