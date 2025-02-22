@@ -3,6 +3,7 @@ class Course < ActiveRecord::Base
   has_many :components
   has_many :certs
 
+  belongs_to :uniform
   belongs_to :program
   belongs_to :head_instructor, class_name: "Instructor", foreign_key: :head_instructor_id
 
