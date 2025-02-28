@@ -1,4 +1,9 @@
 class Student < ActiveRecord::Base
+  # foreign table
+  self.table_name = 'siblksdb_v2.students'
+  self.primary_key = 'id'
+  belongs_to :admission
+
   validates_presence_of :religion, :name, :birthplace, :birthdate, :sex, :phone, :email
   validates_presence_of :district, :regency_city
   validate :registered_at_before_created_at_and_started_on  
